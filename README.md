@@ -6,7 +6,7 @@ Website Kumpulan dan Pendaftaran Event Kampus
  
 ## QA & DevOps Documentation 
  
-### Minggu 2 — Tools Pendukung & Git Convention 
+### Tools Pendukung & Git Convention 
  
 #### 1. Hosting 
  
