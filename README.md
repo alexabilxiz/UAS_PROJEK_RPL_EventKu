@@ -49,6 +49,17 @@ Tim menggunakan format commit berikut:
 | `test` | Menambahkan/perbaiki testing | `test: menambahkan test API login` | 
 | `docs` | Perubahan dokumentasi | `docs: memperbarui README` | 
 | `refactor` | Perubahan struktur kode | `refactor: merapikan service auth` | 
+
+### 4. Git Branching Strategy
+
+EventKu menggunakan struktur branching untuk mengatur proses pengembangan dan pengujian aplikasi.
+
+#### Struktur Branch
+
+```text
+main
+└── develop
+    └── feature/qa-testing
  
 Contoh: 
  
