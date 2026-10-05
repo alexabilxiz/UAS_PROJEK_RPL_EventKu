@@ -61,6 +61,25 @@ main
 └── develop
     └── feature/qa-testing
  
+
+ #### Aturan Feature Branch
+
+Setiap pekerjaan atau perubahan dibuat pada branch `feature/*`.
+Setelah pekerjaan selesai, perubahan diajukan melalui Pull Request untuk digabungkan ke `develop`.
+
+Alur branching:
+
+```text
+feature/*
+     ↓
+Pull Request
+     ↓
+develop
+     ↓
+Testing / integrasi
+     ↓
+main
+
 Contoh: 
  
 ```bash 
