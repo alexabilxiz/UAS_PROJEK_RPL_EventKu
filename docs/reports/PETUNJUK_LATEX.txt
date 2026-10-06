@@ -1,0 +1,11 @@
+Paket laporan UTS EventKu
+
+Upload ZIP ke Overleaf sebagai New Project > Upload Project, atau kompilasi file .tex dengan folder figures berada di direktori yang sama. Pilih pdfLaTeX dan file EventKu_Laporan_UTS_Kelompok_IV.tex sebagai Main document.
+
+Sebelas PNG diekstrak tanpa perubahan dari gambar aktif pada DOCX arsitektur Minggu 6 dan pattern Minggu 7. Caption DOCX menyatakan sumber ekspor Lucidchart versi revisi. File unduhan lama tidak dipakai karena rancangan berbeda dari SRS terbaru.
+
+Diagram SDLC dan use case tetap native LaTeX. Diagram use case kelompok belum ditemukan. Jawaban pribadi C-D dan konfirmasi kondisi aktual tim masih perlu dilengkapi.
+
+Kompiler bawaan Codex mendukung dokumen tunggal dan belum mendukung proyek dengan gambar tambahan; gunakan paket lengkap di Overleaf atau lingkungan LaTeX yang mendukung gambar.
+
+Revisi UI: sembilan gambar Figma dari DOCX Audrey disertakan pada folder figures/figma. Desain visual tidak diubah; penjelasan cakupan dan perbedaan hak akses/status mengacu SRS.
