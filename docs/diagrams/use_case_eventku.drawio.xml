@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="ZZkstaTlIwzJrnunl7Av">
+    <mxGraphModel dx="1653" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sys" parent="1" style="rounded=1;arcSize=2;dashed=1;fillColor=none;strokeColor=#5F5E5A;verticalAlign=top;fontStyle=1;fontSize=14;fontColor=#2C2C2A;" value="Sistem EventKu" vertex="1">
+          <mxGeometry height="502" width="472" x="182" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="actM" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontStyle=1;fontSize=13;strokeColor=#2C2C2A;" value="Mahasiswa" vertex="1">
+          <mxGeometry height="60" width="30" x="123" y="284" as="geometry" />
+        </mxCell>
+        <mxCell id="actP" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontStyle=1;fontSize=13;strokeColor=#2C2C2A;" value="Penyelenggara" vertex="1">
+          <mxGeometry height="60" width="30" x="697" y="244" as="geometry" />
+        </mxCell>
+        <mxCell id="actA" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fontStyle=1;fontSize=13;strokeColor=#2C2C2A;" value="Admin / pengelola" vertex="1">
+          <mxGeometry height="60" width="30" x="697" y="444" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontColor=#085041;fontStyle=1;fontSize=13;" value="Melihat daftar event" vertex="1">
+          <mxGeometry height="56" width="184" x="207" y="84" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontColor=#085041;fontStyle=1;fontSize=13;" value="Mencari dan memfilter event" vertex="1">
+          <mxGeometry height="56" width="184" x="207" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontColor=#085041;fontStyle=1;fontSize=13;" value="Melihat detail event" vertex="1">
+          <mxGeometry height="56" width="184" x="207" y="244" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontColor=#085041;fontStyle=1;fontSize=13;" value="Mendaftar event (RSVP)" vertex="1">
+          <mxGeometry height="56" width="184" x="207" y="324" as="geometry" />
+        </mxCell>
+        <mxCell id="m5" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontColor=#085041;fontStyle=1;fontSize=13;" value="Melihat event terdaftar" vertex="1">
+          <mxGeometry height="56" width="184" x="207" y="404" as="geometry" />
+        </mxCell>
+        <mxCell id="m6" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E1F5EE;strokeColor=#0F6E56;fontColor=#085041;fontStyle=1;fontSize=13;" value="Melihat calendar" vertex="1">
+          <mxGeometry height="56" width="184" x="207" y="484" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#3C3489;fontStyle=1;fontSize=13;" value="Mengisi informasi event" vertex="1">
+          <mxGeometry height="56" width="184" x="454" y="84" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#3C3489;fontStyle=1;fontSize=13;" value="Mengajukan event" vertex="1">
+          <mxGeometry height="56" width="184" x="454" y="164" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#3C3489;fontStyle=1;fontSize=13;" value="Mengunggah poster" vertex="1">
+          <mxGeometry height="56" width="184" x="454" y="244" as="geometry" />
+        </mxCell>
+        <mxCell id="p4" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#3C3489;fontStyle=1;fontSize=13;" value="Mengelola event" vertex="1">
+          <mxGeometry height="56" width="184" x="454" y="324" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#3C3489;fontStyle=1;fontSize=13;" value="Memeriksa pengajuan" vertex="1">
+          <mxGeometry height="56" width="184" x="454" y="404" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#EEEDFE;strokeColor=#534AB7;fontColor=#3C3489;fontStyle=1;fontSize=13;" value="Menyetujui / menolak pengajuan" vertex="1">
+          <mxGeometry height="56" width="184" x="454" y="484" as="geometry" />
+        </mxCell>
+        <mxCell id="eM1" edge="1" parent="1" source="actM" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="m1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eM2" edge="1" parent="1" source="actM" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="m2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eM3" edge="1" parent="1" source="actM" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="m3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eM4" edge="1" parent="1" source="actM" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="m4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eM5" edge="1" parent="1" source="actM" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="m5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eM6" edge="1" parent="1" source="actM" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="m6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eP1" edge="1" parent="1" source="actP" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="p2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eP2" edge="1" parent="1" source="actP" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="p4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eA1" edge="1" parent="1" source="actA" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="a1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eA2" edge="1" parent="1" source="actA" style="endArrow=none;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;" target="a2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i1" edge="1" parent="1" source="p2" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;fontSize=12;fontColor=#5F5E5A;" target="p1" value="«include»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="i2" edge="1" parent="1" source="p2" style="endArrow=open;endFill=0;dashed=1;html=1;strokeColor=#5F5E5A;strokeWidth=1.3;fontSize=12;fontColor=#5F5E5A;" target="p3" value="«include»">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
