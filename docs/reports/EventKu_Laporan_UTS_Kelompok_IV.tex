@@ -9,9 +9,10 @@
 \definecolor{bluebg}{HTML}{EAF2FA}
 \hypersetup{colorlinks=true,linkcolor=navy,urlcolor=navy,pdftitle={Laporan UTS EventKu Kelompok IV}}
 \pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small EventKu -- Laporan UTS}\fancyhead[R]{\small Kelompok IV}\fancyfoot[C]{\thepage}
-\setlength{\parindent}{0pt}\setlength{\parskip}{7pt}
-\renewcommand{\contentsname}{Daftar Isi}
+\setlength{\parindent}{0pt}\setlength{\parskip}{7pt}\setlength{\emergencystretch}{3em}
+\renewcommand{\contentsname}{Daftar Isi}\renewcommand{\refname}{Referensi}
 \setlist{nosep,leftmargin=*,topsep=4pt}
+\widowpenalty=10000\clubpenalty=10000
 \renewcommand{\arraystretch}{1.2}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \newcommand{\tbl}[2]{\par\smallskip\noindent\begin{tabularx}{\linewidth}{#1}\toprule #2\bottomrule\end{tabularx}\par\smallskip}
@@ -19,27 +20,49 @@
 \newcommand{\page}[1]{\clearpage\section{#1}}
 \tikzset{box/.style={draw=navy,rounded corners,fill=bluebg,align=center,text width=3cm,minimum height=1cm,font=\small},arr/.style={-{Stealth},draw=navy},uc/.style={ellipse,draw=navy,fill=bluebg,align=center,text width=3cm,minimum height=.9cm,font=\small}}
 \lstset{basicstyle=\ttfamily\small,breaklines=true,frame=single,backgroundcolor=\color{bluebg},columns=fullflexible,keepspaces=true,showstringspaces=false}
-\newcommand{\lucidfig}[3]{\par\begin{center}\includegraphics[width=\linewidth,height=#2,keepaspectratio]{figures/#1.png}\par\small #3\par\footnotesize Sumber: ekspor Lucidchart versi revisi dalam DOCX kelompok. \href{https://lucid.app/lucidchart/c1ed1ac4-eabd-423c-a2b8-d558d07f165d/edit}{Buka dokumen Lucidchart}.\end{center}\par}
+\newcommand{\lucidfig}[3]{\par\begin{center}\includegraphics[width=\linewidth,height=#2,keepaspectratio]{figures/#1.png}\par\small #3\par\footnotesize Sumber: ekspor Lucidchart versi revisi dalam DOCX kelompok. \url{https://lucid.app/lucidchart/eade4b94-4f0b-4ff1-9576-4063f45cfbfb/view?invitationId=inv_144411dc-3a44-4e55-8ed9-8ea69347d77b&page=index}.\end{center}\par}
 \newcommand{\uifig}[3]{\par\begin{center}\includegraphics[width=\linewidth,height=#2,keepaspectratio]{figures/figma/#1.png}\par\small #3\par\footnotesize Sumber: rancangan Figma Audrey, pada DOCX wireframe dan UI high-fidelity Minggu 7.\end{center}\par}
+\newcommand{\contribfig}[3]{\par\begin{center}\begin{minipage}{\linewidth}\centering\includegraphics[width=\linewidth,height=#2,keepaspectratio]{figures/kontribusi/alexa/bukti_#1.png}\par\small #3\par\footnotesize Sumber: lampiran jawaban individu Alexa.\end{minipage}\end{center}\par}
+\newcommand{\bambangexport}[3]{\par\begin{center}\includegraphics[width=\linewidth,height=#2,keepaspectratio]{figures/kontribusi/bambang/lucidchart_#1.png}\par\small #3\par\footnotesize Sumber: PNG ekspor Lucidchart yang disampaikan Bambang; versi awal sebelum penyelarasan SRS. \url{https://lucid.app/lucidchart/eade4b94-4f0b-4ff1-9576-4063f45cfbfb/view?invitationId=inv_144411dc-3a44-4e55-8ed9-8ea69347d77b&page=index}.\end{center}\par}
 \begin{document}
-\begin{titlepage}\centering
-{\Large Universitas Katolik Widya Mandala Surabaya\par}
-{\large Fakultas Teknik -- Program Studi Informatika\par}
-\vspace{1.5cm}{\Huge\bfseries\color{navy} EventKu\par}
-\vspace{.5cm}{\LARGE Laporan Ujian Tengah Semester\par}
-{\large INF300 -- Rekayasa Perangkat Lunak\par}
-{\large Semester Gasal 2026/2027\par}
-\vspace{1cm}{\large Sistem Informasi dan Pendaftaran Event Kampus\par}
-\vspace{1cm}\begin{tabular}{ll}
-Audrey Elizabeth Gracesia & 5803024014\\
-Bambang Herlambang & 5803024019\\
-Dustin Pranata Wangsawidjaja & 5803024021\\
-Alexa Bilxiz Aulia & 5803024023\\
-\end{tabular}\par\vspace{.7cm}Kelompok IV
-\vfill\note{Draf laporan berdasarkan artefak proyek sampai 7 Oktober 2026. Konfirmasi kondisi aktual tim dan jawaban individu bagian C--D masih harus dilengkapi sebelum pengumpulan.}
-\vspace{.5cm}Surabaya, 7 Oktober 2026
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\fontfamily{ptm}\fontsize{12}{15}\selectfont\color{black}
+\null
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=center,align=center,text width=\linewidth,inner sep=0pt,font=\bfseries]
+  at ([yshift=-3.35cm]current page.north)
+  {LAPORAN UTS REKAYASA PERANGKAT LUNAK};
+\node[anchor=center,align=center,text width=\linewidth,inner sep=0pt,font=\bfseries]
+  at ([yshift=-4.85cm]current page.north)
+  {EVENTKU -- SISTEM INFORMASI DAN PENDAFTARAN EVENT KAMPUS};
+\node[anchor=center,inner sep=0pt]
+  at ([yshift=-11cm]current page.north)
+  {\includegraphics[height=8.7cm,trim=105bp 57bp 105bp 57bp,clip]{figures/logowm.png}};
+\node[anchor=center,inner sep=0pt,font=\bfseries]
+  at ([yshift=-17.2cm]current page.north)
+  {ANGGOTA TIM};
+\node[anchor=north,inner sep=0pt,align=left]
+  at ([yshift=-17.9cm]current page.north)
+  {\renewcommand{\arraystretch}{1.05}%
+   \begin{tabular}{@{}p{7.3cm}l@{}}
+   Audrey Elizabeth Gracesia & 5803024014\\
+   Bambang Herlambang & 5803024019\\
+   Dustin Pranata Wangsawidjaja & 5803024021\\
+   Alexa Bilxiz Aulia & 5803024023\\
+   \end{tabular}};
+\node[anchor=north,align=center,text width=\linewidth,inner sep=0pt,font=\bfseries]
+  at ([yshift=-22.8cm]current page.north)
+  {PROGRAM STUDI INFORMATIKA\\[.3cm]
+   FAKULTAS TEKNIK\\[.3cm]
+   UNIVERSITAS KATOLIK WIDYA MANDALA\\[.3cm]
+   SURABAYA\\[.3cm]
+   2026};
+\end{tikzpicture}
 \end{titlepage}
-\tableofcontents
+\hypersetup{pageanchor=true}
+{\small\setlength{\parskip}{0pt}\tableofcontents}
 \page{Identitas dan Deskripsi Proyek}
 EventKu adalah aplikasi web untuk memusatkan informasi kegiatan kampus dan pendaftaran peserta. Laporan ini menggabungkan analisis kebutuhan dan rancangan kelompok sampai tahap UTS. SRS versi 2 menjadi acuan kebutuhan; Figma merupakan artefak visual yang belum mencakup seluruh kebutuhan.
 \subsection{Pembagian Peran}
@@ -226,7 +249,7 @@ Controller & Request, aktor terverifikasi, pemanggilan service, HTTP/DTO.\\
 Service/domain & Aturan bisnis, transisi status, kepemilikan dan transaksi.\\
 Repository & SQL berparameter, filter, pagination, kontrak yang dapat diuji.\\
 Facade publik & Akses lintas modul tanpa mengimpor repository privat.\\
-EventBus/handler & Event setelah commit; pemilihan penerima notifikasi.\\}
+EventBus / handler & Event setelah commit; pemilihan penerima notifikasi.\\}
 \subsection{Aliran Pencarian}
 View mengirim GET /api/v1/events. Controller dan service menormalisasi query serta menetapkan lingkup publik Disetujui. Repository menggunakan filter identik untuk count dan daftar, dengan urutan stabil. Controller mengirim JSON; UI menampilkan hasil atau keadaan kosong.
 \subsection{Modularitas dan Kualitas}
@@ -299,16 +322,16 @@ View React menerima JSON dari controller HTTP. Service, domain, dan repository m
 \page{Progres sampai Minggu 8 dan Perubahan Kebutuhan}
 Evaluasi progres UTS dibatasi pada Minggu 1--8. Pekerjaan Minggu 9--16 merupakan rencana lanjutan menuju UAS dan tidak dinilai sebagai kekurangan pelaksanaan UTS.
 
-\tbl{p{2.2cm}p{1.1cm}Yp{3.4cm}}{Rencana & Minggu & Bukti tersedia & Batas/status\\\midrule
+\tbl{p{2.2cm}p{1.4cm}Yp{3.4cm}}{Rencana & Minggu & Bukti tersedia & Batas/status\\\midrule
 Inisiasi & 1 & Charter, identitas/peran. & Persetujuan formal belum dibuktikan.\\
 Analisis & 2--4 & SRS, kebutuhan, story, backlog. & Review konsistensi final diperlukan.\\
 Diagram alur & 5 & Activity mahasiswa, penyelenggara/admin; ERD draft. & Artefak tersedia, bukan hasil uji alur.\\
 Arsitektur & 6 & Modular, class diagram, ERD, Lucidchart. & PostgreSQL dipilih; tipe ID perlu ditetapkan.\\
 Pattern/UI & 7 & Pattern, frontend, Figma, testcase. & Figma belum seluruh cakupan SRS.\\
-Konsolidasi & 8 & Revisi DOCX, tautan, presentasi, draf laporan. & Jawaban pribadi dan pemeriksaan PDF perlu diselesaikan.\\
+Konsolidasi & 8 & Revisi DOCX, tautan, presentasi, draf laporan. & Jawaban keempat anggota terlampir; sebagian bukti kontribusi Dustin masih perlu diverifikasi.\\
 }
 \subsection{Kendala Aktual sampai Minggu 8}
-Berdasarkan konfirmasi Bambang, tidak ada kendala yang dilaporkan dalam pelaksanaan proyek sampai Minggu 8. Oleh karena itu, tidak ada tindakan penanganan kendala aktual yang dilaporkan. Catatan kelengkapan artefak pada tabel merupakan pemeriksaan paket laporan dan tidak otomatis berarti terjadi keterlambatan proyek.
+Pada konfirmasi awal, Bambang tidak melaporkan kendala proyek sampai Minggu 8. Dalam evaluasi individu yang kemudian dilampirkan, Audrey menjelaskan kendala menentukan alur penggunaan aplikasi, sedangkan Alexa melaporkan beberapa tugas individu selesai melewati waktu yang direncanakan, termasuk kendala memahami penggunaan Jira pada Minggu 3. Alexa tidak menyimpulkan bahwa keterlambatan individunya menyebabkan seluruh proyek terlambat. Dustin melaporkan sebagian pekerjaannya terlambat atau tertunda akibat pengelolaan waktu dan beban kerja serta kesalahan pengerjaan; ia tidak menyatakan bagian pekerjaannya sepenuhnya sesuai jadwal. Penilaian jadwal tim perlu dibedakan dari ketepatan waktu individu dan dibandingkan dengan target serta bukti aktual. \cite{audreyind,dustinind,alexaind}
 \subsection{Riwayat Artefak}
 Riwayat lokal memuat activity diagram dan UI high-fidelity pada 6 Oktober 2026; penyelarasan rancangan dengan SRS serta tautan Lucidchart pada 7 Oktober. Tanggal commit membuktikan perubahan artefak, bukan waktu seluruh aktivitas atau persetujuan tugas.
 \subsection{Perubahan yang Mempengaruhi Desain}
@@ -321,10 +344,10 @@ UI sebagian kebutuhan & Lingkup dianggap selesai dari tampilan. & Matriks SRS--U
 Persaingan kuota & Kursi terlampaui, data tidak konsisten. & Transaksi, conditional update/lock, constraint unik, uji konkurensi.\\
 Akses lintas organisasi & Kebocoran atau perubahan data pihak lain. & Peran, verifikasi, ownership server pada setiap operasi.\\
 Event notifikasi terlewat & Informasi gagal dikirim sesudah commit. & Idempotensi; dokumentasikan batas EventBus; pertimbangkan outbox.\\
-Integrasi/perubahan file & Konflik merge, diagram tidak sinkron. & Pull/rebase sebelum push, review, pemilik file/PR.\\
+Integrasi / perubahan file & Konflik merge, diagram tidak sinkron. & Pull/rebase sebelum push, review, pemilik file/PR.\\
 Should/Could berlebihan & Must tidak selesai. & Prioritas alur end-to-end Must; review kapasitas.\\}
 \subsection{Perbedaan Risiko dan Kendala Aktual}
-Tidak ada kendala aktual yang dilaporkan sampai Minggu 8 berdasarkan konfirmasi Bambang. Matriks di atas berisi potensi risiko yang perlu diantisipasi pada pengembangan berikutnya; bukan daftar masalah yang sudah terjadi. Bukti review dan status artefak tetap dapat dilengkapi tanpa mengarang kendala atau keterlambatan.
+Kendala individu yang dilaporkan adalah penentuan alur UI oleh Audrey, pengelolaan waktu dan beban kerja serta kesalahan pengerjaan oleh Dustin, serta ketepatan waktu tugas dan pemahaman Jira oleh Alexa. Matriks di atas berisi potensi risiko pengembangan berikutnya; daftar tersebut tidak menyatakan semua risiko telah terjadi. Kendala pribadi dan dampaknya pada jadwal keseluruhan perlu dinilai terpisah. \cite{audreyind,dustinind,alexaind}
 PM/BA mengelola jadwal/prioritas; Architect menjaga kontrak; Backend/Frontend mengintegrasikan; QA/DevOps memverifikasi kualitas dan lingkungan. Review bersama diperlukan agar penanganan risiko tercatat dan dapat ditindaklanjuti.
 \page{Rencana Setelah UTS}
 \tbl{p{2.6cm}Yp{3.9cm}}{Periode usulan & Fokus & Bukti selesai\\\midrule
@@ -347,14 +370,14 @@ EventKu dirancang untuk memusatkan informasi dan pendaftaran kegiatan dengan mod
 Artefak analisis/rancangan tersedia dan dikonsolidasikan dalam laporan ini. SRS digunakan sebagai acuan kebutuhan. Target rancangan dibedakan dari hasil yang telah diverifikasi; diagram, wireframe, atau commit dokumen tidak membuktikan implementasi dan pengujian telah selesai.
 \subsection{Penyelesaian Sebelum Pengumpulan}
 \begin{enumerate}
-\item Tiap anggota mengisi analisis pribadi C--D pada lampiran dengan pengalaman dan kontribusi sebenarnya.
-\item Tim meninjau status tugas dan bukti review/persetujuan sampai Minggu 8; kendala aktual telah dikonfirmasi tidak ada yang dilaporkan.
+\item Jawaban pribadi C--D Audrey, Bambang, Dustin, dan Alexa sudah disertakan. Lengkapi tautan, commit, atau catatan review untuk bukti kontribusi Dustin yang masih bertanda [VERIFIKASI].
+\item Tim meninjau status tugas dan bukti review/persetujuan sampai Minggu 8, termasuk dampak kendala individu yang dilaporkan Audrey, Dustin, dan Alexa.
 \item Gunakan PostgreSQL sesuai keputusan; tetapkan tipe ID dan jadwal sprint yang konsisten.
 \item Periksa identitas, referensi, diagram dan struktur terhadap instruksi UTS.
 \item Setelah isi disepakati, ekspor PDF untuk pengumpulan kelompok.
 \end{enumerate}
 Diagram arsitektur, ERD, pattern, class diagram dan algoritma menggunakan ekspor Lucidchart versi revisi yang tertanam pada DOCX kelompok. Diagram SDLC dan use case digambar dalam LaTeX dan diberi sumber yang sesuai. Kompilasi memerlukan file utama dan folder figures dalam paket laporan. Daftar kebutuhan lengkap di lampiran mempertahankan prioritas dari SRS.
-\note{Status: draf kelompok yang dapat ditinjau. Belum siap dikumpulkan sebelum jawaban individu dan konfirmasi kondisi aktual dilengkapi.}
+\note{Status: draf kelompok yang dapat ditinjau. Jawaban individu Audrey, Bambang, Dustin, dan Alexa sudah terisi. Verifikasi sebagian bukti kontribusi Dustin serta pemeriksaan akhir isi tetap diperlukan.}
 \clearpage\begin{thebibliography}{99}
 \addcontentsline{toc}{section}{Referensi}
 \bibitem{uts} INF300. \emph{Instruksi UTS Rekayasa Perangkat Lunak Semester Gasal 2026/2027}, 7 Oktober 2026. Berkas: \path{INF300 Rekayasa Perangkat Lunak - UTS.pdf}.
@@ -368,9 +391,12 @@ Diagram arsitektur, ERD, pattern, class diagram dan algoritma menggunakan ekspor
 \bibitem{readme} Kelompok IV. \emph{README Repositori EventKu}. Berkas \path{README.md}; rencana stack dan hosting.
 \bibitem{github} Kelompok IV. \emph{Repositori GitHub EventKu}. \url{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu}.
 \bibitem{jira} Kelompok IV. \emph{Workspace Jira EventKu}. \url{https://eventku.atlassian.net/}. Sumber: dokumen User Stories modul non-fungsional Minggu 3. Tautan workspace; board proyek memerlukan akses tim.
-\bibitem{lucid} Kelompok IV. \emph{Lucidchart EventKu}. \url{https://lucid.app/lucidchart/c1ed1ac4-eabd-423c-a2b8-d558d07f165d/edit}. Dokumen revisi yang dirujuk DOCX kelompok; akses memerlukan izin pemilik.
+\bibitem{lucid} Kelompok IV. \emph{Lucidchart EventKu}. \url{https://lucid.app/lucidchart/eade4b94-4f0b-4ff1-9576-4063f45cfbfb/view?invitationId=inv_144411dc-3a44-4e55-8ed9-8ea69347d77b&page=index}. Dokumen revisi yang dirujuk DOCX kelompok; akses memerlukan izin pemilik.
 \bibitem{figma} Kelompok IV. \emph{Figma RPL EventKu -- UTS}. \url{https://www.figma.com/design/msefrhl4aO32NFpVU4MRlo/}.
 \bibitem{ui} Audrey Elizabeth Gracesia. \emph{Wireframe dan UI High-Fidelity EventKu}, Minggu 7. \path{docs/planning/EventKuWeek7_wireframe & UI high-fidelity Figma.docx}. Gambar rancangan desktop awal.
+\bibitem{audreyind} Audrey Elizabeth Gracesia. \emph{Jawaban Individu UTS Rekayasa Perangkat Lunak}. Berkas: \path{Jawaban Individu UTS RPL (Audrey Elizabeth).docx}. Evaluasi kondisi proyek, refleksi pribadi, dan kontribusi UI/UX.
+\bibitem{dustinind} Dustin Pranata Wangsawidjaja. \emph{Draf Analisis Individu Dustin (Bagian C--D)}. Berkas: \path{Lampiran H – Draf Analisis Individu Dustin (Bagian C–D).docx}. Evaluasi PM/BA, refleksi pribadi, dan rincian kontribusi Minggu 1--8 dengan sebagian bukti masih memerlukan verifikasi.
+\bibitem{alexaind} Alexa Bilxiz Aulia. \emph{Jawaban Individu dan Refleksi UTS EventKu}. Berkas: \path{Alexa_rfleksi.docx}. Evaluasi QA/DevOps dan lampiran bukti artefak serta commit.
 \bibitem{scrum} Schwaber, K. dan Sutherland, J. \emph{The Scrum Guide}, November 2020. \url{https://scrumguides.org/scrum-guide.html}.
 \end{thebibliography}
 \clearpage\appendix
@@ -381,7 +407,7 @@ Organization & Identitas, status verifikasi; terkait penyelenggara/event.\\
 EventCategory & Nama unik dan status aktif.\\
 Event & Organisasi, creator, kategori, mulai/selesai, lokasi, quota, kursi aktif, enam status, moderator opsional.\\
 Registration & Event, mahasiswa, status, waktu daftar/batal; pasangan event--mahasiswa unik.\\
-CategorySubscription & Mahasiswa, kategori; pasangan unik.\\
+Category\-Subscription & Mahasiswa, kategori; pasangan unik.\\
 Notification & Penerima, tipe, pesan, baca; event opsional; sumber/versi deduplikasi.\\
 ModerationHistory & Event, admin, keputusan, alasan, versi/waktu; Should.\\}
 \clearpage\subsection*{ERD Final EventKu}\lucidfig{erd_final}{.78\textheight}{Gambar 6. ERD final EventKu (ekspor Lucidchart).}
@@ -543,101 +569,415 @@ UC-17 & Kirim notifikasi dan pengingat & Sistem & FR-NTF-02, 03\\
 \page{Analisis Individu -- Audrey Elizabeth Gracesia}
 \textbf{Nama:} Audrey Elizabeth Gracesia\quad\textbf{NRP:} 5803024014
 
-\note{Harus diisi oleh anggota bersangkutan dengan pengalaman, kontribusi dan penilaian sendiri. Pertanyaan berikut bukan jawaban final.}
+\textit{Sumber: jawaban individu yang disampaikan anggota bersangkutan.} \cite{audreyind}
+
 \subsection*{Bagian C -- Kondisi Proyek}
-\begin{enumerate}
-\item Apakah proyek sesuai jadwal? Sebutkan target dan bukti aktual.
-\item Apa keterlambatan/kendala dan penyebabnya?
-\item Apa perubahan kebutuhan dan artefak terdampak?
-\item Bagaimana tim menangani kendala/perubahan?
-\item Apa risiko tersisa dan rencana setelah UTS?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi uraian dan bukti yang relevan].}
+\subsubsection*{1. Apakah proyek sesuai jadwal? Sebutkan target dan bukti aktual.}
+
+Pengerjaan proyek EventKu dilakukan secara bertahap dari Minggu 1 sampai Minggu 8. Tugas saya berfokus pada analisis kebutuhan pengguna dan desain UI/UX. Pekerjaan yang dilakukan meliputi membuat daftar halaman, User Stories, Functional Requirements, Activity Diagram, serta desain Figma. Bukti pengerjaan dapat dilihat dari dokumen laporan setiap minggu dan hasil desain Figma. Untuk memastikan apakah proyek secara keseluruhan sesuai jadwal, progres tim perlu dibandingkan dengan target yang telah ditentukan.
+
+
+
+\subsubsection*{2. Apa keterlambatan/kendala dan penyebabnya?}
+
+Kendala yang saya hadapi adalah menentukan alur penggunaan aplikasi agar mudah dipahami. Saya harus memastikan mahasiswa dapat mencari event, melihat detail, memeriksa tanggal, waktu, dan lokasi, lalu mendaftar. Selain itu, halaman untuk mahasiswa dan admin memiliki fungsi yang berbeda sehingga perlu disesuaikan dengan kebutuhan masing-masing.
+
+
+
+\subsubsection*{3. Apa perubahan kebutuhan dan artefak terdampak?}
+
+Pada alur pendaftaran, mahasiswa perlu melihat detail event terlebih dahulu sebelum mendaftar. Mahasiswa harus memeriksa tanggal, waktu, dan lokasi agar tidak salah memilih event. Hal ini berpengaruh pada User Stories, Functional Requirements, Activity Diagram, dan desain Figma, terutama halaman Detail Event dan tombol pendaftaran.
+
+
+
+\subsubsection*{4. Bagaimana tim menangani kendala/perubahan?}
+
+Kendala ditangani dengan memeriksa kembali kebutuhan pengguna dan memperbaiki rancangan yang belum sesuai. Saya menyesuaikan alur halaman agar mahasiswa dapat memahami informasi event sebelum mendaftar. Dokumen dan desain juga perlu diperiksa kembali supaya isinya tetap sesuai. Jika ada perubahan yang berpengaruh pada pekerjaan anggota lain, perubahan tersebut perlu dibicarakan bersama tim.
+
+
+
+\subsubsection*{5. Apa risiko tersisa dan rencana setelah UTS?}
+
+Risiko yang masih mungkin terjadi adalah perubahan kebutuhan, desain yang berbeda dengan hasil aplikasi, dan fitur yang belum berjalan dengan baik. Setelah UTS, saya berencana memeriksa kembali desain Figma, memastikan halaman sesuai dengan kebutuhan pengguna, serta membantu mencocokkan desain dengan hasil aplikasi. Pengujian juga perlu dilakukan untuk memastikan fitur pencarian, pendaftaran, dan pengelolaan event berjalan dengan baik.
+
+
 \subsection*{Bagian D -- Refleksi Pribadi}
-\begin{enumerate}
-\item Apakah SDLC pilihan sesuai pelaksanaan? Jelaskan berdasarkan pengalaman.
-\item FR apa paling penting dan bagaimana pengaruhnya pada rancangan?
-\item Jika pengguna meningkat sepuluh kali, apa bottleneck dan strategi skalabilitasnya?
-\item Keputusan desain apa yang Anda buat; apa alternatifnya dan alasan pemilihan?
-\item Jika kebutuhan berubah setelah Minggu 8, apa dampak pada kebutuhan, desain, modul dan jadwal?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi lima jawaban dengan pertimbangan sendiri].}
-\subsection*{Bukti Kontribusi}
-Cantumkan artefak, commit, review atau hasil pengujian yang benar-benar dikerjakan. Jawaban dapat diperpanjang dan tidak harus muat dalam satu halaman formulir ini.
+\subsubsection*{1. Apakah SDLC pilihan sesuai pelaksanaan? Jelaskan berdasarkan pengalaman.}
+
+Menurut saya, tahapan SDLC yang digunakan sudah sesuai karena pengerjaan dilakukan secara berurutan. Tim memulai dari memahami kebutuhan pengguna, membuat rancangan sistem, lalu melanjutkan ke desain aplikasi. Dalam tugas saya, kebutuhan pengguna menjadi dasar untuk membuat User Stories, Functional Requirements, Activity Diagram, dan desain Figma. Dengan urutan ini, desain yang dibuat menjadi lebih terarah.
+
+
+
+\subsubsection*{2. FR apa paling penting dan bagaimana pengaruhnya pada rancangan?}
+
+Menurut saya, salah satu Functional Requirement yang paling penting adalah fitur melihat detail event dan melakukan pendaftaran. Mahasiswa perlu mengetahui tanggal, waktu, lokasi, dan informasi event sebelum mendaftar. Hal ini memengaruhi desain halaman Detail Event karena informasi tersebut harus ditampilkan dengan jelas. Tombol pendaftaran juga perlu mudah ditemukan agar mahasiswa tidak kesulitan saat ingin mendaftar.
+
+
+
+\subsubsection*{3. Jika pengguna meningkat sepuluh kali, apa bottleneck dan strategi skalabilitasnya?}
+
+Jika jumlah pengguna meningkat sepuluh kali lipat, server dan database mungkin menjadi lebih lambat karena banyak pengguna mengakses aplikasi secara bersamaan. Untuk mengatasinya, tim dapat memperbaiki cara pengambilan data, membatasi jumlah event yang ditampilkan dalam satu halaman, dan meningkatkan kapasitas server jika diperlukan. Pengujian juga perlu dilakukan untuk mengetahui apakah aplikasi tetap berjalan dengan baik saat banyak pengguna mengaksesnya.
+
+
+
+\subsubsection*{4. Keputusan desain apa yang Anda buat, apa alternatifnya dan alasan pemilihan?}
+
+Keputusan desain yang saya buat adalah menampilkan informasi lengkap pada halaman Detail Event sebelum mahasiswa melakukan pendaftaran. Alternatifnya adalah menyediakan tombol daftar langsung pada daftar event. Saya memilih halaman Detail Event karena mahasiswa perlu memeriksa tanggal, waktu, dan lokasi terlebih dahulu. Dengan begitu, mahasiswa dapat memastikan bahwa event yang dipilih sesuai dengan jadwal dan kebutuhannya.
+
+
+
+\subsubsection*{5. Jika kebutuhan berubah setelah Minggu 8, apa dampak pada kebutuhan, desain, modul dan jadwal?}
+
+Jika kebutuhan berubah setelah Minggu 8, tim perlu memeriksa bagian yang terkena dampak. Dokumen kebutuhan mungkin harus diperbarui, desain Figma perlu disesuaikan, dan bagian program yang berkaitan mungkin harus diubah. Perubahan tersebut juga dapat menambah waktu pengerjaan dan pengujian. Karena itu, perubahan perlu dibicarakan bersama tim agar setiap anggota mengetahui tugas yang harus diperbaiki dan jadwal pengerjaan dapat disesuaikan.
+
+
+\subsection*{Kontribusi dan Bukti}
+Kontribusi saya dalam proyek EventKu berfokus pada analisis kebutuhan pengguna dan pembuatan desain UI/UX. Pekerjaan yang saya lakukan meliputi:
+\begin{itemize}
+\item Membuat daftar halaman yang dibutuhkan mahasiswa, penyelenggara, dan admin.
+\item Membuat User Stories untuk pencarian dan pendaftaran event.
+\item Menyusun Functional Requirements untuk pengajuan, pengelolaan, dan pendaftaran event.
+\item Membuat alur Activity Diagram pengajuan event dan pendaftaran mahasiswa.
+\item Menentukan informasi yang perlu ditampilkan pada halaman aplikasi dan arah desainnya.
+\item Membuat desain Figma yang mencakup halaman Home/Event UKWMS, Login, Register, Dashboard Mahasiswa, Detail Event, Calendar, Kelola Event Admin, Edit Event Admin, dan Tambah Event Admin.
+\end{itemize}
+
+Sebagai bukti kontribusi, saya melampirkan pada dokumen laporan yang telah dibuat dan tautan Figma yang menunjukkan hasil desain saya.
+
+\href{https://www.figma.com/design/msefrhl4aO32NFpVU4MRlo/RPL-EventKu--UTS-?node-id=0-1\&p=f\&t=HvIXZzI2tPTZ8Ou0-0}{Buka desain Figma Audrey}\quad\href{https://www.figma.com/proto/msefrhl4aO32NFpVU4MRlo/RPL-EventKu--UTS-?node-id=1-52\&p=f\&t=HvIXZzI2tPTZ8Ou0-0\&scaling=scale-down-width\&content-scaling=fixed\&page-id=0\%3A1}{Buka prototype Figma Audrey}.
 
 \page{Analisis Individu -- Bambang Herlambang}
 \textbf{Nama:} Bambang Herlambang\quad\textbf{NRP:} 5803024019
 
-\note{Harus diisi oleh anggota bersangkutan dengan pengalaman, kontribusi dan penilaian sendiri. Pertanyaan berikut bukan jawaban final.}
 \subsection*{Bagian C -- Kondisi Proyek}
-\begin{enumerate}
-\item Apakah proyek sesuai jadwal? Sebutkan target dan bukti aktual.
-\item Apa keterlambatan/kendala dan penyebabnya?
-\item Apa perubahan kebutuhan dan artefak terdampak?
-\item Bagaimana tim menangani kendala/perubahan?
-\item Apa risiko tersisa dan rencana setelah UTS?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi uraian dan bukti yang relevan].}
+\subsubsection*{1. Apakah proyek sesuai jadwal? Sebutkan target dan bukti aktual.}
+Target pekerjaan saya sampai Minggu 8 berfokus pada analisis teknis dan perancangan sebagai System Architect dan Frontend Developer. Dokumen yang sudah tersedia mencakup benchmark platform pada Minggu 1, opsi arsitektur pada Minggu 2, User Stories Auth dan Event pada Minggu 3, serta kebutuhan nonfungsional skalabilitas dan performa pada Minggu 4. Untuk tahap desain, saya menyiapkan ERD awal Auth dan Event pada Minggu 5, arsitektur modular, class diagram dan ERD final pada Minggu 6, kemudian design pattern serta rancangan struktur frontend pada Minggu 7.
+
+Pada konsolidasi menjelang UTS, saya menyelaraskan dokumen desain dengan SRS dan memasukkan diagram Lucidchart ke bagian yang sesuai dalam DOCX. Bukti aktualnya adalah dokumen pada repository serta riwayat commit akun Bambang-code. Keluaran perancangan tersebut sudah tersedia untuk pembahasan UTS. Implementasi frontend, integrasi API, dan pengujian aplikasi merupakan pekerjaan setelah UTS. Kesesuaian jadwal keseluruhan tim tetap perlu dinilai dari perbandingan target dan realisasi setiap anggota, bukan hanya dari keberadaan dokumen saya.
+
+\subsubsection*{2. Apa keterlambatan/kendala dan penyebabnya?}
+Sampai Minggu 8, saya tidak mengalami kendala yang perlu dilaporkan pada pekerjaan pribadi saya. Pemeriksaan dan revisi yang saya lakukan berfokus pada kesesuaian antara SRS, diagram, dan dokumen rancangan. Sebelum implementasi dimulai, saya masih perlu merinci keputusan teknis yang terbuka, seperti tipe ID database dan pengaturan integrasi frontend dengan API. Hal tersebut saya tempatkan sebagai tindak lanjut perancangan.
+
+\subsubsection*{3. Apa perubahan kebutuhan dan artefak terdampak?}
+Rancangan awal perlu diselaraskan dengan SRS versi 2 yang merinci organisasi dan verifikasinya, waktu mulai dan selesai event, enam status event, hak akses setiap peran, hasil moderasi untuk penyelenggara, serta prioritas notifikasi. Pilihan database yang saya gunakan sebagai acuan rancangan adalah PostgreSQL. Perincian ini berdampak pada ERD, class diagram, kontrak API, alur perubahan status, dan rancangan frontend.
+
+Contohnya, penyelenggara harus terkait dengan organisasi yang terverifikasi sebelum dapat mengajukan event. Oleh karena itu, rancangan perlu memuat identitas dan status organisasi serta pemeriksaan izin pada backend. Form event juga perlu mengikuti waktu mulai--selesai, sedangkan katalog publik hanya menampilkan event Disetujui. Mockup Figma yang tersedia tetap menjadi acuan visual awal; fungsi dan aturan implementasi mengikuti SRS terbaru.
+
+\subsubsection*{4. Bagaimana tim menangani kendala/perubahan?}
+Dalam bagian pekerjaan saya, perubahan ditangani dengan memeriksa kebutuhan pada SRS lalu menelusuri pengaruhnya ke diagram dan kontrak modul. Saya memperbarui dokumen ERD, arsitektur, class diagram, design pattern, serta penjelasan frontend agar istilah, status, dan hak aksesnya konsisten. Diagram dari Lucidchart dimasukkan ke bagian terkait dalam DOCX dan diberi tautan sumber sehingga rancangan lebih mudah ditinjau.
+
+Riwayat commit menyimpan perubahan artefak tersebut. Untuk implementasi berikutnya, perubahan kontrak API perlu diselaraskan dengan pekerjaan backend, sedangkan skenario verifikasinya perlu diselaraskan dengan QA. Pemeriksaan ini diperlukan agar frontend, backend, dan test case menggunakan aturan yang sama.
+
+\subsubsection*{5. Apa risiko tersisa dan rencana setelah UTS?}
+Risiko yang masih perlu saya antisipasi adalah perbedaan antara SRS dan implementasi, akses data lintas organisasi, kuota terlampaui saat pendaftaran bersamaan, serta kebutuhan UI yang belum seluruhnya tercakup dalam mockup. Tipe ID dan detail integrasi juga perlu dipastikan sebelum migrasi dan pengembangan dimulai. Risiko tersebut merupakan potensi masalah yang perlu diuji ketika aplikasi tersedia.
+
+Setelah UTS, saya berencana menggunakan rancangan struktur folder sebagai dasar frontend React dan Tailwind, merinci routing berdasarkan peran, memisahkan pemanggilan API melalui lapisan services, serta mengelola sesi dan aksi UI melalui Context dan custom hooks. Saya juga perlu menyelaraskan form, filter, pagination, dan pesan kesalahan dengan kontrak backend. Integrasi kemudian diperiksa bersama hasil pengujian, dengan prioritas pada kebutuhan Must dan alur utama sampai selesai.
+
 \subsection*{Bagian D -- Refleksi Pribadi}
-\begin{enumerate}
-\item Apakah SDLC pilihan sesuai pelaksanaan? Jelaskan berdasarkan pengalaman.
-\item FR apa paling penting dan bagaimana pengaruhnya pada rancangan?
-\item Jika pengguna meningkat sepuluh kali, apa bottleneck dan strategi skalabilitasnya?
-\item Keputusan desain apa yang Anda buat; apa alternatifnya dan alasan pemilihan?
-\item Jika kebutuhan berubah setelah Minggu 8, apa dampak pada kebutuhan, desain, modul dan jadwal?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi lima jawaban dengan pertimbangan sendiri].}
+\subsubsection*{1. Apakah SDLC pilihan sesuai pelaksanaan? Jelaskan berdasarkan pengalaman.}
+Menurut saya, Scrum yang diadaptasi untuk proyek perkuliahan sesuai dengan karakteristik EventKu karena kebutuhan dan rancangan masih dapat diperinci selama pengerjaan. Dalam pekerjaan saya, rancangan awal arsitektur dan ERD perlu diselaraskan lagi ketika organisasi, status event, notifikasi, serta kontrak API diperjelas. Pembagian kebutuhan melalui backlog dan prioritas MoSCoW membantu menentukan bagian yang perlu dipersiapkan terlebih dahulu.
+
+Arsitektur modular mendukung rencana implementasi bertahap karena Auth, Event, Pendaftaran, dan Notifikasi memiliki tanggung jawab yang berbeda. Namun, sampai UTS pekerjaan saya masih berfokus pada analisis dan desain. Saya belum menyimpulkan bahwa seluruh praktik Scrum atau sprint implementasi telah berjalan efektif; hal itu perlu dinilai setelah increment aplikasi dapat diperagakan dan ditinjau.
+
+\subsubsection*{2. FR apa paling penting dan bagaimana pengaruhnya pada rancangan?}
+Saya memilih FR-RSV-06, yaitu sistem menangani pendaftaran bersamaan agar kuota tidak terlampaui. Kebutuhan ini penting karena tampilan sisa kuota pada frontend dapat berubah saat mahasiswa lain mendaftar. Validasi pada layar saja tidak cukup untuk menentukan apakah kursi masih tersedia.
+
+Dalam rancangan, RegistrationService mengakses modul Event melalui EventPublicApi. Reservasi kursi dan penyimpanan Registration dilakukan dalam transaksi database yang sama. Jika salah satu operasi gagal, perubahan harus dibatalkan seluruhnya. Constraint unik pada pasangan event dan mahasiswa membantu mencegah pendaftaran ganda, sedangkan reservasi kursi dirancang memakai pembaruan bersyarat atau penguncian yang sesuai. Setelah transaksi berhasil commit, barulah domain event dapat dipublikasikan untuk kebutuhan notifikasi. Frontend menerima hasil dari backend dan menampilkan pesan berhasil, sudah terdaftar, atau kuota penuh. Kebenaran mekanisme ini masih harus dibuktikan melalui pengujian konkurensi setelah implementasi tersedia.
+
+\subsubsection*{3. Jika pengguna meningkat sepuluh kali, apa bottleneck dan strategi skalabilitasnya?}
+Bagian yang saya perkirakan berpotensi menjadi bottleneck adalah query pencarian event, jumlah koneksi database, dan perebutan kursi ketika banyak mahasiswa mendaftar event yang sama. Query yang membaca terlalu banyak data dapat memperlambat daftar event, sedangkan transaksi pendaftaran perlu menjaga konsistensi kuota ketika permintaan meningkat.
+
+Saya akan memulai dari pengukuran waktu respons dan query pada PostgreSQL, kemudian meninjau indeks kolom filter, pagination, serta penggunaan koneksi database. Backend stateless memberi pilihan untuk menambah instance apabila diperlukan, tetapi penambahan instance tetap harus menjaga transaksi dan constraint database. Pada frontend, pembatasan data per halaman dan pemuatan halaman sesuai kebutuhan membantu mengurangi beban awal. Pemisahan layanan atau caching perlu dipertimbangkan berdasarkan hasil pengukuran; saya belum dapat memastikan bottleneck sebenarnya sebelum aplikasi diuji.
+
+\subsubsection*{4. Keputusan desain apa yang Anda buat; apa alternatifnya dan alasan pemilihan?}
+Keputusan desain yang saya rekomendasikan adalah modular monolith: satu aplikasi backend dengan batas modul Auth, Event, Pendaftaran, dan Notifikasi. Alternatif yang saya kaji adalah monolith tanpa pemisahan modul yang tegas serta microservices dengan layanan terpisah. Pertimbangan tersebut tercatat pada dokumen opsi arsitektur Minggu 2.
+
+Saya memilih modular monolith karena tim beranggotakan empat orang dan waktu implementasi satu semester terbatas. Satu unit backend lebih sederhana untuk disiapkan dan diintegrasikan, sementara pemisahan controller, service, dan repository membantu pembagian tanggung jawab serta pengujian. Transaksi RSVP juga dapat dikoordinasikan pada satu database. Konsekuensinya, tim harus disiplin menjaga batas modul, misalnya modul Pendaftaran mengakses EventPublicApi alih-alih mengimpor repository Event secara langsung. Pilihan ini memberi dasar untuk memisahkan modul tertentu kemudian jika kebutuhan dan hasil pengukuran mendukungnya.
+
+\subsubsection*{5. Jika kebutuhan berubah setelah Minggu 8, apa dampak pada kebutuhan, desain, modul dan jadwal?}
+Jika kebutuhan berubah setelah Minggu 8, saya perlu menelusuri perubahan dari ID kebutuhan ke use case, rancangan data, kontrak API, diagram, frontend, dan skenario pengujian. Sebagai contoh hipotetis, perubahan batas waktu pembatalan RSVP akan memengaruhi validasi pada RegistrationService, ketersediaan tombol pembatalan dan pesan pada frontend, serta test case sebelum dan sesudah batas waktu. Jika aturan itu memerlukan data baru, ERD dan migrasi database juga perlu disesuaikan.
+
+Perubahan harus dicatat dalam SRS dan backlog, kemudian dinilai prioritas serta estimasinya bersama tim. Saya perlu menjelaskan pengaruhnya terhadap kontrak modul dan pekerjaan frontend agar revisi tidak hanya dilakukan pada satu dokumen. Jadwal sprint disesuaikan berdasarkan dampak yang disepakati, termasuk waktu integrasi dan pengujian ulang. Saya tidak akan menganggap perubahan selesai hanya karena diagramnya sudah diperbarui.
+
 \subsection*{Bukti Kontribusi}
-Cantumkan artefak, commit, review atau hasil pengujian yang benar-benar dikerjakan. Jawaban dapat diperpanjang dan tidak harus muat dalam satu halaman formulir ini.
+Kontribusi saya berfokus pada analisis teknis, rancangan arsitektur dan data, kontrak antar modul, serta persiapan struktur frontend. Diagram arsitektur, ERD, class diagram, pattern, dan alur frontend ditampilkan pada bagian rancangan dan lampiran laporan ini. Tautan berikut merujuk artefak serta perubahan yang dicatat oleh akun Bambang-code.
+
+\begin{itemize}
+\item \textbf{Minggu 1--4:} benchmark platform, opsi arsitektur, User Stories Auth dan Event, serta NFR skalabilitas/performa. \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/fa407702c0a555e109fd62b0334c1e7bf31ccb7a}{Commit fa40770 -- 7 September 2026} memuat keempat dokumen awal tersebut.
+\item \textbf{Minggu 5:} ERD draft Auth dan Event. \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/45187d3631b18825ec0d9d8726ee71e35b880a91}{Commit 45187d3 -- 15 September 2026}. Artefak: \path{docs/diagrams/minggu5_erd_draft_auth_event.docx}.
+\item \textbf{Minggu 6:} arsitektur modular, class diagram, ERD final dan kontrak API awal. \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/3335c379c7e3749b07a9053d4fdb41adefecca5c}{Commit 3335c37 -- 29 September 2026}. Artefak: \path{docs/architecture/minggu6_arsitektur_modular_classdiagram_erd.docx}.
+\item \textbf{Minggu 7:} MVC, Repository, Observer, struktur folder frontend, routing dan rencana state management. \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/b1b61d91d2ae04b912279c6b65a53a5d8ebbc02d}{Commit b1b61d9 -- 29 September 2026}. Artefak: \path{docs/architecture/minggu7_design_pattern_struktur_frontend.docx}.
+\item \textbf{Konsolidasi UTS:} penempatan diagram dalam bagian DOCX pada \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/5a171188a8d9fac6df4662edcaa03187cae87be2}{commit 5a17118 -- 6 Oktober 2026}; penyelarasan desain dengan SRS pada \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/6be29cb3f5501b5a5d37ef284735be488d700c82}{commit 6be29cb -- 7 Oktober 2026}; serta tautan sumber Lucidchart pada \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/91d8f32b8f10ea8ed19f023c9fa0ee036bffc7ec}{commit 91d8f32 -- 7 Oktober 2026}.
+\end{itemize}
+
+\textbf{Dokumen Lucidchart EventKu:}
+{\small\raggedright\url{https://lucid.app/lucidchart/eade4b94-4f0b-4ff1-9576-4063f45cfbfb/view?invitationId=inv_144411dc-3a44-4e55-8ed9-8ea69347d77b&page=index}\par}
+
+Tanggal pada tautan commit menunjukkan pencatatan perubahan di Git, bukan waktu seluruh aktivitas pengerjaan. Artefak tersebut membuktikan hasil dokumentasi dan perancangan; hasil implementasi serta pengujian dicatat pada tahap berikutnya.
+
+\clearpage\subsection*{Bukti Visual Bambang -- 01}
+
+Dua belas materi berikut mengikuti tab 01--12 pada paket Lucidchart yang diekspor ke PNG; tab 00 merupakan daftar isi. PNG ini merekam versi awal. Perbedaan status, organisasi, dan API perlu dibaca bersama SRS serta dokumen rancangan revisi pada tautan commit. Rancangan revisi tetap menjadi acuan implementasi.
+
+\bambangexport{01}{.60\textheight}{Bukti BK-01. ERD v1 -- Auth dan Event (tab 01 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 02}
+
+\bambangexport{02}{.76\textheight}{Bukti BK-02. ERD final -- EventKu (tab 02 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 03}
+
+\bambangexport{03}{.76\textheight}{Bukti BK-03. Arsitektur modular EventKu (tab 03 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 04}
+
+\bambangexport{04}{.76\textheight}{Bukti BK-04. Class diagram Auth (tab 04 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 05}
+
+\bambangexport{05}{.76\textheight}{Bukti BK-05. Class diagram Event (tab 05 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 06}
+
+\bambangexport{06}{.76\textheight}{Bukti BK-06. Class diagram Pendaftaran (tab 06 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 07}
+
+\bambangexport{07}{.76\textheight}{Bukti BK-07. Class diagram Notifikasi (tab 07 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 08}
+
+\bambangexport{08}{.76\textheight}{Bukti BK-08. MVC -- Frontend dan Backend (tab 08 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 09}
+
+\bambangexport{09}{.76\textheight}{Bukti BK-09. Repository Pattern (tab 09 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 10}
+
+\bambangexport{10}{.76\textheight}{Bukti BK-10. Observer Pattern (tab 10 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 11}
+
+\bambangexport{11}{.76\textheight}{Bukti BK-11. Kontrak API awal (tab 11 Lucidchart).}
+
+\clearpage\subsection*{Bukti Visual Bambang -- 12}
+
+\bambangexport{12}{.76\textheight}{Bukti BK-12. Algoritma pencarian dan filter (tab 12 Lucidchart).}
 
 \page{Analisis Individu -- Dustin Pranata Wangsawidjaja}
+
 \textbf{Nama:} Dustin Pranata Wangsawidjaja\quad\textbf{NRP:} 5803024021
 
-\note{Harus diisi oleh anggota bersangkutan dengan pengalaman, kontribusi dan penilaian sendiri. Pertanyaan berikut bukan jawaban final.}
+\textbf{Peran:} Project Manager dan Business Analyst
+
+\textit{Sumber: draf analisis individu yang disampaikan anggota bersangkutan.} \cite{dustinind}
+
 \subsection*{Bagian C -- Kondisi Proyek}
-\begin{enumerate}
-\item Apakah proyek sesuai jadwal? Sebutkan target dan bukti aktual.
-\item Apa keterlambatan/kendala dan penyebabnya?
-\item Apa perubahan kebutuhan dan artefak terdampak?
-\item Bagaimana tim menangani kendala/perubahan?
-\item Apa risiko tersisa dan rencana setelah UTS?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi uraian dan bukti yang relevan].}
+
+\subsubsection*{1. Apakah proyek sesuai jadwal?}
+
+Pengerjaan proyek EventKu dilakukan secara bertahap dari Minggu 1 sampai Minggu 8. Tugas saya berfokus pada perencanaan dan analisis kebutuhan sebagai Project Manager dan Business Analyst, yaitu menyusun Project Charter, SRS, Product Backlog, dokumen justifikasi SDLC, dan User Stories, serta mengoordinasikan dokumen dan materi presentasi UTS.
+
+Bukti pengerjaan dapat dilihat dari Project Charter v1.0, SRS v2.0 (50 kebutuhan fungsional, 24 kebutuhan nonfungsional, dan 17 use case), dokumen Justifikasi SDLC, Product Backlog v1 (46 story, 150 poin), dan slide UTS. Namun, pekerjaan saya cukup terlambat dan sebagian harus tertunda karena manajemen waktu saya yang kurang baik serta kesalahan dalam pengerjaan, sehingga saya tidak dapat menyatakan bagian saya sepenuhnya sesuai jadwal. Untuk memastikan apakah proyek secara keseluruhan sesuai jadwal, progres tim perlu dibandingkan dengan target yang telah ditentukan.
+
+\subsubsection*{2. Keterlambatan/kendala dan penyebabnya}
+
+Kendala utama berasal dari diri saya sendiri, yaitu pengelolaan waktu dan beban kerja yang kurang baik serta beberapa kesalahan dalam pengerjaan. Akibatnya, penyelesaian sebagian pekerjaan saya terlambat dan sebagian lainnya harus ditunda. Saya meminta maaf kepada rekan tim atas keterlambatan tersebut. Selain itu, sebagai PM dan BA saya harus memastikan alur penggunaan aplikasi bagi mahasiswa, penyelenggara, dan admin tercantum secara konsisten di SRS dan backlog, karena setiap peran memiliki fungsi yang berbeda.
+
+\subsubsection*{3. Perubahan kebutuhan dan artefak terdampak}
+
+Pada alur pendaftaran, mahasiswa perlu melihat detail event terlebih dahulu sebelum mendaftar, yaitu memeriksa tanggal, waktu, dan lokasi agar tidak salah memilih event. Alur ini sudah tercakup dalam SRS v2.0 (FR-SRC-04 dan FR-RSV-01), tetapi dipertegas dari sisi rancangan antarmuka. Dampaknya pada pekerjaan saya adalah penyelarasan User Stories, kebutuhan fungsional di SRS, dan Product Backlog agar halaman Detail Event dan tombol pendaftaran konsisten dengan Activity Diagram dan desain Figma.
+
+\subsubsection*{4. Bagaimana tim menangani}
+
+Kendala dan perubahan ditangani dengan memeriksa kembali kebutuhan pengguna dan menyelaraskan dokumen yang terdampak, yaitu SRS, User Stories, dan Product Backlog, supaya isinya tetap sesuai dengan rancangan. Jika ada perubahan yang berpengaruh pada pekerjaan anggota lain, perubahan tersebut perlu dibicarakan bersama tim. Terkait keterlambatan saya, rekan tim bersabar menghadapi saya, dan saya mengucapkan terima kasih atas pengertian mereka.
+
+\subsubsection*{5. Risiko tersisa dan rencana setelah UTS}
+
+Risiko yang masih mungkin terjadi:
+
+\begin{itemize}
+
+\item Perubahan kebutuhan dan ketidaksesuaian. Kebutuhan dapat berubah, desain dapat berbeda dengan hasil aplikasi, dan sebagian fitur dapat belum berjalan dengan baik.
+
+\item Manajemen waktu saya. Keterlambatan dari pihak saya dapat menghambat pekerjaan anggota lain pada sprint.
+
+\item Beban sprint timpang. Sprint 2 berisi 51 poin dalam 1 minggu, dibanding 14 poin per minggu pada Sprint 1.
+
+\item Pembagian beban. Pekerjaan backend terkonsentrasi pada satu anggota, dan sebagian UI berprioritas Must belum terjadwal di rincian mingguan.
+
+\item Jadwal sprint belum seragam. Rencana proyek, backlog dan slide, serta laporan memakai pembagian sprint yang berbeda.
+
+\end{itemize}
+
+Setelah UTS, saya berencana memperbaiki manajemen waktu agar pekerjaan selesai sesuai target, menyeimbangkan beban sprint dan menyamakan jadwal sprint pada Sprint Planning Minggu 9, memantau progres, serta mereview API terhadap SRS. Saya juga akan memimpin UAT, dokumentasi, dan Berita Acara Serah Terima pada Minggu 14--16. Pengujian perlu dilakukan untuk memastikan fitur pencarian, pendaftaran, dan pengelolaan event berjalan dengan baik.
+
 \subsection*{Bagian D -- Refleksi Pribadi}
-\begin{enumerate}
-\item Apakah SDLC pilihan sesuai pelaksanaan? Jelaskan berdasarkan pengalaman.
-\item FR apa paling penting dan bagaimana pengaruhnya pada rancangan?
-\item Jika pengguna meningkat sepuluh kali, apa bottleneck dan strategi skalabilitasnya?
-\item Keputusan desain apa yang Anda buat; apa alternatifnya dan alasan pemilihan?
-\item Jika kebutuhan berubah setelah Minggu 8, apa dampak pada kebutuhan, desain, modul dan jadwal?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi lima jawaban dengan pertimbangan sendiri].}
-\subsection*{Bukti Kontribusi}
-Cantumkan artefak, commit, review atau hasil pengujian yang benar-benar dikerjakan. Jawaban dapat diperpanjang dan tidak harus muat dalam satu halaman formulir ini.
+
+\subsubsection*{1. Apakah SDLC pilihan sesuai pelaksanaan?}
+
+Scrum dipilih lewat matriks berbobot (122 dari 140), yang merupakan penilaian internal. Sampai Minggu 8 pekerjaan masih berurutan karena sprint baru mulai Minggu 9, sehingga kecocokan penuh belum teruji. Backlog dan estimasi poin sudah memberi manfaat nyata: dari situ ketimpangan beban sprint terlihat sebelum implementasi. Kelemahan yang saya akui sendiri adalah skor dokumentasi dan kemudahan bagi pemula yang hanya 3.
+
+JIRA terasa rumit bagi saya sehingga membutuhkan waktu belajar yang cukup lama sebelum saya terbiasa; standup juga membutuhkan waktu untuk dibiasakan.
+
+\subsubsection*{2. FR paling penting}
+
+FR-RSV-02 dan FR-RSV-06 (kuota tidak terlampaui dan tidak ada pendaftaran ganda, termasuk pada permintaan bersamaan). Dampaknya pada rancangan: pemeriksaan dan reservasi kursi dalam satu transaksi, constraint UNIQUE(event, mahasiswa), batas 0 $\leq$ reserved\_seats $\leq$ quota, TransactionManager, dan uji konkurensi.
+
+\subsubsection*{3. Jika pengguna naik sepuluh kali}
+
+Bottleneck yang diperkirakan: query pencarian, koneksi database, kontensi kuota pada event populer, dan notifikasi yang bisa terlewat bila proses gagal setelah commit. Strategi: ukur dulu, lalu pagination dan indeks (tanggal, kategori, status), backend stateless agar bisa direplikasi, caching katalog bila terbukti perlu, dan outbox/worker/handler idempoten bila keandalan notifikasi harus lebih tinggi.
+
+\subsubsection*{4. Keputusan desain}
+
+Keputusan saya: memilih Scrum yang diadaptasi (alternatif: Waterfall dan Iteratif), menyusun backlog MoSCoW dengan kriteria penerimaan dan ketertelusuran ke FR, serta menyarankan hanya organisasi terverifikasi yang boleh mengajukan event (alternatif: semua boleh, hanya moderasi). Alasannya adalah waktu implementasi lima minggu, kebutuhan yang bisa berkembang, dan menekan event palsu.
+
+\subsubsection*{5. Jika kebutuhan berubah setelah Minggu 8}
+
+Contoh konkret: FR-EVT-06 (US-15, 3 poin, Should) dinaikkan menjadi Must dan masuk Sprint 2. Beban Sprint 2 naik dari 51 menjadi 54 poin dalam satu minggu, sehingga sesuatu harus turun. Dampaknya: SRS menjadi v2.1, lalu backlog, use case UC-11, ERD (moderation\_version), class diagram, API dan testcase diperbarui, serta modul Event dan Notifikasi terdampak. Setelah feature-freeze Minggu 13, perubahan perlu persetujuan tim.
+
+\subsection*{Bukti Kontribusi (Minggu 1--8)}
+
+Butir berikut disusun dari berkas proyek dan rincian tugas mingguan. Butir bertanda [VERIFIKASI] memerlukan tautan, commit, atau catatan review sebelum pengumpulan.
+
+\begin{itemize}
+
+\item Minggu 1: Menyusun Project Charter v1.0 dan mengidentifikasi stakeholder proyek (mahasiswa, UKM/Ormawa, admin fakultas). Charter ditinjau bersama seluruh anggota pada kick-off meeting dan menunggu persetujuan dosen pengampu.
+
+\item Minggu 2: Menyusun SRS v1.0 (tercatat dalam riwayat revisi SRS) dan Product Backlog v1: 46 user story, 150 poin, prioritas MoSCoW, kriteria penerimaan, dan ketertelusuran ke SRS. Berkas backlog hanya mencantumkan kelompok, sehingga [VERIFIKASI] dengan riwayat JIRA atau versi berkas.
+
+\item Minggu 3: Menyusun justifikasi SDLC yang membandingkan Waterfall, Iteratif, dan Scrum dengan matriks berbobot (80, 97, dan 122 dari 140) serta menetapkan adaptasi Scrum untuk perkuliahan. Menulis User Stories bersama Bambang. [VERIFIKASI: story mana yang saya tulis.]
+
+\item Minggu 4: Menyusun SRS v2.0 dengan mengonsolidasikan masukan Audrey (fungsional), Bambang (skalabilitas dan performa), dan Alexa (keamanan dan reliabilitas): 50 kebutuhan fungsional, 24 kebutuhan nonfungsional, dan 17 use case. Riwayat revisi SRS mencatat pekerjaan ini.
+
+\item Minggu 5: Membuat Use Case Diagram (berkas diagram format draw.io): 3 aktor (Mahasiswa, Penyelenggara, Admin/pengelola) dan 12 use case yang mencakup alur utama mahasiswa, penyelenggara, dan admin, dengan relasi \guillemotleft{}include\guillemotright{} pada pengajuan event. SRS mendefinisikan 17 use case secara lebih lengkap.
+
+\item Minggu 6: Mendokumentasikan arsitektur ke dalam laporan dan menyelaraskannya dengan batas cakupan. [VERIFIKASI: bagian laporan mana yang saya tulis.]
+
+\item Minggu 7: Menyusun draf slide presentasi UTS (10 slide) yang merangkum SRS, arsitektur, dan desain.
+
+\end{itemize}
+
+Berkas pendukung: \path{EventKu_1_Project_Charter.docx}, \path{EventKu_2_SRS.docx} (v2.0), \path{EventKu_3_Justifikasi_SDLC.docx}, \path{EventKu_4_Product_Backlog.xlsx}, \path{EventKu_5_Presentasi_UTS.pptx}, dan berkas Use Case Diagram. Saya tercantum sebagai penyusun pada Charter, SRS, dan justifikasi SDLC; backlog dan slide hanya mencantumkan Kelompok IV, sehingga peran saya pada keduanya dinyatakan berdasarkan rincian tugas mingguan.
+
 
 \page{Analisis Individu -- Alexa Bilxiz Aulia}
 \textbf{Nama:} Alexa Bilxiz Aulia\quad\textbf{NRP:} 5803024023
 
-\note{Harus diisi oleh anggota bersangkutan dengan pengalaman, kontribusi dan penilaian sendiri. Pertanyaan berikut bukan jawaban final.}
+\textit{Sumber: jawaban individu yang disampaikan anggota bersangkutan.} \cite{alexaind}
+
 \subsection*{Bagian C -- Kondisi Proyek}
-\begin{enumerate}
-\item Apakah proyek sesuai jadwal? Sebutkan target dan bukti aktual.
-\item Apa keterlambatan/kendala dan penyebabnya?
-\item Apa perubahan kebutuhan dan artefak terdampak?
-\item Bagaimana tim menangani kendala/perubahan?
-\item Apa risiko tersisa dan rencana setelah UTS?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi uraian dan bukti yang relevan].}
+\subsubsection*{1. Apakah proyek sesuai jadwal? Sebutkan target dan bukti aktual.}
+
+Menurut saya, pengerjaan proyek EventKu dari sisi tugas individu saya belum sepenuhnya sesuai jadwal karena beberapa pekerjaan baru saya selesaikan setelah waktu yang direncanakan. Berdasarkan pembagian tugas, pekerjaan saya meliputi persiapan repository dan channel komunikasi pada Minggu 1, riset tools dan konvensi commit Git pada Minggu 2, serta penyusunan kebutuhan nonfungsional keamanan dan reliabilitas pada Minggu 4. Selanjutnya, saya membuat activity diagram moderasi admin dan draft test case pada Minggu 5, menyiapkan struktur branching Git pada Minggu 6, menyusun checklist QA berdasarkan design pattern dan arsitektur pada Minggu 7.
+
+
+
+\subsubsection*{2. Apa keterlambatan/kendala dan penyebabnya?}
+
+Kendala utama yang saya alami adalah keterlambatan menyelesaikan tugas individu. Saya tetap mengerjakan tugas yang diberikan, tetapi penyelesaiannya belum sesuai dengan waktu yang direncanakan. Hal ini menyebabkan pekerjaan dokumentasi dan persiapan QA baru dapat diselesaikan setelah waktu yang seharusnya digunakan untuk pemeriksaan dan penyelarasan. Saya juga menyadari bahwa pekerjaan saya saling berkaitan dengan dokumen kebutuhan dan rancangan anggota lain, Dan pada minggu ke 3 saya belum bisa meyelesaikan JIRA, dikarenakan saya masih belum mengengerti lebih dalam tentang penggunaan JIRA. Sehingga keterlambatan dapat mengurangi waktu untuk melakukan pemeriksaan bersama.
+
+Saya tidak dapat menyimpulkan bahwa keterlambatan saya menyebabkan seluruh proyek terlambat.
+
+
+
+\subsubsection*{3. Apa perubahan kebutuhan dan artefak terdampak?}
+
+Kebutuhan EventKu semakin terperinci, mulai dari enam status event, alasan penolakan, verifikasi organisasi penyelenggara, hingga notifikasi hasil moderasi. Kebutuhan keamanan dan reliabilitas juga diperjelas, termasuk hak akses, HTTPS, backup harian, dan target unit test minimal 60\%. Selain itu, database ditetapkan menggunakan PostgreSQL.
+
+Perubahan tersebut berdampak pada activity diagram moderasi admin, test case awal, User Stories nonfungsional, dan dokumen NFR yang perlu disesuaikan. Pada Minggu 7, saya telah mengembangkan test case menjadi 35 kasus, tetapi pengujian belum dijalankan karena program belum tersedia. Oleh karena itu, artefak pengujian masih perlu diselaraskan dengan kebutuhan terbaru sebelum implementasi dan pengujian dimulai.
+
+
+
+\subsubsection*{4. Bagaimana tim menangani kendala/perubahan?}
+
+Perubahan kebutuhan ditangani dengan memperbarui dan menyelaraskan dokumen rancangan berdasarkan SRS sebagai acuan proyek. Kontribusi saya meliputi pembaruan file proyek, penyusunan diagram moderasi admin, draft test case, serta checklist QA berdasarkan design pattern dan arsitektur yang dirancang tim. Riwayat commit Git menjadi bukti perubahan artefak yang telah dikerjakan.
+
+Namun, pengujian fungsional belum dapat dilakukan karena program belum tersedia pada tahap UTS. Checklist yang saya susun masih berupa persiapan pengujian, bukan bukti bahwa aplikasi telah berhasil diuji. Saat implementasi dimulai, tim perlu menyelaraskan SRS, diagram, UI, API, dan test case. Saya juga perlu memperbaiki ketepatan waktu agar pekerjaan dapat diperiksa lebih awal dan tidak menambah beban menjelang tenggat.
+
+
+
+\subsubsection*{5. Apa risiko tersisa dan rencana setelah UTS?}
+
+Risiko yang masih ada adalah kemungkinan ketidaksesuaian antara kebutuhan, rancangan, dan implementasi, serta bug yang belum dapat diketahui karena aplikasi belum tersedia untuk pengujian. Risiko lain yang tercantum dalam laporan proyek meliputi akses lintas organisasi, persaingan kuota pendaftaran, ketidaklengkapan cakupan UI, dan masalah integrasi antarbagian. Risiko tersebut merupakan hal yang perlu diantisipasi, bukan berarti semuanya sudah terjadi.
+
+Setelah UTS, saya berencana melanjutkan pekerjaan QA \& DevOps sesuai tahapan proyek. Pada tahap awal implementasi, saya perlu membantu menyiapkan Sprint Planning, Definition of Done, repository, dan board tugas. Ketika API autentikasi tersedia, saya akan membuat unit test dasar dan memverifikasi endpoint menggunakan Postman. Selanjutnya, saya akan memperbarui checklist berdasarkan implementasi aktual, menjalankan pengujian fungsional dan keamanan dasar, mencatat bug, membantu pelaksanaan UAT, serta mendukung deployment dan verifikasi konfigurasi server sesuai jadwal proyek. Saya juga akan memperbaiki pengaturan waktu agar tugas QA berikutnya tidak terlambat dan tim memiliki waktu yang cukup untuk memperbaiki temuan pengujian.
+
+
 \subsection*{Bagian D -- Refleksi Pribadi}
-\begin{enumerate}
-\item Apakah SDLC pilihan sesuai pelaksanaan? Jelaskan berdasarkan pengalaman.
-\item FR apa paling penting dan bagaimana pengaruhnya pada rancangan?
-\item Jika pengguna meningkat sepuluh kali, apa bottleneck dan strategi skalabilitasnya?
-\item Keputusan desain apa yang Anda buat; apa alternatifnya dan alasan pemilihan?
-\item Jika kebutuhan berubah setelah Minggu 8, apa dampak pada kebutuhan, desain, modul dan jadwal?
-\end{enumerate}
-\textit{Jawaban pribadi: [isi lima jawaban dengan pertimbangan sendiri].}
-\subsection*{Bukti Kontribusi}
-Cantumkan artefak, commit, review atau hasil pengujian yang benar-benar dikerjakan. Jawaban dapat diperpanjang dan tidak harus muat dalam satu halaman formulir ini.
+\subsubsection*{1. Apakah SDLC pilihan sesuai pelaksanaan? Jelaskan berdasarkan pengalaman.}
+
+Menurut saya, Scrum cukup sesuai untuk proyek EventKu karena kebutuhan dan rancangan masih dapat diperjelas sebelum implementasi dimulai. Sampai Minggu 8, pekerjaan tim masih berfokus pada analisis dan perancangan, termasuk penyusunan backlog MoSCoW dan pembaruan SRS. Namun, saya belum dapat menilai efektivitas seluruh proses Scrum karena pelaksanaan sprint implementasi, stand-up, sprint review, dan retrospective belum dapat dievaluasi secara menyeluruh. Dari sisi QA, saya menyadari pentingnya Definition of Done yang jelas agar setiap pekerjaan memiliki kriteria penyelesaian yang dapat diperiksa. Pada tahap berikutnya, saya perlu membantu menyiapkan kriteria tersebut sebelum pengujian mulai dilakukan.
+
+
+
+\subsubsection*{2. FR apa paling penting dan bagaimana pengaruhnya pada rancangan?}
+
+Menurut saya, salah satu kebutuhan fungsional yang paling penting adalah FR-AUTH-04, yaitu pembatasan akses fitur berdasarkan peran pengguna pada antarmuka dan API. EventKu memiliki pengguna dengan peran mahasiswa, penyelenggara, dan admin yang mempunyai kewenangan berbeda. Jika pembatasan akses tidak diterapkan dengan benar, pengguna berpotensi mengakses atau mengubah data yang bukan menjadi kewenangannya.
+
+Kebutuhan ini memengaruhi rancangan autentikasi, pembagian tanggung jawab modul, pemeriksaan hak akses pada backend, dan skenario pengujian. Dari sisi QA, saya perlu menyiapkan test case untuk memastikan pengguna dapat mengakses fitur yang diizinkan dan ditolak ketika mencoba mengakses fitur yang tidak menjadi kewenangannya. Pengujian tersebut belum dapat dijalankan karena aplikasi belum tersedia, sehingga untuk saat ini saya baru dapat menyiapkan acuan pengujiannya.
+
+
+
+\subsubsection*{3. Jika pengguna meningkat sepuluh kali, apa bottleneck dan strategi skalabilitasnya?}
+
+Menurut saya, bagian yang berpotensi menjadi bottleneck adalah database, pencarian event, dan proses pendaftaran ketika banyak pengguna mengakses sistem secara bersamaan. Peningkatan jumlah pengguna dapat menyebabkan waktu respons bertambah, sedangkan pendaftaran bersamaan berisiko membuat kuota tidak konsisten apabila prosesnya tidak dirancang dengan benar.
+
+Strategi yang dapat dipertimbangkan adalah mengoptimalkan query dan indeks database, menggunakan pagination untuk daftar event, serta menerapkan transaksi atau mekanisme penguncian yang sesuai pada proses pendaftaran agar kuota tidak terlampaui. Backend yang stateless juga dapat membantu penerapan penskalaan horizontal apabila dibutuhkan. Dari sisi QA, saya perlu menyiapkan pengujian beban dan konkurensi setelah program tersedia untuk mengetahui apakah sistem memenuhi kebutuhan performa. Saya tidak dapat memastikan bottleneck yang sebenarnya sebelum aplikasi diimplementasikan dan diuji.
+
+
+
+\subsubsection*{4. Keputusan desain apa yang Anda buat; apa alternatifnya dan alasan pemilihan?}
+
+Keputusan yang saya ambil sesuai tanggung jawab QA adalah menyiapkan checklist pengujian sejak tahap perancangan berdasarkan design pattern dan arsitektur yang dipilih tim. Checklist tersebut mencakup bagian yang nantinya perlu diperiksa, seperti pembagian tanggung jawab MVC, akses data melalui Repository Pattern, alur notifikasi menggunakan Observer Pattern, routing dan hak akses pengguna, serta pengelolaan state pada frontend.
+
+Alternatifnya adalah menunggu sampai aplikasi selesai dibuat baru menyusun seluruh skenario pengujian. Saya memilih menyiapkan checklist lebih awal agar kebutuhan pengujian sudah dipikirkan sejak perancangan dan dapat disesuaikan ketika implementasi tersedia. Namun, checklist awal tidak dapat menggantikan pengujian langsung. Saya perlu memperbaruinya berdasarkan perilaku aplikasi yang sebenarnya dan mencatat hasil pengujian ketika program sudah dapat dijalankan.
+
+
+
+\subsubsection*{5. Jika kebutuhan berubah setelah Minggu 8, apa dampak pada kebutuhan, desain, modul dan jadwal?}
+
+Jika kebutuhan berubah setelah Minggu 8, SRS perlu diperbarui dan dampaknya harus diperiksa pada diagram, database, kontrak API, modul frontend dan backend, serta test case. Sebagai contoh, perubahan proses moderasi event dapat memengaruhi status event, alur persetujuan admin, informasi yang diterima penyelenggara, dan notifikasi. Perubahan tersebut dapat menambah pekerjaan, menyebabkan revisi artefak yang sudah dibuat, dan memengaruhi jadwal sprint berikutnya.
+
+Dari sisi saya, perubahan kebutuhan mengharuskan checklist QA dan test case diperbarui agar sesuai dengan perilaku sistem yang baru. Bagian yang terdampak juga perlu diuji kembali setelah implementasi tersedia.
+
+
+\clearpage\subsection*{Bukti Kontribusi}
+Gambar berikut berasal dari lampiran dokumen jawaban pribadi Alexa. Pengelompokan minggu mengikuti keterangan pada dokumen tersebut; tanggal commit dan kondisi antarmuka dipertahankan seperti pada tangkapan layar.
+
+\subsection*{Minggu 1--2 -- Repository dan Riset Tools}
+Minggu 1 Menyiapkan repository kosong \& struktur folder awal.
+
+Minggu 2 Riset opsi tools pendukung (hosting/cloud, testing tools) \& menyusun draft konvensi commit Git.
+\contribfig{01}{.14\textheight}{Gambar AK-01. Riwayat commit Minggu 1 dan Minggu 2 pada GitHub.}
+\contribfig{02}{.24\textheight}{Gambar AK-02. Tampilan Source Control repository di editor.}
+\clearpage\subsection*{Minggu 2 -- Riset Tools dan Konvensi Git}
+\contribfig{03}{.40\textheight}{Gambar AK-03. Cuplikan dokumen riset tools pendukung dan konvensi Git.}
+\clearpage\subsection*{Minggu 3--4 -- User Stories dan Kebutuhan Nonfungsional}
+Minggu 3 Menyusun User Stories untuk modul non-fungsional (keamanan, performa) \& kriteria Definition of Ready.
+
+Minggu 4 Merumuskan kebutuhan non-fungsional terkait keamanan (autentikasi, hak akses) \& reliabilitas system (JIRA).
+\contribfig{04}{.29\textheight}{Gambar AK-04. Cuplikan dokumen kebutuhan keamanan dan reliabilitas Minggu 4.}
+\contribfig{05}{.24\textheight}{Gambar AK-05. Commit unggahan dokumen kebutuhan nonfungsional.}
+\clearpage\subsection*{Minggu 3--4 -- Tampilan Jira}
+\contribfig{06}{.60\textheight}{Gambar AK-06. Tampilan workspace Jira EventKu dan daftar item yang tersedia.}
+Tangkapan layar menampilkan daftar item Jira; status penyelesaian dan penugasan setiap item mengikuti data yang terlihat.
+\clearpage\subsection*{Minggu 5 -- Activity Diagram Moderasi Admin}
+Minggu 5 Membuat Activity Diagram alur moderasi event oleh admin \& menyusun skenario pengujian awal (test case draft).
+\contribfig{07}{.70\textheight}{Gambar AK-07. Activity diagram alur moderasi event oleh admin.}
+\clearpage\subsection*{Minggu 5 -- Draft Test Case dan Riwayat Perubahan}
+\contribfig{08}{.38\textheight}{Gambar AK-08. Cuplikan draft test case moderasi; status pada gambar adalah Not Run.}
+\contribfig{09}{.06\textheight}{Gambar AK-09. Riwayat commit penghapusan berkas Diagram activity Admin.drawio.}
+\contribfig{10}{.10\textheight}{Gambar AK-10. Riwayat commit penggantian nama berkas test case.}
+Cuplikan test case merupakan rancangan pengujian dan tidak menunjukkan bahwa skenario telah dijalankan atau lulus.
+\clearpage\subsection*{Minggu 6 -- Struktur Branching Git}
+Week 6 Menyiapkan struktur branching Git (main/develop/feature) sesuai arsitektur modul yang dirancang.
+\contribfig{11}{.50\textheight}{Gambar AK-11. Daftar branch develop dan feature/qa-testing pada GitHub.}
+\clearpage\subsection*{Minggu 7 -- Checklist QA dan Test Case}
+Week 7 Menyiapkan checklist QA awal berdasarkan design pattern \& arsitektur (poin yang perlu diuji nantinya).
+\contribfig{12}{.33\textheight}{Gambar AK-12. Cuplikan skenario pengujian arsitektur dan design pattern; status Not Run.}
+\contribfig{13}{.26\textheight}{Gambar AK-13. Halaman berkas week7testcaseRPL.xlsx beserta riwayat unggahan.}
+Bukti ini mendokumentasikan persiapan QA. Hasil uji aktual diisi ketika aplikasi tersedia dan pengujian dijalankan.
 
 \end{document}

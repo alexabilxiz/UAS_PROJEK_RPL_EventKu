@@ -4,8 +4,22 @@ Upload ZIP ke Overleaf sebagai New Project > Upload Project, atau kompilasi file
 
 Sebelas PNG diekstrak tanpa perubahan dari gambar aktif pada DOCX arsitektur Minggu 6 dan pattern Minggu 7. Caption DOCX menyatakan sumber ekspor Lucidchart versi revisi. File unduhan lama tidak dipakai karena rancangan berbeda dari SRS terbaru.
 
-Diagram SDLC dan use case tetap native LaTeX. Diagram use case kelompok belum ditemukan. Jawaban pribadi C-D dan konfirmasi kondisi aktual tim masih perlu dilengkapi.
+Diagram SDLC dan use case pada laporan tetap native LaTeX. Jawaban pribadi C-D Audrey, Bambang, Dustin, dan Alexa sudah dimasukkan pada bagian masing-masing. Sebagian bukti kontribusi Dustin tetap bertanda [VERIFIKASI] sesuai sumber yang diberikan.
 
 Kompiler bawaan Codex mendukung dokumen tunggal dan belum mendukung proyek dengan gambar tambahan; gunakan paket lengkap di Overleaf atau lingkungan LaTeX yang mendukung gambar.
 
 Revisi UI: sembilan gambar Figma dari DOCX Audrey disertakan pada folder figures/figma. Desain visual tidak diubah; penjelasan cakupan dan perbedaan hak akses/status mengacu SRS.
+
+Revisi jawaban individu 15 Oktober 2026: isi DOCX Audrey dan Alexa dimasukkan ke bagian masing-masing. Tiga belas gambar bukti Alexa disertakan tanpa perubahan pada figures/kontribusi/alexa. Ringkasan kendala disesuaikan dengan evaluasi pribadi yang diberikan; cakupan progres tetap Minggu 1-8.
+
+Bagian Bambang dilengkapi berdasarkan artefak Minggu 1-8, riwayat commit Bambang-code, serta keputusan dan konfirmasi yang diberikan dalam pembahasan. Bukti kontribusi memakai tautan commit dan diagram yang sudah dimuat pada laporan.
+
+Ekspor PDF 16 Oktober 2026: versi PDF tersedia terpisah sebagai EventKu_Laporan_UTS_Kelompok_IV.pdf pada folder docs/reports (77 halaman termasuk lampiran). PDF dikompilasi dari sumber yang sama dengan seluruh folder gambar menggunakan Tectonic yang sudah tersedia. Tata letak diperiksa; analisis Dustin telah dimasukkan, dengan sebagian bukti kontribusi masih perlu diverifikasi. Paket ZIP berisi sumber LaTeX dan gambar, tanpa PDF.
+
+Revisi sampul: tata letak mengikuti contoh yang diberikan, dengan identitas EventKu dan tahun 2026. Logo WM asli disertakan pada figures/logowm.png tanpa perubahan pada berkas gambar; pemotongan ruang kosong hanya diatur saat penempatan pada LaTeX.
+
+Bukti visual Bambang: 12 PNG ekspor tab 01-12 dari paket Lucidchart ditampilkan sesuai urutan aslinya pada bagian individu Bambang. Tab 00 adalah daftar isi dan tidak dihitung. File asli disalin tanpa perubahan ke figures/kontribusi/bambang/lucidchart_01.png sampai lucidchart_12.png. Ekspor ini merekam versi awal sebelum penyelarasan SRS dan diberi keterangan versi; diagram revisi tetap digunakan pada pembahasan rancangan. Urutan analisis individu: Audrey, Bambang, Dustin, Alexa. PDF individu Bambang diperbarui menjadi 16 halaman.
+
+
+Revisi tautan 16 Oktober 2026: seluruh tautan Lucidchart pada laporan menggunakan dokumen yang dikonfirmasi pengguna, dalam mode /view. Alamat HTTPS lengkap terlihat pada keterangan gambar, referensi, dan bukti kontribusi Bambang:
+https://lucid.app/lucidchart/eade4b94-4f0b-4ff1-9576-4063f45cfbfb/view?invitationId=inv_144411dc-3a44-4e55-8ed9-8ea69347d77b&page=index
