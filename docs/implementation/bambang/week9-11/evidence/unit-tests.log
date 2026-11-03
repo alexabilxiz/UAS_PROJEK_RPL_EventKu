@@ -1,0 +1,12 @@
+
+> eventku-frontend@0.1.0 test
+> vitest run
+
+
+ RUN  v5.1.0 C:/asemester5/brpl/UAS_PROJEK_RPL_EventKu/UAS_PROJEK_RPL_EventKu/frontend
+
+
+ Test Files  3 passed (3)
+      Tests  57 passed (57)
+   Start at  08:02:22
+   Duration  2.76s (environment 58%, tests 19%, setup 19%, transform 2%, import 1%)

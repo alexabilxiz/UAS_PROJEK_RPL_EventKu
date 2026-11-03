@@ -4,6 +4,21 @@ PROJEK NAME "EVENTKU"
  
 Website Kumpulan dan Pendaftaran Event Kampus 
  
+## Implementasi frontend Bambang, Minggu 9–11
+
+Folder [`frontend`](frontend/README.md) berisi React, Tailwind, halaman login/register, client API Auth, penyimpanan sesi, dan navigasi berdasarkan peran.
+
+```powershell
+cd frontend
+npm ci
+Copy-Item .env.example .env.local
+npm run dev
+```
+
+Gunakan Node.js minimal 22.12. UI dapat ditinjau tanpa backend. Login/register memerlukan API Audrey; `API_PROXY_TARGET` pada `.env.local` perlu diarahkan ke server yang sebenarnya. Pengujian otomatis saat ini memakai fixture kontrak, sehingga belum membuktikan integrasi dengan backend nyata.
+
+Rincian hasil mingguan, screenshot desktop/ponsel, dan bukti pengujian: [`docs/implementation/bambang/week9-11`](docs/implementation/bambang/week9-11/README.md).
+
 ## QA & DevOps Documentation 
  
 ### Tools Pendukung & Git Convention 
@@ -55,4 +70,5 @@ Contoh:
 ```bash 
 git commit -m "feat: menambahkan fitur login" 
 git commit -m "test: menambahkan unit test authentication" 
-git commit -m "fix: memperbaiki validasi password" 
+git commit -m "fix: memperbaiki validasi password"
+```

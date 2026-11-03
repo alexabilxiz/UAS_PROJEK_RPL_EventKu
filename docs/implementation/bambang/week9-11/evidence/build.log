@@ -1,0 +1,14 @@
+
+> eventku-frontend@0.1.0 build
+> vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 41 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.68 kB │ gzip:  0.41 kB
+dist/assets/index-D2Rr329z.css   13.83 kB │ gzip:  4.08 kB
+dist/assets/index-MLnSoJwe.js   287.39 kB │ gzip: 90.59 kB
+
+✓ built in 256ms

@@ -1,0 +1,47 @@
+npm warn Unknown cli config "--workers". This will stop working in the next major version of npm.
+
+> eventku-frontend@0.1.0 test:e2e
+> playwright test
+
+[WebServer] (node:10788) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] npm warn Unknown env config "workers". This will stop working in the next major version of npm.
+[WebServer] (node:21524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 8 workers
+
+(node:27304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:26052) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:9224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:18764) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:21984) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:22188) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 [chromium] › e2e\auth.spec.js:204:1 › a 403 from the profile endpoint does not discard a stored token (7.4s)
+  ok  4 [chromium] › e2e\auth.spec.js:158:1 › an unauthenticated protected route returns to the intended internal screen (7.9s)
+  ok  9 [chromium] › e2e\auth.spec.js:214:1 › external login redirect is not followed (1.4s)
+  ok  8 [chromium] › e2e\auth.spec.js:167:1 › a student cannot navigate to the admin screen but keeps their valid session (8.8s)
+  ok  5 [chromium] › e2e\auth.spec.js:90:1 › login uses the Auth contract and restores the session through /me (8.9s)
+  ok  3 [chromium] › e2e\auth.spec.js:178:1 › role navigation follows the authoritative /me profile instead of login metadata (8.8s)
+  ok  1 [chromium] › e2e\auth.spec.js:108:1 › remembered session persists and logout clears both token stores (9.0s)
+  ok  6 [chromium] › e2e\auth.spec.js:191:1 › expired session is cleared after a 401 from /me (9.0s)
+  ok  2 [chromium] › e2e\auth.spec.js:124:1 › replacing a remembered token does not sign out both open tabs (9.7s)
+  ok 10 [chromium] › e2e\auth.spec.js:222:1 › student registration excludes confirmation and creates no authenticated session (2.1s)
+  ok 14 [chromium] › e2e\auth.spec.js:276:1 › bad credentials and network failure remain recoverable without a session (1.6s)
+  ok 12 [chromium] › e2e\auth.spec.js:267:1 › duplicate email stays on signup and displays a safe actionable error (1.6s)
+  ok 15 [chromium] › e2e\auth.spec.js:290:1 › password visibility controls preserve the entered value (1.6s)
+  ok 13 [chromium] › e2e\auth.spec.js:253:1 › invalid registration passwords never reach the API (1.8s)
+  ok 11 [chromium] › e2e\auth.spec.js:237:1 › organizer registration requires an organization ID and never offers public admin signup (1.9s)
+  ok 16 [chromium] › e2e\auth.spec.js:302:1 › auth screens fit desktop and 360px mobile layouts (2.4s)
+
+  16 passed (16.2s)
