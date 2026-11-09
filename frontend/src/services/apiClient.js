@@ -153,5 +153,8 @@ export function createApiClient({ baseUrl = '/api/v1', timeoutMs = 12000, fetchI
   return { request };
 }
 
-export const apiClient = createApiClient({ baseUrl: import.meta.env?.VITE_API_BASE_URL || '/api/v1' });
+const demoMode = import.meta.env?.DEV && import.meta.env.MODE === 'demo';
+export const apiClient = createApiClient({
+  baseUrl: demoMode ? '/api/v1' : import.meta.env?.VITE_API_BASE_URL || '/api/v1',
+});
 export default apiClient;

@@ -18,6 +18,22 @@ Buka alamat yang dicetak Vite, biasanya `http://localhost:5173`. Halaman login/r
 
 Untuk API HTTPS pada host terpisah, atur `VITE_API_BASE_URL=https://HOST-BACKEND/api/v1` dan aktifkan CORS untuk origin frontend pada backend. Host contoh itu harus diganti alamat nyata. Proxy Vite hanya untuk development; hosting produksi harus menyiapkan reverse proxy `/api/v1` atau menggunakan URL HTTPS API yang benar.
 
+## Demo lokal dengan data dummy
+
+Dari folder `frontend`, jalankan `npm ci` untuk instalasi pertama, lalu `npm run dev:demo`. Buka [katalog demo](http://127.0.0.1:5174/events). Mode demo memakai API lokal pada proses Vite dan tidak memerlukan konfigurasi `.env.local`.
+
+| Akun dummy | Email | Kata sandi |
+|---|---|---|
+| Mahasiswa | `mahasiswa@demo.test` | `EventKuDemo123!` |
+| Penyelenggara terverifikasi | `penyelenggara@demo.test` | `EventKuDemo123!` |
+| Admin | `admin@demo.test` | `EventKuDemo123!` |
+
+Dari detail event, mahasiswa dapat mendaftar dan membuka daftar RSVP untuk membatalkannya. Penyelenggara dapat memilih **Ajukan event** dari halaman akun. Untuk mencoba registrasi akun penyelenggara, gunakan ID organisasi `demo-ukwms`. Akun penyelenggara baru berstatus menunggu verifikasi.
+
+Akun Admin bisa masuk dan membuka **Ruang admin** untuk memeriksa profil dan hak akses. Moderasi dalam demo berhenti pada status **Menunggu Moderasi**.
+
+Gunakan kredensial dummy saja. Data akun, draft, dan RSVP tersimpan dalam memori server demo hingga proses dihentikan. Mode ini hanya aktif pada server pengembangan. Untuk memakai API tim, jalankan `npm run dev` dengan konfigurasi backend di atas.
+
 ## Cakupan
 
 | Minggu | Hasil |
