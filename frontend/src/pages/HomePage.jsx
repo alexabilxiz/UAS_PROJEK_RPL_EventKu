@@ -7,7 +7,15 @@ export default function HomePage() {
   useEffect(() => { document.title = 'EventKu — Kegiatan kampus, lebih dekat'; }, []);
   return <PageShell>
     <section className="home-hero">
-      <div><p className="eyebrow">UNTUK KOMUNITAS KAMPUS</p><h1>Pengalaman baru,<br /><span>dimulai dari sini.</span></h1><p>Kegiatan, pertemuan, dan kesempatan untuk berkembang. Siapkan akunmu untuk terhubung dengan kehidupan kampus.</p><div className="hero-actions"><Link className="primary-button" to="/register">Buat akun EventKu <Icon name="arrow-right" /></Link><Link className="secondary-button" to="/login">Saya sudah punya akun</Link></div><p className="home-scope">Akses akun sudah tersedia. Katalog dan pendaftaran kegiatan akan hadir pada tahap berikutnya.</p></div>
+      <div>
+        <p className="eyebrow">UNTUK KOMUNITAS KAMPUS</p>
+        <h1>Pengalaman baru,<br /><span>dimulai dari sini.</span></h1>
+        <p>Cari seminar, lomba, dan kegiatan kampus. Masuk dengan akun mahasiswa untuk mendaftar pada event yang tersedia.</p>
+        <div className="hero-actions">
+          <Link className="primary-button" to="/events">Jelajahi event <Icon name="arrow-right" /></Link>
+          <Link className="secondary-button" to="/register">Buat akun EventKu</Link>
+        </div>
+      </div>
       <div className="hero-image"><img src="/campus.jpg" alt="Universitas Katolik Widya Mandala Surabaya" /><div className="hero-caption"><Icon name="calendar" size={24} /><div><strong>Kampusmu, ceritamu.</strong><span>Temukan lebih banyak pengalaman.</span></div></div></div>
     </section>
     <section className="home-intro"><p className="eyebrow">SATU AKUN EVENTKU</p><h2>Ruang untuk setiap peran.</h2><div className="role-grid">{[

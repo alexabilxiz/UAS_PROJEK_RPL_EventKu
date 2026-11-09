@@ -1,5 +1,7 @@
 const paths = {
   calendar: <><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M7 3v4m10-4v4M3 10h18m-13 5 2 2 5-5" /></>,
+  clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+  location: <><path d="M19 10c0 5-7 10-7 10S5 15 5 10a7 7 0 1 1 14 0Z" /><circle cx="12" cy="10" r="2" /></>,
   'arrow-left': <><path d="m12 5-7 7 7 7M5 12h15" /></>,
   'arrow-right': <><path d="m12 5 7 7-7 7M19 12H4" /></>,
   mail: <><rect x="3" y="5" width="18" height="14" rx="3" /><path d="m4 7 8 6 8-6" /></>,

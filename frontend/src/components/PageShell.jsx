@@ -14,6 +14,7 @@ export default function PageShell({ children }) {
           <Brand />
           <nav className="site-nav" aria-label="Navigasi utama">
             <Link to="/">Beranda</Link>
+            <Link to="/events">Event</Link>
             {user ? <>
               <Link to="/dashboard">Akun saya</Link>
               <button className="button button-secondary logout-button" type="button" onClick={logout}><Icon name="logout" size={17} />Keluar</button>

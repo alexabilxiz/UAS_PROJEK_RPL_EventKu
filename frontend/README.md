@@ -1,6 +1,6 @@
 # Frontend EventKu
 
-Implementasi bagian Bambang untuk Minggu 9–11: setup React dan Tailwind, UI login/register, serta client integrasi API Auth. Desain mengacu gambar Figma pada laporan UTS. Struktur memisahkan halaman, komponen, layanan HTTP, state sesi, hooks, dan route guard.
+Implementasi bagian Bambang untuk Minggu 9–12 mencakup setup React dan Tailwind, Auth, katalog event, pengajuan penyelenggara, dan RSVP mahasiswa. Desain mengacu pada gambar Figma di laporan UTS. Struktur memisahkan halaman, komponen, layanan HTTP, state sesi, hooks, dan route guard.
 
 ## Menjalankan
 
@@ -25,10 +25,9 @@ Untuk API HTTPS pada host terpisah, atur `VITE_API_BASE_URL=https://HOST-BACKEND
 | 9 | Vite, React, Tailwind, routing, komponen dasar, konfigurasi environment dan lockfile |
 | 10 | Login/register responsif, validasi, status loading/error, password visibility, pilihan mahasiswa/penyelenggara |
 | 11 | Client register/login/me, Bearer token, AuthContext, pemulihan sesi, logout lokal dan guard navigasi berdasarkan profil API |
+| 12 | Katalog dan detail publik, pencarian/filter/paginasi, pengajuan event oleh penyelenggara terverifikasi, serta RSVP, pembatalan, dan riwayat mahasiswa |
 
-Integrasi kode frontend diuji dengan fixture kontrak. Uji end-to-end terhadap backend Audrey belum dapat dilakukan karena implementasi/URL backend belum tersedia dalam repository. Lihat `../docs/implementation/bambang/week9-11/README.md` untuk rincian dan daftar pengecekan integrasi nyata.
-
-Listing/filter event, pengajuan, RSVP dan kalender interaktif berada pada Minggu 12–13 dan belum diimplementasikan di sini. Beranda akun hanya menampilkan data profil yang benar-benar dikembalikan API. Tidak ada statistik/kegiatan/peserta fiktif.
+Tes browser menjalankan alur melalui fixture kontrak. Integrasi dengan backend Audrey menunggu server Auth dan Event yang dapat diuji. Catatan konfigurasi, endpoint, dan hasil pengujian ada di [Minggu 9–11](../docs/implementation/bambang/week9-11/README.md) dan [Minggu 12](../docs/implementation/bambang/week12/README.md).
 
 ## Kontrak Auth
 
@@ -72,7 +71,7 @@ Vitest menguji transport HTTP, kontrak Auth dan transisi sesi. Playwright menjal
 
 Hasil tes tidak membuktikan API/database Audrey tersedia atau lolos QA. Workbook test case Alexa dan analisis individu anggota tidak diubah. `dist`, `node_modules`, laporan tes, dan `.env.local` diabaikan Git.
 
-Verifikasi 3 November 2026: build produksi berhasil, 57 tes unit lulus, dan 16 tes browser Chromium lulus. Screenshot desktop/ponsel dan log perintah ada pada [bukti pengujian](../docs/implementation/bambang/week9-11/evidence/verification.md).
+Hasil pengujian awal Auth tercatat pada [bukti Minggu 9–11](../docs/implementation/bambang/week9-11/evidence/verification.md). Hasil terbaru untuk Auth dan Event ada di [Minggu 12](../docs/implementation/bambang/week12/README.md).
 
 ## Struktur
 

@@ -50,7 +50,14 @@ export function createAuthService(client = apiClient) {
       }
       const body = { name: string(name), email: string(email), password, role };
       if (role === 'penyelenggara') body.organizationId = id(organizationId);
-      const result = await client.request('/auth/register', { method: 'POST', body, signal });
+      let result;
+      try {
+        result = await client.request('/auth/register', { method: 'POST', body, signal });
+      } catch (error) {
+        if (error.status !== 409) throw error;
+        const message = 'Email tersebut sudah terdaftar. Gunakan email lain atau masuk.';
+        throw new ApiError(message, { status: 409, fieldErrors: { email: message } });
+      }
       if (!result || !id(result.userId) || !PUBLIC_ROLES.includes(result.role)) throw contractError();
       return {
         userId: id(result.userId), role: result.role, status: string(result.status),

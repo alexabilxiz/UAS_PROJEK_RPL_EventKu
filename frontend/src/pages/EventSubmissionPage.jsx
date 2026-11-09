@@ -6,7 +6,8 @@ import PageShell from '../components/PageShell';
 import { useAuth } from '../hooks/useAuth';
 import { listCategories } from '../services/eventService';
 import { createEventDraft, getEventDraftStatus, submitEventDraft } from '../services/eventSubmissionService';
-import { isEventSubmissionId, isHttpsPoster, prepareEventDraft } from '../utils/eventSubmission';
+import { isHttpsPoster, prepareEventDraft } from '../utils/eventSubmission';
+import { normalizeEventId } from '../utils/events';
 import '../styles/event-submission.css';
 
 const emptyForm = {
@@ -23,9 +24,8 @@ function readAttempt(key) {
   try {
     const attempt = JSON.parse(sessionStorage.getItem(key));
     if (attempt?.kind === 'unconfirmed') return attempt;
-    if (attempt?.kind === 'draft' && isEventSubmissionId(attempt.eventId)) {
-      return attempt;
-    }
+    const eventId = normalizeEventId(attempt?.eventId);
+    if (attempt?.kind === 'draft' && eventId) return { kind: 'draft', eventId };
   } catch { /* The current tab can still submit without sessionStorage. */ }
   return null;
 }

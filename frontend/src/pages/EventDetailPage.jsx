@@ -40,7 +40,7 @@ function EventCapacity({ event }) {
         {quota !== null && <strong>{reservedSeats === null ? `${quota} peserta` : `${reservedSeats} / ${quota} terdaftar`}</strong>}
       </div>
       {quota > 0 && reservedSeats !== null && <progress aria-label="Kuota terisi" value={Math.min(quota, reservedSeats)} max={quota} />}
-      {availableSeats !== null && <p>{availableSeats ? `${availableSeats} tempat masih tersedia` : 'Kuota penuh'}</p>}
+      {availableSeats !== null && <p>{availableSeats ? `${availableSeats} tempat tersedia saat detail dimuat` : 'Kuota penuh saat detail dimuat'}</p>}
     </div>
   );
 }

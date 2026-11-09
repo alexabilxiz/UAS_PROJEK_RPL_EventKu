@@ -1,5 +1,5 @@
 import apiClient, { ApiError } from './apiClient';
-import { isEventSubmissionId } from '../utils/eventSubmission';
+import { normalizeEventId } from '../utils/events';
 
 const eventStatuses = new Set([
   'draft', 'menunggu_moderasi', 'disetujui', 'ditolak', 'selesai', 'dibatalkan',
@@ -10,10 +10,8 @@ function contractError() {
 }
 
 function eventIdFrom(value) {
-  const id = typeof value === 'number' && Number.isSafeInteger(value) && value > 0
-    ? String(value)
-    : value;
-  if (!isEventSubmissionId(id)) throw contractError();
+  const id = normalizeEventId(value);
+  if (!id) throw contractError();
   return id;
 }
 

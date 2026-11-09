@@ -1,9 +1,5 @@
 const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
 
-export function isEventSubmissionId(value) {
-  return typeof value === 'string' && /^[A-Za-z0-9][A-Za-z0-9._~-]*$/.test(value);
-}
-
 function toWibTimestamp(value) {
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return null;
   const time = Date.parse(`${value}:00+07:00`);

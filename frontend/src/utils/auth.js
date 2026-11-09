@@ -1,10 +1,18 @@
+import { normalizeEventId } from './events';
+
 export const PUBLIC_ROLES = ['mahasiswa', 'penyelenggara'];
 export const ROLE_LABELS = { mahasiswa: 'Mahasiswa', penyelenggara: 'Penyelenggara', admin: 'Admin' };
 export const ROLE_PATHS = { mahasiswa: '/mahasiswa', penyelenggara: '/penyelenggara', admin: '/admin' };
 
 // Allow only known internal destinations. Never navigate to a URL from a query parameter.
 export function safeReturnPath(value) {
-  return ['/dashboard', ...Object.values(ROLE_PATHS)].includes(value) ? value : '/dashboard';
+  const fixedPaths = ['/dashboard', '/events', '/mahasiswa/pendaftaran', '/penyelenggara/event/ajukan', ...Object.values(ROLE_PATHS)];
+  if (fixedPaths.includes(value)) return value;
+  if (typeof value === 'string' && value.startsWith('/events/')) {
+    const eventId = normalizeEventId(value.slice('/events/'.length));
+    if (eventId && value === `/events/${eventId}`) return value;
+  }
+  return '/dashboard';
 }
 
 export function validateLogin(values) {

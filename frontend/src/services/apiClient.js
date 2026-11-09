@@ -14,6 +14,14 @@ const FIELD_MESSAGES = {
   password: 'Periksa kembali kata sandi Anda. Minimal 8 karakter saat mendaftar.',
   role: 'Pilih peran mahasiswa atau penyelenggara.',
   organizationId: 'Periksa kembali ID organisasi Anda.',
+  title: 'Periksa kembali judul event.',
+  description: 'Periksa kembali deskripsi event.',
+  categoryId: 'Pilih kategori event yang aktif.',
+  startAt: 'Periksa kembali waktu mulai.',
+  endAt: 'Periksa kembali waktu selesai.',
+  locationOrLink: 'Periksa kembali lokasi atau tautan event.',
+  posterUrl: 'Periksa kembali tautan poster.',
+  quota: 'Masukkan kuota yang valid.',
 };
 
 function invalidConfiguration() {
@@ -56,7 +64,6 @@ function normalizePath(path) {
 }
 
 function safeFieldErrors(payload, status) {
-  if (status === 409) return { email: 'Email tersebut sudah terdaftar. Gunakan email lain atau masuk.' };
   if (status !== 422 || !payload || typeof payload !== 'object') return {};
   const errors = payload.fieldErrors ?? payload.errors;
   if (!errors || typeof errors !== 'object' || Array.isArray(errors)) return {};
@@ -71,7 +78,7 @@ function responseError(status, payload) {
     401: 'Email atau kata sandi salah, atau sesi Anda sudah berakhir. Silakan masuk kembali.',
     403: 'Akun Anda tidak memiliki izin untuk melakukan tindakan ini.',
     404: 'Layanan yang diminta tidak ditemukan. Hubungi pengelola aplikasi.',
-    409: 'Data tersebut sudah digunakan. Periksa kembali data pendaftaran Anda.',
+    409: 'Permintaan bertentangan dengan status data saat ini. Periksa kembali dan coba lagi.',
     422: 'Ada data yang belum sesuai. Periksa kembali formulir Anda.',
     429: 'Terlalu banyak percobaan. Tunggu sebentar sebelum mencoba kembali.',
   }[status] ?? (status >= 500
