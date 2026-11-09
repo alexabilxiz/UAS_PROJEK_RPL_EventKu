@@ -1,0 +1,74 @@
+.rsvp-panel {
+  display: grid;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid #e6e9f3;
+  margin-top: 16px;
+}
+
+.rsvp-panel .error-message,
+.rsvp-panel .success-message { margin: 0; }
+
+.rsvp-note { margin: 0; color: #616a85; font-size: 13px; }
+
+.registrations-page { background: #f6f7fb; min-height: calc(100svh - 180px); }
+.registrations-hero { background: #f0f1fb; }
+.registrations-hero > div,
+.registrations-inner { max-width: 1140px; margin: 0 auto; padding: 32px; }
+.registrations-hero > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding-top: 46px;
+  padding-bottom: 46px;
+}
+.registrations-hero h1 { margin: 8px 0; font-size: clamp(26px, 4vw, 38px); font-weight: 750; }
+.registrations-hero p:not(.eyebrow) { margin: 0; color: #616a85; font-size: 14px; }
+.registrations-inner { padding-bottom: 64px; }
+.registration-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.registration-toolbar p { color: #616a85; margin: 0; font-size: 13px; }
+.registration-tabs { display: flex; gap: 6px; padding: 4px; border-radius: 10px; background: #e9ebf7; }
+.registration-tabs button {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #515a76;
+  font-size: 13px;
+  font-weight: 650;
+}
+.registration-tabs button[aria-pressed="true"] { color: #2d4188; background: white; box-shadow: 0 1px 3px #2d418818; }
+.registration-list { display: grid; gap: 12px; margin: 14px 0 0; padding: 0; list-style: none; }
+.registration-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #e6e9f3;
+  border-radius: 14px;
+  background: white;
+}
+.registration-card-icon { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 10px; background: #eef0fb; color: #2d4188; }
+.registration-card-content { min-width: 0; overflow-wrap: anywhere; }
+.registration-card-content h2 { margin: 0 0 4px; font-size: 17px; font-weight: 750; }
+.registration-card-content p { margin: 0 0 4px; color: #616a85; font-size: 13px; }
+.registration-card-content a { display: inline-flex; align-items: center; gap: 4px; margin-top: 6px; font-size: 13px; font-weight: 650; }
+.registration-card-actions { display: grid; justify-items: end; gap: 8px; }
+.registration-card-actions .secondary-button { font-size: 12px; padding: 8px 12px; min-height: 38px; }
+.registration-badge { display: inline-block; border-radius: 999px; padding: 4px 10px; color: #256a46; background: #ecf8f1; font-size: 12px; font-weight: 650; }
+.registration-badge-cancelled { color: #656b7f; background: #eef0f5; }
+.registration-confirm { grid-column: 1 / -1; padding: 14px; border-radius: 8px; background: #f4f3ff; }
+.registration-confirm p { margin: 0 0 10px; font-size: 14px; overflow-wrap: anywhere; }
+.registration-confirm > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.registration-placeholder { padding: 28px; border: 1px solid #e6e9f3; border-radius: 14px; background: white; color: #616a85; }
+.registration-placeholder p { margin: 0 0 12px; }
+.registration-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; margin-top: 22px; font-size: 13px; }
+
+@media (max-width: 680px) {
+  .registrations-hero > div, .registrations-inner { padding-inline: 20px; }
+  .registrations-hero > div { align-items: start; flex-direction: column; gap: 16px; padding-top: 30px; padding-bottom: 30px; }
+  .registration-card { grid-template-columns: auto minmax(0, 1fr); padding: 15px; gap: 12px; }
+  .registration-card-actions { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+}
