@@ -9,22 +9,38 @@ import { formatEventDate, formatEventTime, isEventDate, safeEventLink } from '..
 import '../styles/event-catalog.css';
 
 const PAGE_SIZE = 9;
+const LAST_RANGE_DAY = '9999-12-30';
+
+function isDateRange(from, to) {
+  return isEventDate(from) && isEventDate(to) && from <= to && to <= LAST_RANGE_DAY;
+}
+
+function rangeQuery(from, to) {
+  const end = new Date(`${to}T00:00:00Z`);
+  end.setUTCDate(end.getUTCDate() + 1);
+  return { from: `${from}T00:00:00+07:00`, to: `${end.toISOString().slice(0, 10)}T00:00:00+07:00` };
+}
 
 function readFilters(params) {
   const page = Number(params.get('page'));
   const date = params.get('date');
+  const from = params.get('from');
+  const to = params.get('to');
+  const hasRange = isDateRange(from, to);
   return {
     q: params.get('q')?.trim() || '',
     category: params.get('category')?.trim() || '',
     organizer: params.get('organizer')?.trim() || '',
-    date: isEventDate(date) ? date : '',
+    date: !hasRange && isEventDate(date) ? date : '',
+    from: hasRange ? from : '',
+    to: hasRange ? to : '',
     page: Number.isSafeInteger(page) && page > 0 ? page : 1,
   };
 }
 
-function filterParams({ q, category, organizer, date, page = 1 }) {
+function filterParams({ q, category, organizer, date, from, to, page = 1 }) {
   const params = new URLSearchParams();
-  for (const [key, value] of Object.entries({ q, category, organizer, date })) {
+  for (const [key, value] of Object.entries({ q, category, organizer, date, from, to })) {
     if (value) params.set(key, value);
   }
   if (page > 1) params.set('page', String(page));
@@ -33,18 +49,26 @@ function filterParams({ q, category, organizer, date, page = 1 }) {
 
 function CatalogFilters({ values, categories, onApply }) {
   const [draft, setDraft] = useState(values);
+  const [useRange, setUseRange] = useState(Boolean(values.from));
+  const [rangeError, setRangeError] = useState('');
   const update = (field) => (event) => {
     setDraft((previous) => ({ ...previous, [field]: event.target.value }));
+    setRangeError('');
   };
   const chosenCategory = draft.category && !categories.some(({ categoryId }) => categoryId === draft.category);
 
   function submit(event) {
     event.preventDefault();
-    onApply({ ...draft, q: draft.q.trim(), organizer: draft.organizer.trim(), page: 1 });
+    if (useRange && !isDateRange(draft.from, draft.to)) {
+      setRangeError('Isi kedua tanggal dan pastikan tanggal akhir sama dengan atau sesudah tanggal awal.');
+      return;
+    }
+    const dates = useRange ? { date: '' } : { from: '', to: '' };
+    onApply({ ...draft, ...dates, q: draft.q.trim(), organizer: draft.organizer.trim(), page: 1 });
   }
 
   return (
-    <form className="catalog-filters" onSubmit={submit} aria-label="Pencarian event">
+    <form className={`catalog-filters${useRange ? ' catalog-filters-with-range' : ''}`} onSubmit={submit} aria-label="Pencarian event">
       <FormField id="event-search" label="Cari event" type="search" placeholder="Judul atau topik event" value={draft.q} onChange={update('q')} />
       <FormField id="event-category" label="Kategori">
         <select value={draft.category} onChange={update('category')}>
@@ -54,7 +78,19 @@ function CatalogFilters({ values, categories, onApply }) {
         </select>
       </FormField>
       <FormField id="event-organizer" label="ID penyelenggara" placeholder="Semua penyelenggara" value={draft.organizer} onChange={update('organizer')} />
-      <FormField id="event-date" label="Tanggal event" type="date" value={draft.date} onChange={update('date')} />
+      <div className="catalog-date-filters" role="group" aria-label="Tanggal dalam WIB">
+        {useRange ? (
+          <div className="catalog-date-range">
+            <FormField id="event-from-date" label="Dari tanggal" type="date" value={draft.from} max={draft.to || LAST_RANGE_DAY} required onChange={update('from')} />
+            <FormField id="event-to-date" label="Sampai tanggal" type="date" value={draft.to} min={draft.from || undefined} max={LAST_RANGE_DAY} required onChange={update('to')} />
+          </div>
+        ) : <FormField id="event-date" label="Tanggal event" type="date" value={draft.date} onChange={update('date')} />}
+        <label className="checkbox-label catalog-range-toggle">
+          <input type="checkbox" checked={useRange} onChange={(event) => { setUseRange(event.target.checked); setRangeError(''); }} />
+          Gunakan rentang tanggal
+        </label>
+        {rangeError && <p className="field-error" role="alert">{rangeError}</p>}
+      </div>
       <button className="primary-button" type="submit">Cari Event</button>
     </form>
   );
@@ -81,11 +117,12 @@ function EventCard({ event, search }) {
 function CatalogResults({ filters, search, onPage, onReset }) {
   const [result, setResult] = useState({ status: 'loading' });
   const [attempt, setAttempt] = useState(0);
-  const { q, category, organizer, date, page } = filters;
+  const { q, category, organizer, date, from, to, page } = filters;
 
   useEffect(() => {
     const controller = new AbortController();
-    listEvents({ q, category, organizer, date, page, limit: PAGE_SIZE }, { signal: controller.signal })
+    const dates = from ? rangeQuery(from, to) : { date };
+    listEvents({ q, category, organizer, ...dates, page, limit: PAGE_SIZE }, { signal: controller.signal })
       .then((payload) => {
         if (!controller.signal.aborted) setResult({ status: 'ready', payload });
       })
@@ -93,11 +130,11 @@ function CatalogResults({ filters, search, onPage, onReset }) {
         if (!controller.signal.aborted) setResult({ status: 'error', message: error.message });
       });
     return () => controller.abort();
-  }, [q, category, organizer, date, page, attempt]);
+  }, [q, category, organizer, date, from, to, page, attempt]);
 
   const payload = result.payload;
   const pages = payload ? Math.max(1, Math.ceil(payload.total / PAGE_SIZE)) : 1;
-  const hasFilters = Boolean(q || category || organizer || date);
+  const hasFilters = Boolean(q || category || organizer || date || from);
   return (
     <section className="catalog-results" aria-labelledby="event-results-title" aria-busy={result.status === 'loading'}>
       <div className="catalog-results-heading">
