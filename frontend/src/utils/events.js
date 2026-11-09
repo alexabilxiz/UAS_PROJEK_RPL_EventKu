@@ -47,3 +47,9 @@ export function safeEventPoster(value) {
   const url = safeEventLink(value);
   return url.startsWith('https://') ? url : '';
 }
+
+export function safeRegistrationUrl(value) {
+  if (typeof value !== 'string' || !/^https:\/\//i.test(value)) return '';
+  const url = safeEventLink(value);
+  return url.startsWith('https://') ? url : '';
+}

@@ -110,9 +110,11 @@ export default function EventRegistration({ event }) {
   return <section className="rsvp-panel" aria-label="Pendaftaran event">
     {loading ? <p className="rsvp-note" role="status">Memeriksa sesi…</p>
       : user?.role === 'mahasiswa' && token ? (
-        <StudentRegistration key={`${user.userId}:${event.eventId}`} {...{ event, seats, token, loginUrl, logout }} />
+        user.ukwmsVerified === true
+          ? <StudentRegistration key={`${user.userId}:${event.eventId}`} {...{ event, seats, token, loginUrl, logout }} />
+          : <p className="rsvp-note">RSVP khusus mahasiswa UKWMS terverifikasi.</p>
       ) : reason ? <p className="rsvp-note">{reason}</p>
-        : user ? <p className="rsvp-note">Pendaftaran tersedia untuk akun mahasiswa.</p>
+        : user ? <p className="rsvp-note">RSVP khusus mahasiswa UKWMS terverifikasi.</p>
           : <Link className="primary-button" to={loginUrl}>Masuk untuk mendaftar</Link>}
   </section>;
 }

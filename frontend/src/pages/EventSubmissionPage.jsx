@@ -13,6 +13,7 @@ import '../styles/event-submission.css';
 const emptyForm = {
   title: '', description: '', categoryId: '', startAt: '', endAt: '',
   locationOrLink: '', quota: '', posterUrl: '',
+  registrationMode: 'internal', audience: '', registrationUrl: '',
 };
 
 const statusLabels = {
@@ -228,7 +229,19 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
             <FormField {...field('startAt')} label="Mulai (WIB)" type="datetime-local" />
             <FormField {...field('endAt')} label="Selesai (WIB)" type="datetime-local" />
             <FormField {...field('locationOrLink')} label="Lokasi atau tautan" placeholder="Aula kampus atau tautan pertemuan" />
-            <FormField {...field('quota')} label="Kuota peserta" type="number" min={1} step={1} placeholder="Contoh 80" />
+            <FormField {...field('registrationMode')} label="Cara daftar"
+              hint={values.registrationMode === 'internal' ? 'RSVP tersedia untuk mahasiswa UKWMS terverifikasi.' : undefined}>
+              <select>
+                <option value="internal">RSVP di EventKu</option>
+                <option value="external">Daftar lewat tautan panitia</option>
+              </select>
+            </FormField>
+            <FormField {...field('audience')} required={values.registrationMode === 'external'}
+              label="Siapa yang boleh ikut?" placeholder={values.registrationMode === 'external'
+                ? 'Contoh: siswa SMA/SMK, tim 2–3 orang' : 'Ketentuan tambahan, jika ada'} maxLength={180} />
+            {values.registrationMode === 'external'
+              ? <FormField {...field('registrationUrl')} label="Tautan pendaftaran panitia" type="url" placeholder="https://…" />
+              : <FormField {...field('quota')} label="Kuota peserta" type="number" min={1} step={1} placeholder="Contoh 80" />}
           </div>
         </fieldset>
 

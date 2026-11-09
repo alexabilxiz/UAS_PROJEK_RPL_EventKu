@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { safeRegistrationUrl } from '../src/utils/events.js';
 
 const password = 'EventKuDemo123!';
 const categories = [
@@ -12,8 +13,8 @@ function seedEvents() {
   const names = [
     ['Workshop Desain Produk', 'workshop'],
     ['Seminar Karier Teknologi', 'seminar'],
-    ['Kompetisi UI dan UX', 'kompetisi'],
-    ['Workshop Fotografi Kampus', 'workshop'],
+    ['Kompetisi Inovasi Pelajar (Demo)', 'kompetisi'],
+    ['Workshop Fotografi Khusus UKWMS (Demo)', 'workshop'],
     ['Seminar Literasi Digital', 'seminar'],
     ['Kompetisi Ide Bisnis', 'kompetisi'],
     ['Workshop Pengembangan Web', 'workshop'],
@@ -23,7 +24,7 @@ function seedEvents() {
   ];
   return names.map(([title, categoryId], index) => {
     const start = new Date(Date.now() + (index + 2) * 86_400_000);
-    return {
+    const event = {
       eventId: `demo-event-${index + 1}`, title, categoryId,
       categoryName: categories.find((item) => item.categoryId === categoryId).name,
       organizationId: organization.organizationId, organizationName: organization.name,
@@ -31,6 +32,13 @@ function seedEvents() {
       startAt: start.toISOString(), endAt: new Date(+start + 7_200_000).toISOString(),
       locationOrLink: index % 2 ? 'Ruang Seminar Kampus' : 'Aula Kampus Pakuwon',
       quota: 25, reservedSeats: 0, status: 'disetujui',
+    };
+    if (index !== 2) return event;
+    return {
+      ...event, organizationName: 'Panitia UKWMS (Demo)',
+      description: 'Contoh lomba kampus untuk peserta dari luar UKWMS. Tautan pendaftaran membuka halaman contoh.',
+      registrationMode: 'external', audience: 'Siswa SMA/SMK/sederajat, tim 2–3 siswa.',
+      registrationUrl: 'https://example.org/',
     };
   });
 }
@@ -55,7 +63,11 @@ export function eventkuDemo() {
   const accounts = new Map([
     ['mahasiswa@demo.test', {
       password,
-      user: { userId: 'demo-mahasiswa', name: 'Mahasiswa Demo', email: 'mahasiswa@demo.test', role: 'mahasiswa', status: 'active' },
+      user: { userId: 'demo-mahasiswa', name: 'Mahasiswa UKWMS Demo', email: 'mahasiswa@demo.test', role: 'mahasiswa', status: 'active', ukwmsVerified: true },
+    }],
+    ['mahasiswa.luar@demo.test', {
+      password,
+      user: { userId: 'demo-mahasiswa-luar', name: 'Mahasiswa Kampus Lain Demo', email: 'mahasiswa.luar@demo.test', role: 'mahasiswa', status: 'active' },
     }],
     ['penyelenggara@demo.test', {
       password,
@@ -136,13 +148,20 @@ export function eventkuDemo() {
       if (user.organization.status !== 'verified') return error(403, 'Organisasi demo belum terverifikasi.');
       const body = await readBody(request);
       const category = categories.find((item) => item.categoryId === body?.categoryId);
+      const external = body?.registrationMode === 'external';
+      const audience = typeof body?.audience === 'string' ? body.audience.trim() : '';
+      const registrationUrl = safeRegistrationUrl(body?.registrationUrl);
+      const validRegistration = external
+        ? audience && registrationUrl
+        : Number.isSafeInteger(body?.quota) && body.quota > 0;
       if (!category || !body.title || !body.description || !body.locationOrLink || !body.posterUrl
           || !(Date.parse(body.startAt) > Date.now()) || !(Date.parse(body.endAt) > Date.parse(body.startAt))
-          || !Number.isSafeInteger(body.quota) || body.quota < 1) return error(422, 'Data event belum lengkap.');
+          || !validRegistration) return error(422, 'Data event belum lengkap.');
       const { title, description, startAt, endAt, locationOrLink, posterUrl, quota } = body;
       const eventId = randomUUID();
       events.push({
-        eventId, title, description, startAt, endAt, locationOrLink, posterUrl, quota,
+        eventId, title, description, startAt, endAt, locationOrLink, posterUrl, audience,
+        ...(external ? { registrationMode: 'external', registrationUrl } : { quota }),
         categoryId: category.categoryId, categoryName: category.name,
         organizationId: user.organization.organizationId, organizationName: user.organization.name,
         reservedSeats: 0, status: 'draft',
@@ -166,8 +185,11 @@ export function eventkuDemo() {
       }
       if (method === 'POST' && action === 'registrations') {
         if (!allows('mahasiswa')) return;
+        if (user.ukwmsVerified !== true) {
+          return error(403, 'RSVP khusus mahasiswa UKWMS terverifikasi.');
+        }
         const existing = registrations.find((row) => row.eventId === event.eventId && row.userId === user.userId);
-        if (event.status !== 'disetujui' || Date.now() >= Date.parse(event.endAt)
+        if (event.registrationMode === 'external' || event.status !== 'disetujui' || Date.now() >= Date.parse(event.endAt)
             || event.reservedSeats >= event.quota || existing?.status === 'aktif') {
           return error(409, 'Pendaftaran tidak tersedia.');
         }

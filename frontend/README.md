@@ -24,13 +24,22 @@ Dari folder `frontend`, jalankan `npm ci` untuk instalasi pertama, lalu `npm run
 
 | Akun dummy | Email | Kata sandi |
 |---|---|---|
-| Mahasiswa | `mahasiswa@demo.test` | `EventKuDemo123!` |
+| Mahasiswa UKWMS terverifikasi | `mahasiswa@demo.test` | `EventKuDemo123!` |
+| Akun uji tanpa verifikasi UKWMS | `mahasiswa.luar@demo.test` | `EventKuDemo123!` |
 | Penyelenggara terverifikasi | `penyelenggara@demo.test` | `EventKuDemo123!` |
 | Admin | `admin@demo.test` | `EventKuDemo123!` |
 
 Dari detail event, mahasiswa dapat mendaftar dan membuka daftar RSVP untuk membatalkannya. Penyelenggara dapat memilih **Ajukan event** dari halaman akun. Untuk mencoba registrasi akun penyelenggara, gunakan ID organisasi `demo-ukwms`. Akun penyelenggara baru berstatus menunggu verifikasi.
 
 Akun Admin bisa masuk dan membuka **Ruang admin** untuk memeriksa profil dan hak akses. Moderasi dalam demo berhenti pada status **Menunggu Moderasi**.
+
+Contoh pendaftaran eksternal tersedia di **Kompetisi Inovasi Pelajar (Demo)**. Pengunjung dapat membaca syarat peserta dan membuka tautan contoh panitia tanpa masuk. Untuk mengajukan event serupa, pilih **Daftar lewat tautan panitia**, isi target peserta, dan masukkan URL HTTPS.
+
+Seluruh RSVP internal, termasuk **Seminar Karier Teknologi**, memerlukan akun mahasiswa UKWMS terverifikasi. Akun uji tanpa verifikasi bisa membuka katalog dan tautan panitia. Akun mahasiswa baru menunggu verifikasi UKWMS sebelum dapat melakukan RSVP.
+
+Integrasi backend untuk pendaftaran eksternal memerlukan dukungan `registrationMode: "external"`, `audience`, dan `registrationUrl` pada pengajuan dan respons detail. Kuota ditangani panitia untuk mode tersebut. Field `audience` opsional pada RSVP internal.
+
+Backend harus mengembalikan boolean `ukwmsVerified: true` di `/auth/me` hanya setelah identitas mahasiswa UKWMS terverifikasi. Endpoint RSVP perlu menegakkan syarat ini pada setiap event internal dan mengembalikan 403 jika syarat belum terpenuhi. Demo mensimulasikan status itu pada akun contoh dan menerapkan pemeriksaan tersebut di API lokal.
 
 Gunakan kredensial dummy saja. Data akun, draft, dan RSVP tersimpan dalam memori server demo hingga proses dihentikan. Mode ini hanya aktif pada server pengembangan. Untuk memakai API tim, jalankan `npm run dev` dengan konfigurasi backend di atas.
 

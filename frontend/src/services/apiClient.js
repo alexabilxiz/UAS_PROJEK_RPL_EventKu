@@ -22,6 +22,8 @@ const FIELD_MESSAGES = {
   locationOrLink: 'Periksa kembali lokasi atau tautan event.',
   posterUrl: 'Periksa kembali tautan poster.',
   quota: 'Masukkan kuota yang valid.',
+  audience: 'Periksa kembali ketentuan peserta.',
+  registrationUrl: 'Periksa kembali tautan pendaftaran HTTPS.',
 };
 
 function invalidConfiguration() {

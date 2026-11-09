@@ -22,6 +22,7 @@ export function normalizeUser(payload) {
     email: string(payload.email),
     role: payload.role,
     status: string(payload.status),
+    ...(payload.role === 'mahasiswa' && payload.ukwmsVerified === true && { ukwmsVerified: true }),
     organizationId: id(payload.organizationId ?? organization?.organizationId ?? organization?.id),
     organizationStatus: string(payload.organizationStatus ?? organization?.status),
   };

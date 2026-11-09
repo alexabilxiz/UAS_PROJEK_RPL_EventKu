@@ -21,6 +21,12 @@ function EventMetadata({ event }) {
     ['location', 'Lokasi', locationLink ? <a href={locationLink} target="_blank" rel="noreferrer">Buka tautan event</a> : event.locationOrLink || 'Belum tersedia'],
     ['user', 'Penyelenggara', event.organizationName || 'Belum tersedia'],
   ];
+  if (event.registrationMode === 'internal') {
+    items.push(['user', 'Peserta yang boleh ikut', 'Mahasiswa UKWMS terverifikasi']);
+    if (event.audience) items.push(['user', 'Ketentuan tambahan', event.audience]);
+  } else if (event.audience) {
+    items.push(['user', 'Peserta yang boleh ikut', event.audience]);
+  }
 
   return <dl className="event-metadata">{items.map(([icon, label, value]) => (
     <div key={label}>
@@ -92,8 +98,19 @@ function EventDetail({ eventId, renderRegistration }) {
         {event.categoryName && <span className="event-category">{event.categoryName}</span>}
         <h2 id="event-detail-title">{event.title}</h2>
         <EventMetadata event={event} />
-        <EventCapacity event={event} />
-        {renderRegistration?.(event)}
+        {event.registrationMode === 'external' ? (
+          <section className="rsvp-panel" aria-label="Pendaftaran event">
+            <p className="rsvp-note">Pendaftaran dikelola oleh panitia. Tautan dapat dibuka tanpa akun EventKu.</p>
+            {event.registrationUrl ? (
+              <a className="primary-button" href={event.registrationUrl} target="_blank" rel="noopener noreferrer">
+                Daftar di situs lomba
+              </a>
+            ) : <p className="rsvp-note">Tautan pendaftaran belum tersedia.</p>}
+          </section>
+        ) : <>
+          <EventCapacity event={event} />
+          {renderRegistration?.(event)}
+        </>}
       </section>
     </div>
   );

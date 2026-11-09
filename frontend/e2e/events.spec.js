@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const student = { userId: 'student-12', name: 'Mahasiswa Kampus', role: 'mahasiswa', status: 'active' };
+const student = { userId: 'student-12', name: 'Mahasiswa Kampus', role: 'mahasiswa', status: 'active', ukwmsVerified: true };
 const organizer = {
   userId: 'organizer-12', name: 'Panitia Kampus', role: 'penyelenggara', status: 'active',
   organization: { organizationId: 'org-12', status: 'verified' },
@@ -167,6 +167,14 @@ test('student returns to the event after login, RSVPs and cancels their registra
   await page.getByRole('button', { name: 'Riwayat', exact: true }).click();
   await expect(page.getByText(event.title, { exact: true })).toBeVisible();
   await expect(page.getByText('Dibatalkan', { exact: true })).toBeVisible();
+});
+
+test('a student without UKWMS verification cannot RSVP to a regular internal event', async ({ page }) => {
+  const calls = await mockEventApi(page, { user: { ...student, ukwmsVerified: false } });
+  await startAuthenticated(page, '/events/event-12');
+  await expect(page.getByText('RSVP khusus mahasiswa UKWMS terverifikasi.')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Daftar Event', exact: true })).toHaveCount(0);
+  expect(calls.filter(({ path }) => path.includes('/registrations'))).toHaveLength(0);
 });
 
 test('RSVP conflict reports failure and keeps the student session', async ({ page }) => {
