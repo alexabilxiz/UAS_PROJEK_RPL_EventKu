@@ -8,7 +8,7 @@ const eventTimeFormatter = new Intl.DateTimeFormat('id-ID', {
 export function normalizeEventId(value) {
   const id = typeof value === 'number' && Number.isSafeInteger(value) && value > 0
     ? String(value) : typeof value === 'string' ? value.trim() : '';
-  return /^[A-Za-z0-9_-]+$/.test(id) ? id : '';
+  return /^[A-Za-z0-9][A-Za-z0-9._~-]*$/.test(id) ? id : '';
 }
 
 export function isEventDate(value) {
