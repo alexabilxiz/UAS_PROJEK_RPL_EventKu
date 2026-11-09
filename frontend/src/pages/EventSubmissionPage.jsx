@@ -100,7 +100,7 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
     setReceipt({ eventId, status });
   }
 
-  async function submit(event) {
+  async function submit(event, saveOnly = false) {
     event.preventDefault();
     if (request.current || receipt || attempt?.kind === 'unconfirmed') return;
     let draft = attempt;
@@ -119,7 +119,8 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
     const options = { token, signal: controller.signal };
     request.current = controller;
     setFailure(null);
-    setBusy(draft ? 'submit' : 'save');
+    const createAction = saveOnly ? 'save-only' : 'save';
+    setBusy(draft ? 'submit' : createAction);
     try {
       if (!draft) {
         // Preserve uncertainty on navigation or timeout before the API confirms an ID.
@@ -127,7 +128,7 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
         const eventId = await createEventDraft(payload, options);
         draft = { kind: 'draft', eventId };
         remember(draft);
-        if (controller.signal.aborted) return;
+        if (controller.signal.aborted || saveOnly) return;
         setBusy('submit');
       }
       const status = await submitEventDraft(draft.eventId, options);
@@ -153,6 +154,18 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
       request.current = null;
       if (!controller.signal.aborted) setBusy('');
     }
+  }
+
+  function startAnotherEvent() {
+    if (request.current) return;
+    const confirmed = window.confirm(
+      `Draft ${attempt.eventId} tetap tersimpan di server. Buka formulir baru dan lepas pelacakan draft ini dari tab?`,
+    );
+    if (!confirmed) return;
+    setValues(emptyForm);
+    setErrors({});
+    setFailure(null);
+    remember(null);
   }
 
   const field = (name) => ({ id: name, value: values[name], onChange: change(name), error: errors[name], required: true });
@@ -187,6 +200,7 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
       <p>ID draft <strong>{attempt.eventId}</strong>. Lanjutkan pengajuan untuk mengirim draft ini ke moderator.</p>
       <div className="submission-actions">
         <Link className="secondary-button" to="/penyelenggara">Kembali ke akun</Link>
+        <button className="secondary-button" type="button" onClick={startAnotherEvent} disabled={Boolean(busy)}>Buat event lain</button>
         <button className="primary-button" type="submit" disabled={Boolean(busy)}>
           {busy ? <><span className="spinner" aria-hidden="true" />Mengirim pengajuan…</> : 'Lanjutkan pengajuan'}
         </button>
@@ -233,8 +247,11 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
         <p>Event masuk ke antrean moderasi setelah pengajuan berhasil.</p>
         <div className="submission-actions">
           <Link className="secondary-button" to="/penyelenggara">Batal</Link>
+          <button className="secondary-button" type="button" onClick={(event) => submit(event, true)} disabled={formDisabled}>
+            {busy === 'save-only' ? <><span className="spinner" aria-hidden="true" />Menyimpan draft…</> : 'Simpan draft'}
+          </button>
           <button className="primary-button" type="submit" disabled={formDisabled}>
-            {busy ? <><span className="spinner" aria-hidden="true" />Menyimpan draft…</> : 'Ajukan event'}
+            {busy === 'save' ? <><span className="spinner" aria-hidden="true" />Menyimpan draft…</> : 'Ajukan event'}
           </button>
         </div>
       </div>
