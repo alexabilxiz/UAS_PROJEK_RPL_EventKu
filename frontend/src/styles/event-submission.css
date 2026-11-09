@@ -1,0 +1,43 @@
+.submission-page { min-height: 100%; background: #f7f8fc; }
+.submission-banner { background: #f0f0fb; }
+.submission-banner-inner, .submission-body { max-width: 1140px; margin: 0 auto; padding-inline: 32px; }
+.submission-banner-inner { padding-block: 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.submission-banner h1 { font-size: clamp(27px, 4vw, 36px); font-weight: 750; letter-spacing: -.9px; }
+.submission-banner p:not(.eyebrow) { margin-top: 7px; color: #606983; font-size: 14px; }
+.submission-banner a { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; font-size: 13px; font-weight: 650; }
+.submission-body { padding-block: 24px 45px; }
+.submission-card { background: #fff; border: 1px solid #e4e7f0; border-radius: 15px; padding: 24px; }
+.submission-grid { display: grid; grid-template-columns: minmax(0, 2.6fr) minmax(205px, 1fr); gap: 28px; }
+.submission-grid fieldset { border: 0; min-width: 0; padding: 0; margin: 0; }
+.submission-grid legend, .submission-result h2 { padding: 0; margin: 0 0 15px; font-weight: 720; font-size: 20px; line-height: 1.3; }
+.submission-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+.submission-card textarea { resize: vertical; min-height: 96px; }
+.submission-card :is(textarea, input[type="datetime-local"]):focus-visible { outline: 3px solid #8293d8; outline-offset: 3px; }
+.submission-card input[readonly] { background: #f6f7fb; }
+.submission-poster-box { background: #f7f8fc; border: 1px dashed #cdd4e7; border-radius: 11px; padding: 18px 14px; }
+.submission-poster-box > p { font-size: 13px; color: #535c78; margin-bottom: 12px; }
+.submission-poster-box .feature-icon { margin-bottom: 10px; }
+.submission-poster-box .form-field { margin-bottom: 0; }
+.submission-poster-box > a { display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 650; }
+.submission-tip { background: #f1f1fd; border-radius: 10px; padding: 13px 14px; margin-top: 16px; color: #535c78; font-size: 13px; }
+.submission-tip strong { display: block; color: #2d4188; margin-bottom: 5px; }
+.submission-footer { padding-top: 18px; border-top: 1px solid #edf0f7; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.submission-footer p, .submission-result p { color: #606983; font-size: 14px; }
+.submission-result p + p { margin-top: 8px; }
+.submission-result strong { overflow-wrap: anywhere; }
+.submission-result .submission-actions, .submission-result > a { margin-top: 20px; }
+.submission-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.submission-category-message { color: #606983; font-size: 13px; margin-bottom: 14px; }
+.submission-category-message button { color: #2d4188; font-weight: 650; text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .submission-grid { grid-template-columns: 1fr; gap: 12px; }
+  .submission-footer { margin-top: 22px; }
+}
+
+@media (max-width: 520px) {
+  .submission-banner-inner, .submission-body { padding-inline: 20px; }
+  .submission-banner-inner, .submission-footer { align-items: flex-start; flex-direction: column; }
+  .submission-card { padding: 18px; }
+  .submission-fields { grid-template-columns: 1fr; }
+}
