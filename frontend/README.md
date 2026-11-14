@@ -1,6 +1,6 @@
 # Frontend EventKu
 
-Implementasi bagian Bambang untuk Minggu 9–12 mencakup setup React dan Tailwind, Auth, katalog event, pengajuan penyelenggara, dan RSVP mahasiswa. Desain mengacu pada gambar Figma di laporan UTS. Struktur memisahkan halaman, komponen, layanan HTTP, state sesi, hooks, dan route guard.
+Implementasi bagian Bambang untuk Minggu 9–13 mencakup setup React dan Tailwind, Auth, katalog event, pengajuan penyelenggara, RSVP mahasiswa, serta kalender bulanan. Desain mengacu pada gambar Figma di laporan UTS. Struktur memisahkan halaman, komponen, layanan HTTP, state sesi, hooks, dan route guard.
 
 ## Menjalankan
 
@@ -51,6 +51,15 @@ Gunakan kredensial dummy saja. Data akun, draft, dan RSVP tersimpan dalam memori
 | 10 | Login/register responsif, validasi, status loading/error, password visibility, pilihan mahasiswa/penyelenggara |
 | 11 | Client register/login/me, Bearer token, AuthContext, pemulihan sesi, logout lokal dan guard navigasi berdasarkan profil API |
 | 12 | Katalog dan detail publik, pencarian/filter/paginasi, pengajuan event oleh penyelenggara terverifikasi, serta RSVP, pembatalan, dan riwayat mahasiswa |
+| 13 | Kalender bulanan publik, navigasi bulan/hari ini, agenda per tanggal WIB, pemulihan pilihan lewat URL, serta perbaikan deteksi RSVP pada halaman kedua dan seterusnya |
+
+## Kalender bulanan
+
+Buka `/events/calendar` dari navigasi **Kalender** atau tombol di katalog. Pilih bulan, tombol bulan sebelumnya/berikutnya, atau **Hari ini**. Klik tanggal untuk melihat agenda hari tersebut; **Tampilkan semua tanggal** mengembalikan agenda bulanan. Tautan judul membuka detail event, dan **Kembali ke kalender** mempertahankan bulan/tanggal yang dipilih. Contoh URL: `/events/calendar?month=2026-11&date=2026-11-14`.
+
+Kalender memakai hari mulai event dalam WIB, termasuk event yang dimulai pada hari sebelumnya menurut UTC. Event beberapa hari ditampilkan pada tanggal mulai; rentang lengkapnya tersedia di detail. Semua halaman `GET /events?from=&to=&page=&limit=20` dimuat sebelum kalender ditampilkan. `from` adalah awal bulan WIB inklusif dan `to` awal bulan berikutnya eksklusif, sesuai kontrak pencarian yang sudah ada. Tidak diperlukan endpoint kalender atau dependensi tambahan. Loading, error API, coba lagi, dan bulan/tanggal tanpa event memiliki tampilan tersendiri.
+
+Di ponsel, sel kalender menampilkan tanggal dan jumlah event; judul lengkap tersedia pada agenda di bawah kalender. Dokumentasi dan hasil verifikasi: [Minggu 13](../docs/implementation/bambang/week13/README.md).
 
 Tes browser menjalankan alur melalui fixture kontrak. Integrasi dengan backend Audrey menunggu server Auth dan Event yang dapat diuji. Catatan konfigurasi, endpoint, dan hasil pengujian ada di [Minggu 9–11](../docs/implementation/bambang/week9-11/README.md) dan [Minggu 12](../docs/implementation/bambang/week12/README.md).
 

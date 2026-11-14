@@ -44,12 +44,9 @@ function StudentRegistration({ event, seats, token, loginUrl, logout }) {
 
   useEffect(() => {
     const controller = new AbortController();
-    // The API has no event-specific read endpoint. This first page can confirm
-    // a visible registration, but an absent row is left to the server on POST.
-    registrationService.list({ token, signal: controller.signal })
-      .then(({ data }) => {
+    registrationService.hasActiveRegistration(event.eventId, { token, signal: controller.signal })
+      .then((existing) => {
         if (!controller.signal.aborted) {
-          const existing = data.some((row) => row.eventId === event.eventId && row.status === 'aktif');
           if (existing) setRegistration('existing');
         }
       })

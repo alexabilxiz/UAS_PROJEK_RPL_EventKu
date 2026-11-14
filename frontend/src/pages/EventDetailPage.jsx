@@ -120,13 +120,14 @@ export default function EventDetailPage({ renderRegistration }) {
   const { eventId } = useParams();
   const { state } = useLocation();
   const catalogSearch = typeof state?.catalogSearch === 'string' ? state.catalogSearch : '';
+  const calendarSearch = typeof state?.calendarSearch === 'string' ? state.calendarSearch : null;
 
   return (
     <PageShell>
       <section className="event-detail-hero">
         <div className="event-width">
           <div><h1>Detail Event</h1><p>Kenali kegiatan dan siapkan pengalaman kampusmu berikutnya.</p></div>
-          <Link to={{ pathname: '/events', search: catalogSearch }}><Icon name="arrow-left" size={16} />Kembali ke katalog</Link>
+          <Link to={{ pathname: calendarSearch === null ? '/events' : '/events/calendar', search: calendarSearch ?? catalogSearch }}><Icon name="arrow-left" size={16} />{calendarSearch === null ? 'Kembali ke katalog' : 'Kembali ke kalender'}</Link>
         </div>
       </section>
       <div className="catalog-background event-detail-background">

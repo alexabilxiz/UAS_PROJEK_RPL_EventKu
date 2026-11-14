@@ -6,6 +6,7 @@ import RegisterPage from './pages/RegisterPage';
 import AccountPage from './pages/AccountPage';
 import AccountHelpPage from './pages/AccountHelpPage';
 import EventCatalogPage from './pages/EventCatalogPage';
+import EventCalendarPage from './pages/EventCalendarPage';
 import EventDetailPage from './pages/EventDetailPage';
 import EventSubmissionPage from './pages/EventSubmissionPage';
 import RegistrationsPage from './pages/RegistrationsPage';
@@ -22,6 +23,7 @@ export default function App() {
     <Route path="/register" element={<RegisterPage />} />
     <Route path="/bantuan-akun" element={<AccountHelpPage />} />
     <Route path="/events" element={<EventCatalogPage />} />
+    <Route path="/events/calendar" element={<EventCalendarPage />} />
     <Route path="/events/:eventId" element={<EventDetailPage renderRegistration={(event) => <EventRegistration key={event.eventId} event={event} />} />} />
     <Route element={<RoleRoute />}><Route path="/dashboard" element={<AccountPage />} /></Route>
     <Route element={<RoleRoute roles={['penyelenggara']} />}>

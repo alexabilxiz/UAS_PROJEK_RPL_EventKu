@@ -199,6 +199,7 @@ export default function EventCatalogPage() {
           <p className="eyebrow">AGENDA KAMPUS</p>
           <h1>Event UKWMS</h1>
           <p>Jelajahi kegiatan, tambah pengalaman, dan perluas relasimu di kampus.</p>
+          <Link className="secondary-button" to="/events/calendar">Lihat kalender event</Link>
           <CatalogFilters key={filterParams({ ...filters, page: 1 }).toString()} values={filters} categories={categories} onApply={apply} />
           {categoryError && <div className="catalog-category-error"><span role="status">Kategori gagal dimuat. Pencarian tetap tersedia.</span><button type="button" className="text-button" onClick={() => { setCategoryError(false); setCategoryAttempt((value) => value + 1); }}>Muat ulang kategori</button></div>}
         </div>

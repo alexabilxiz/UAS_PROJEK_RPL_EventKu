@@ -38,7 +38,18 @@ function normalizeRegistration(row) {
 }
 
 export function createRegistrationService(client = apiClient) {
-  return {
+  const service = {
+    async hasActiveRegistration(eventId, { token, signal } = {}) {
+      const id = requireId(eventId);
+      for (let page = 1; page <= 500; page++) {
+        const result = await service.list({ token, signal, page });
+        if (result.page !== page) throw contractError();
+        if (result.data.some((row) => row.eventId === id && row.status === 'aktif')) return true;
+        if (page * 20 >= result.total) return false;
+        if (!result.data.length) throw contractError();
+      }
+      throw contractError();
+    },
     async register(eventId, { token, signal } = {}) {
       requireToken(token);
       const result = await client.request(`/events/${requireId(eventId)}/registrations`, {
@@ -68,6 +79,7 @@ export function createRegistrationService(client = apiClient) {
       return { data: result.data.map(normalizeRegistration), page: result.page, total: result.total };
     },
   };
+  return service;
 }
 
 export const registrationService = createRegistrationService();
