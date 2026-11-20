@@ -187,6 +187,81 @@ test('RSVP conflict reports failure and keeps the student session', async ({ pag
   await expect(page.getByRole('link', { name: 'Akun saya' })).toBeVisible();
 });
 
+test('RSVP stays unavailable while registration history is unavailable', async ({ page }) => {
+  const calls = await mockEventApi(page);
+  let lookupFails = true;
+  await page.route('**/api/v1/registrations/me?*', (route) => lookupFails
+    ? route.fulfill({ status: 503, json: { message: 'Layanan sementara tidak tersedia' } })
+    : route.fallback());
+  await startAuthenticated(page, '/events/event-12');
+  await expect(page.getByRole('alert')).toContainText('Status pendaftaran belum dapat diperiksa');
+  await expect(page.getByRole('button', { name: 'Daftar Event', exact: true })).toHaveCount(0);
+  expect(calls.filter(({ method }) => method === 'POST')).toHaveLength(0);
+
+  lookupFails = false;
+  await page.getByRole('button', { name: 'Periksa ulang pendaftaran' }).click();
+  await expect(page.getByRole('button', { name: 'Daftar Event', exact: true })).toBeEnabled();
+});
+
+test('an uncertain RSVP response requires a status check before another POST', async ({ page }) => {
+  const calls = await mockEventApi(page);
+  let registrationAttempts = 0;
+  await page.route('**/api/v1/events/event-12/registrations', (route) => {
+    registrationAttempts += 1;
+    // The fixture commits the RSVP, but the browser receives an error.
+    return route.fulfill({ status: 503, json: { message: 'Respons pendaftaran hilang' } });
+  });
+  await page.route('**/api/v1/registrations/me?*', (route) => registrationAttempts
+    ? route.fulfill({ json: { data: [{ registrationId: 'reg-12', status: 'aktif', event }], page: 1, total: 1 } })
+    : route.fallback());
+  await startAuthenticated(page, '/events/event-12');
+  await page.getByRole('button', { name: 'Daftar Event', exact: true }).click();
+  await expect(page.getByRole('alert')).toContainText('Hasil pendaftaran belum dapat dipastikan');
+  await expect(page.getByRole('button', { name: 'Daftar Event', exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Periksa ulang pendaftaran' }).click();
+  await expect(page.getByText('Anda sudah terdaftar di event ini.')).toBeVisible();
+  expect(registrationAttempts).toBe(1);
+  expect(calls.some(({ method, path }) => method === 'GET' && path === '/registrations/me')).toBe(true);
+});
+
+test('mobile visitors can open signup directly from the catalog', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await mockEventApi(page);
+  await page.goto('/events');
+  const nav = page.getByRole('navigation', { name: 'Navigasi utama' });
+  const signup = nav.getByRole('link', { name: 'Daftar', exact: true });
+  await expect(signup).toBeVisible();
+  const signupBox = await signup.boundingBox();
+  const loginBox = await nav.getByRole('link', { name: 'Masuk', exact: true }).boundingBox();
+  expect(signupBox.height).toBeGreaterThanOrEqual(44);
+  expect(signupBox.y).toBe(loginBox.y);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+  await signup.click();
+  await expect(page).toHaveURL(/\/register$/);
+});
+
+test('event submission actions fit narrow phones and stay inline on desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await mockEventApi(page, { user: organizer });
+  await startAuthenticated(page, '/penyelenggara/event/ajukan');
+  await fillProposal(page);
+  const save = page.getByRole('button', { name: 'Simpan draft', exact: true });
+  const submit = page.getByRole('button', { name: 'Ajukan event', exact: true });
+  const mobileSave = await save.boundingBox();
+  const mobileSubmit = await submit.boundingBox();
+  expect(mobileSave.x).toBe(mobileSubmit.x);
+  expect(mobileSave.width).toBe(mobileSubmit.width);
+  expect(mobileSave.y).toBeLessThan(mobileSubmit.y);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(320);
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  const desktopSave = await save.boundingBox();
+  const desktopSubmit = await submit.boundingBox();
+  expect(desktopSave.y).toBe(desktopSubmit.y);
+  expect(desktopSave.x).toBeLessThan(desktopSubmit.x);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(1440);
+});
+
 test('verified organizer resumes a saved draft after submission failure without duplicating POST', async ({ page }, testInfo) => {
   const calls = await mockEventApi(page, { user: organizer, submissionFails: true });
   await startAuthenticated(page, '/penyelenggara/event/ajukan');

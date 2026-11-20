@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import FormField from '../components/FormField';
+import EventSubmissionFields from '../components/EventSubmissionFields';
 import Icon from '../components/Icon';
 import PageShell from '../components/PageShell';
 import { useAuth } from '../hooks/useAuth';
 import { listCategories } from '../services/eventService';
 import { createEventDraft, getEventDraftStatus, submitEventDraft } from '../services/eventSubmissionService';
-import { isHttpsPoster, prepareEventDraft } from '../utils/eventSubmission';
+import { prepareEventDraft } from '../utils/eventSubmission';
 import { normalizeEventId } from '../utils/events';
 import '../styles/event-submission.css';
 
@@ -58,6 +58,7 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
   const [attempt, setAttempt] = useState(() => readAttempt(storageKey));
   const [receipt, setReceipt] = useState(null);
   const [busy, setBusy] = useState('');
+  const [posterBusy, setPosterBusy] = useState(false);
   const [categoryRetry, setCategoryRetry] = useState(0);
   const [categoryResult, setCategoryResult] = useState({ loading: true, data: [], error: '' });
   const request = useRef(null);
@@ -103,7 +104,7 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
 
   async function submit(event, saveOnly = false) {
     event.preventDefault();
-    if (request.current || receipt || attempt?.kind === 'unconfirmed') return;
+    if (posterBusy || request.current || receipt || attempt?.kind === 'unconfirmed') return;
     let draft = attempt;
     let payload;
     if (!draft) {
@@ -170,7 +171,7 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
   }
 
   const field = (name) => ({ id: name, value: values[name], onChange: change(name), error: errors[name], required: true });
-  const formDisabled = Boolean(busy) || categoryResult.loading || categoryResult.data.length === 0;
+  const formDisabled = Boolean(busy) || posterBusy || categoryResult.loading || categoryResult.data.length === 0;
 
   return <div className="submission-body">
     {failure && <div className="error-message" role="alert" ref={alert} tabIndex={-1}>
@@ -207,55 +208,9 @@ function EventSubmissionForm({ user, token, logout, storageKey }) {
         </button>
       </div>
     </form> : <form className="submission-card" noValidate onSubmit={submit} aria-busy={Boolean(busy)}>
-      <div className="submission-grid">
-        <fieldset disabled={Boolean(busy)} className="submission-info">
-          <legend>Informasi event</legend>
-          <FormField {...field('title')} label="Judul event" placeholder="Masukkan judul event" />
-          <FormField {...field('description')} label="Deskripsi">
-            <textarea rows={4} placeholder="Ceritakan tujuan dan kegiatan yang akan berlangsung." />
-          </FormField>
-          <div className="submission-fields">
-            <FormField {...field('categoryId')} label="Kategori">
-              <select disabled={categoryResult.loading || !categoryResult.data.length}>
-                <option value="">{categoryResult.loading ? 'Memuat kategori…' : 'Pilih kategori'}</option>
-                {categoryResult.data.map(({ categoryId, name }) => <option key={categoryId} value={categoryId}>{name}</option>)}
-              </select>
-            </FormField>
-            <FormField id="submission-organization" label="ID organisasi" value={user.organizationId} readOnly />
-          </div>
-          {categoryResult.error && <p role="status" className="submission-category-message">{categoryResult.error} <button type="button" onClick={() => setCategoryRetry((count) => count + 1)}>Muat ulang</button></p>}
-          {!categoryResult.loading && !categoryResult.error && categoryResult.data.length === 0 && <p className="submission-category-message" role="status">Belum ada kategori aktif.</p>}
-          <div className="submission-fields">
-            <FormField {...field('startAt')} label="Mulai (WIB)" type="datetime-local" />
-            <FormField {...field('endAt')} label="Selesai (WIB)" type="datetime-local" />
-            <FormField {...field('locationOrLink')} label="Lokasi atau tautan" placeholder="Aula kampus atau tautan pertemuan" />
-            <FormField {...field('registrationMode')} label="Cara daftar"
-              hint={values.registrationMode === 'internal' ? 'RSVP tersedia untuk mahasiswa UKWMS terverifikasi.' : undefined}>
-              <select>
-                <option value="internal">RSVP di EventKu</option>
-                <option value="external">Daftar lewat tautan panitia</option>
-              </select>
-            </FormField>
-            <FormField {...field('audience')} required={values.registrationMode === 'external'}
-              label="Siapa yang boleh ikut?" placeholder={values.registrationMode === 'external'
-                ? 'Contoh: siswa SMA/SMK, tim 2–3 orang' : 'Ketentuan tambahan, jika ada'} maxLength={180} />
-            {values.registrationMode === 'external'
-              ? <FormField {...field('registrationUrl')} label="Tautan pendaftaran panitia" type="url" placeholder="https://…" />
-              : <FormField {...field('quota')} label="Kuota peserta" type="number" min={1} step={1} placeholder="Contoh 80" />}
-          </div>
-        </fieldset>
-
-        <fieldset disabled={Boolean(busy)} className="submission-poster">
-          <legend>Poster event</legend>
-          <div className="submission-poster-box">
-            <span className="feature-icon"><Icon name="calendar" size={24} /></span>
-            <p>Tambahkan tautan ke poster kegiatan.</p>
-            <FormField {...field('posterUrl')} label="URL poster" type="url" placeholder="https://…" hint="Gunakan URL HTTPS yang dapat dibuka peserta." />
-            {isHttpsPoster(values.posterUrl.trim()) && <a href={values.posterUrl.trim()} target="_blank" rel="noreferrer">Periksa tautan poster</a>}
-          </div>
-          <div className="submission-tip"><strong>Tips pengajuan</strong><p>Periksa jam mulai, jam selesai, dan kapasitas. Detail yang lengkap memudahkan admin meninjau event.</p></div>
-        </fieldset>
-      </div>
+      <EventSubmissionFields busy={busy} field={field} values={values} organizationId={user.organizationId}
+        categoryResult={categoryResult} retryCategories={() => setCategoryRetry((count) => count + 1)}
+        onPosterBusy={setPosterBusy} onPosterUploaded={(value) => change('posterUrl')({ target: { value } })} />
       <div className="submission-footer">
         <p>Event masuk ke antrean moderasi setelah pengajuan berhasil.</p>
         <div className="submission-actions">

@@ -86,3 +86,5 @@
   .event-detail-hero .event-width { flex-wrap: wrap; gap: 12px; }
   .event-detail-background { padding-block: 20px 38px; }
 }
+.event-favorite { margin-block: 14px; }
+.event-favorite p { margin-bottom: 8px; font-size: 13px; }

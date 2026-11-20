@@ -1,6 +1,8 @@
 import { safeRegistrationUrl } from './events.js';
 
 const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
+export const POSTER_LIMIT = 2 * 1024 * 1024;
+export const POSTER_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 function toWibTimestamp(value) {
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return null;
@@ -20,6 +22,14 @@ export function isHttpsPoster(value) {
   } catch {
     return false;
   }
+}
+
+export function isUploadPoster(value) {
+  return typeof value === 'string' && /^\/api\/v1\/assets\/posters\/[a-f0-9-]{36}$/.test(value);
+}
+
+export function isEventPosterReference(value) {
+  return isHttpsPoster(value) || isUploadPoster(value);
 }
 
 export function prepareEventDraft(values, categories, now = Date.now()) {
@@ -50,7 +60,7 @@ export function prepareEventDraft(values, categories, now = Date.now()) {
   }
   if (external && !audience) errors.audience = 'Jelaskan siapa yang boleh mengikuti event.';
   if (external && !registrationUrl) errors.registrationUrl = 'Isi tautan pendaftaran HTTPS yang valid.';
-  if (!isHttpsPoster(posterUrl)) errors.posterUrl = 'Isi URL poster HTTPS yang valid.';
+  if (!isEventPosterReference(posterUrl)) errors.posterUrl = 'Unggah poster atau isi URL HTTPS yang valid.';
 
   if (Object.keys(errors).length) return { errors };
   return {

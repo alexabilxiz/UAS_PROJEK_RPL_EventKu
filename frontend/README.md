@@ -1,6 +1,6 @@
 # Frontend EventKu
 
-Implementasi bagian Bambang untuk Minggu 9–13 mencakup setup React dan Tailwind, Auth, katalog event, pengajuan penyelenggara, RSVP mahasiswa, serta kalender bulanan. Desain mengacu pada gambar Figma di laporan UTS. Struktur memisahkan halaman, komponen, layanan HTTP, state sesi, hooks, dan route guard.
+Implementasi bagian Bambang untuk Minggu 9–14 mencakup setup React dan Tailwind, Auth, katalog event, pengajuan penyelenggara, RSVP mahasiswa, kalender bulanan, dan perbaikan hasil uji frontend. Desain mengacu pada gambar Figma di laporan UTS. Struktur memisahkan halaman, komponen, layanan HTTP, state sesi, hooks, dan route guard.
 
 ## Menjalankan
 
@@ -27,11 +27,54 @@ Dari folder `frontend`, jalankan `npm ci` untuk instalasi pertama, lalu `npm run
 | Mahasiswa UKWMS terverifikasi | `mahasiswa@demo.test` | `EventKuDemo123!` |
 | Akun uji tanpa verifikasi UKWMS | `mahasiswa.luar@demo.test` | `EventKuDemo123!` |
 | Penyelenggara terverifikasi | `penyelenggara@demo.test` | `EventKuDemo123!` |
+| Penyelenggara menunggu verifikasi | `penyelenggara.baru@demo.test` | `EventKuDemo123!` |
 | Admin | `admin@demo.test` | `EventKuDemo123!` |
 
-Dari detail event, mahasiswa dapat mendaftar dan membuka daftar RSVP untuk membatalkannya. Penyelenggara dapat memilih **Ajukan event** dari halaman akun. Untuk mencoba registrasi akun penyelenggara, gunakan ID organisasi `demo-ukwms`. Akun penyelenggara baru berstatus menunggu verifikasi.
+Dari detail event, mahasiswa dapat mendaftar dan membuka daftar RSVP untuk membatalkannya. Penyelenggara dapat memilih **Ajukan event**, **Event organisasi** untuk melihat status dan daftar peserta aktif atau mengunduh CSV, serta **Notifikasi** untuk membaca hasil moderasi. Untuk mencoba registrasi penyelenggara, gunakan ID `demo-organisasi-baru` selama organisasinya masih menunggu verifikasi.
 
-Akun Admin bisa masuk dan membuka **Ruang admin** untuk memeriksa profil dan hak akses. Moderasi dalam demo berhenti pada status **Menunggu Moderasi**.
+Akun admin bisa membuka **Buka antrean moderasi**, **Verifikasi organisasi**, dan **Kelola kategori** dari halaman akun. Demo menyediakan dua pengajuan awal. Untuk mencoba alur verifikasi, verifikasi **Komunitas Mahasiswa Baru**, lalu pilih **Periksa status verifikasi** di halaman akun penyelenggara baru. Perubahan demo tersimpan selama server Vite berjalan.
+
+Moderasi memakai `GET /api/v1/admin/events/moderation?page=1&limit=10` (respons `{ data, total, page }`) dan `PATCH /api/v1/admin/events/moderation/:eventId` (body `{ status, reason? }`, respons `{ eventId, status }`). Nilai status keputusan adalah `disetujui` atau `ditolak`. Penolakan wajib menyertakan alasan hingga 500 karakter. Endpoint ini tersedia di demo lokal dan perlu diselaraskan dengan API backend tim saat integrasi.
+
+| Fitur | Endpoint demo dengan awalan `/api/v1` |
+|---|---|
+| Verifikasi organisasi | `GET /admin/organizations`, `PATCH /admin/organizations/:id` dengan `{ status }` (`verified` atau `suspended`). |
+| Kategori | `GET /admin/categories`, `POST /admin/categories` dengan `{ name }`, dan `PATCH /admin/categories/:id` dengan `{ name, isActive }`. Kategori nonaktif hilang dari pilihan form dan filter. Event yang sudah terbit tetap dapat dibuka. |
+| Notifikasi moderasi | `GET /notifications/me`, `PATCH /notifications/me/:id/read`. Keputusan tersedia bagi penyelenggara di organisasi pemilik event. |
+| Event dan peserta | `GET /organizer/events`, `GET /organizer/events/:id/participants` dengan judul event dan daftar peserta aktif. Tambahkan `?format=csv` untuk mengunduh semua peserta aktif sebagai respons JSON `{ csv }`. Akses peserta dan ekspor memerlukan organisasi pemilik yang terverifikasi. |
+
+Daftar di atas menggunakan `page` dan `limit` dengan respons `{ data, total, page }`. Untuk demo ekspor, lakukan RSVP dengan akun mahasiswa pada event internal, kemudian buka daftar peserta event yang sama dengan akun penyelenggara terverifikasi.
+
+### Fitur lanjutan dan verifikasi
+
+| Akses | Cara mencoba di demo |
+|---|---|
+| Semua akun | **Pengaturan akun** untuk mengubah nama, URL foto HTTPS, dan kata sandi. Dari halaman masuk, **Lupa kata sandi?** menampilkan tautan pemulihan demo setelah email dimasukkan. |
+| Mahasiswa | **Atur minat**, lalu setujui event dengan kategori yang diminati dari akun admin. **Notifikasi mahasiswa** memuat event baru, konfirmasi RSVP, pengingat 24 jam sebelum mulai, serta perubahan atau pembatalan. Aktifkan preferensi email untuk melihat salinannya di **Kotak email demo**. |
+| Mahasiswa | Simpan event dari detail, lalu buka **Event favorit**. Buka **Pendaftaran saya → Riwayat → Lokakarya Orientasi (Demo)** untuk memberi rating dan ulasan pada event selesai yang sudah diikuti. Kalender bisa difilter menurut kategori dan menandai event yang sudah didaftari. |
+| Penyelenggara | Di **Event organisasi → Kelola event**, edit, ajukan draft, atau batalkan event. Perubahan jadwal atau lokasi event tayang memicu moderasi ulang dan notifikasi peserta. Form menerima poster JPG, PNG, atau WebP hingga 2 MB, serta URL HTTPS. **Statistik organisasi** menampilkan peserta aktif, kuota terisi, dan tren pendaftaran. |
+| Admin | **Kelola pengguna** untuk menonaktifkan atau mengaktifkan kembali akun nonadmin. Di **Moderasi event**, buka **Event tayang** untuk menurunkan event dengan alasan atau **Riwayat moderasi** untuk melihat keputusan dan pelakunya. **Statistik platform** menampilkan jumlah pengguna, event, pendaftaran aktif, serta distribusi event. |
+
+Endpoint tambahan memakai awalan `/api/v1`. Alur ini memerlukan kontrak yang sama di backend tim untuk penggunaan di luar mode demo.
+
+| Alur | Kontrak tambahan |
+|---|---|
+| Profil dan kata sandi | `PATCH /auth/me/profile` dengan `{ name, photoUrl }`; `PATCH /auth/me/password` dengan `{ currentPassword, password }`; `POST /auth/forgot-password` dengan `{ email }`; `POST /auth/reset-password` dengan `{ token, password }`. `demoResetPath` hanya digunakan oleh mode demo. |
+| Poster | `POST /assets/posters` dengan `{ type, data }`, yaitu MIME dan isi Base64. Respons `{ posterUrl }` yang bisa dipakai pada pengajuan dan penyuntingan event. |
+| Kelola event | `GET /organizer/events/:eventId` → `{ event }`. `PATCH` memakai `{ action, expectedStatus, expectedVersion, event? }` dengan aksi `update` atau `cancel`. |
+| Aktivitas mahasiswa | `GET /student/notifications`, `PATCH /student/notifications/:id/read`, `GET/PUT /student/interests` dengan `{ categoryIds }`, dan `GET/PUT /student/notification-preferences` dengan `{ emailEnabled }`. `GET /student/demo-mail` khusus simulasi email lokal. |
+| Favorit dan ulasan | `GET /student/favorites`, `GET/PUT/DELETE /student/favorites/:eventId` → `{ saved }`, dan `GET/PUT /student/reviews/:eventId` dengan `{ rating, comment }` untuk menyimpan. |
+| Moderasi lanjutan | `GET /admin/events/moderation?scope=published` atau `scope=history`. Gunakan `PATCH` pada event tayang dengan `{ status: "dibatalkan", reason }` untuk menurunkannya. |
+| Pengguna dan statistik | `GET /admin/users`, `PATCH /admin/users/:id` dengan `{ status }`, `GET /admin/statistics`, dan `GET /organizer/statistics`. |
+
+Demo menjalankan transisi event selesai dan pengingat H-1 secara lokal. Pengiriman email nyata, penyimpanan persisten, penjadwalan production, dan validasi integrasi tetap bergantung pada backend tim.
+
+```powershell
+npm test
+npm run test:e2e -- --workers=2
+npx playwright test -c playwright.demo.config.js
+npm run build
+```
 
 Contoh pendaftaran eksternal tersedia di **Kompetisi Inovasi Pelajar (Demo)**. Pengunjung dapat membaca syarat peserta dan membuka tautan contoh panitia tanpa masuk. Untuk mengajukan event serupa, pilih **Daftar lewat tautan panitia**, isi target peserta, dan masukkan URL HTTPS.
 
@@ -52,6 +95,7 @@ Gunakan kredensial dummy saja. Data akun, draft, dan RSVP tersimpan dalam memori
 | 11 | Client register/login/me, Bearer token, AuthContext, pemulihan sesi, logout lokal dan guard navigasi berdasarkan profil API |
 | 12 | Katalog dan detail publik, pencarian/filter/paginasi, pengajuan event oleh penyelenggara terverifikasi, serta RSVP, pembatalan, dan riwayat mahasiswa |
 | 13 | Kalender bulanan publik, navigasi bulan/hari ini, agenda per tanggal WIB, pemulihan pilihan lewat URL, serta perbaikan deteksi RSVP pada halaman kedua dan seterusnya |
+| 14 | Pemulihan status RSVP setelah kegagalan API, akses Daftar langsung dari navigasi ponsel, dan tata letak tombol pengajuan responsif. Lihat [catatan dan bukti uji](../docs/implementation/bambang/week14/README.md). |
 
 ## Kalender bulanan
 

@@ -1,4 +1,5 @@
 import apiClient, { ApiError } from './apiClient';
+import { safeEventPoster } from '../utils/events';
 
 const ROLES = ['mahasiswa', 'penyelenggara', 'admin'];
 const PUBLIC_ROLES = ['mahasiswa', 'penyelenggara'];
@@ -22,6 +23,7 @@ export function normalizeUser(payload) {
     email: string(payload.email),
     role: payload.role,
     status: string(payload.status),
+    ...(payload.photoUrl && { photoUrl: safeEventPoster(payload.photoUrl) }),
     ...(payload.role === 'mahasiswa' && payload.ukwmsVerified === true && { ukwmsVerified: true }),
     organizationId: id(payload.organizationId ?? organization?.organizationId ?? organization?.id),
     organizationStatus: string(payload.organizationStatus ?? organization?.status),
@@ -71,6 +73,22 @@ export function createAuthService(client = apiClient) {
       }
       const result = await client.request('/auth/me', { token, signal });
       return normalizeUser(result?.user ?? result);
+    },
+    async updateProfile(values, { token, signal }) {
+      const result = await client.request('/auth/me/profile', { method: 'PATCH', token, signal, body: values });
+      return normalizeUser(result?.user ?? result);
+    },
+    async changePassword(values, { token, signal }) {
+      await client.request('/auth/me/password', { method: 'PATCH', token, signal, body: values });
+    },
+    async requestReset(email, { signal } = {}) {
+      const result = await client.request('/auth/forgot-password', { method: 'POST', signal, body: { email } });
+      const path = result?.demoResetPath;
+      const demo = import.meta.env.DEV && import.meta.env.MODE === 'demo';
+      return demo && typeof path === 'string' && /^\/atur-ulang-kata-sandi\?token=[a-f0-9]{64}$/.test(path) ? path : '';
+    },
+    async resetPassword(token, password, { signal } = {}) {
+      await client.request('/auth/reset-password', { method: 'POST', signal, body: { token, password } });
     },
   };
 }

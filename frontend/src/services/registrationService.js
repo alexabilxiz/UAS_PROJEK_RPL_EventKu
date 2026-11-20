@@ -30,6 +30,7 @@ function normalizeRegistration(row) {
     registrationId: requireId(row.registrationId),
     eventId: requireId(event.eventId ?? row.eventId),
     status: row.status,
+    ...(typeof event.status === 'string' && { eventStatus: event.status }),
     title: text(event.title),
     startAt: text(event.startAt),
     endAt: text(event.endAt),
@@ -39,6 +40,17 @@ function normalizeRegistration(row) {
 
 export function createRegistrationService(client = apiClient) {
   const service = {
+    async listActiveEventIds(options) {
+      const ids = new Set();
+      for (let page = 1; page <= 500; page++) {
+        const result = await service.list({ ...options, page });
+        if (result.page !== page) throw contractError();
+        for (const row of result.data) if (row.status === 'aktif') ids.add(row.eventId);
+        if (page * 20 >= result.total) return ids;
+        if (!result.data.length) throw contractError();
+      }
+      throw contractError();
+    },
     async hasActiveRegistration(eventId, { token, signal } = {}) {
       const id = requireId(eventId);
       for (let page = 1; page <= 500; page++) {

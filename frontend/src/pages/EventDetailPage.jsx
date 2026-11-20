@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import EventPoster from '../components/EventPoster';
+import EventFavorite from '../components/EventFavorite';
 import Icon from '../components/Icon';
 import PageShell from '../components/PageShell';
 import { getEvent } from '../services/eventService';
@@ -98,6 +99,7 @@ function EventDetail({ eventId, renderRegistration }) {
         {event.categoryName && <span className="event-category">{event.categoryName}</span>}
         <h2 id="event-detail-title">{event.title}</h2>
         <EventMetadata event={event} />
+        <EventFavorite eventId={event.eventId} />
         {event.registrationMode === 'external' ? (
           <section className="rsvp-panel" aria-label="Pendaftaran event">
             <p className="rsvp-note">Pendaftaran dikelola oleh panitia. Tautan dapat dibuka tanpa akun EventKu.</p>

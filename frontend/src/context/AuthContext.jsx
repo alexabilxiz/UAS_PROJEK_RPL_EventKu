@@ -94,6 +94,11 @@ export function AuthProvider({ children, service = authService }) {
   }, [service]);
 
   const register = useCallback((values) => service.register(values), [service]);
+  const updateProfile = useCallback(async (values, { signal } = {}) => {
+    const current = operation.current;
+    const profile = await service.updateProfile(values, { token, signal });
+    if (operation.current === current && !signal?.aborted) setUser(profile);
+  }, [service, token]);
 
-  return <AuthContext.Provider value={{ user, token, role: user?.role, loading, sessionError, login, logout, register, retrySession: restoreSession }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, token, role: user?.role, loading, sessionError, login, logout, register, updateProfile, retrySession: restoreSession }}>{children}</AuthContext.Provider>;
 }

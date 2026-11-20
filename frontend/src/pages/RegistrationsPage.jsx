@@ -9,7 +9,8 @@ import '../styles/event-registration.css';
 
 const loginUrl = `/login?redirect=${encodeURIComponent('/mahasiswa/pendaftaran')}`;
 function canCancel(row) {
-  return row.status === 'aktif' && isEventTimestamp(row.startAt) && Date.parse(row.startAt) > Date.now();
+  return row.status === 'aktif' && row.eventStatus !== 'dibatalkan'
+    && isEventTimestamp(row.startAt) && Date.parse(row.startAt) > Date.now();
 }
 
 function listError(error) {
@@ -35,11 +36,12 @@ function RegistrationCard({ row, confirming, pending, onAsk, onDismiss, onCancel
       <h2>{row.title || `Event ${row.eventId}`}</h2>
       <p>{formatEventDate(row.startAt)} {formatEventTime(row.startAt)}</p>
       {row.locationOrLink && <p>{row.locationOrLink}</p>}
-      <Link to={`/events/${row.eventId}`}>Lihat detail event <Icon name="arrow-right" size={14} /></Link>
+      {row.eventStatus === 'selesai' && row.status === 'aktif' ? <Link to={`/mahasiswa/ulasan/${row.eventId}`}>Beri ulasan <Icon name="arrow-right" size={14} /></Link>
+        : row.eventStatus !== 'dibatalkan' && <Link to={`/events/${row.eventId}`}>Lihat detail event <Icon name="arrow-right" size={14} /></Link>}
     </div>
     <div className="registration-card-actions">
       <span className={`registration-badge${row.status === 'dibatalkan' ? ' registration-badge-cancelled' : ''}`}>
-        {row.status === 'aktif' ? 'Terdaftar' : 'Dibatalkan'}
+        {row.eventStatus === 'dibatalkan' ? 'Event dibatalkan' : row.status === 'aktif' ? 'Terdaftar' : 'Dibatalkan'}
       </span>
       {canCancel(row) && !confirming && <button className="secondary-button" type="button" disabled={pending} onClick={onAsk}>
         Batalkan pendaftaran

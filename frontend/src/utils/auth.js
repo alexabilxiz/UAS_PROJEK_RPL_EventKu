@@ -6,12 +6,23 @@ export const ROLE_PATHS = { mahasiswa: '/mahasiswa', penyelenggara: '/penyelengg
 
 // Allow only known internal destinations. Never navigate to a URL from a query parameter.
 export function safeReturnPath(value) {
-  const fixedPaths = ['/dashboard', '/events', '/mahasiswa/pendaftaran', '/penyelenggara/event/ajukan', ...Object.values(ROLE_PATHS)];
+  const fixedPaths = [
+    '/dashboard', '/events', '/events/calendar', '/akun/pengaturan',
+    '/mahasiswa/pendaftaran', '/mahasiswa/minat', '/mahasiswa/notifikasi', '/mahasiswa/favorit',
+    '/penyelenggara/event/ajukan', '/penyelenggara/event', '/penyelenggara/notifikasi', '/penyelenggara/statistik',
+    '/admin/moderasi', '/admin/moderasi/riwayat', '/admin/moderasi/tayang', '/admin/organisasi', '/admin/kategori',
+    '/admin/pengguna', '/admin/statistik', ...Object.values(ROLE_PATHS),
+  ];
   if (fixedPaths.includes(value)) return value;
   if (typeof value === 'string' && value.startsWith('/events/')) {
     const eventId = normalizeEventId(value.slice('/events/'.length));
     if (eventId && value === `/events/${eventId}`) return value;
   }
+  const roleEventPath = typeof value === 'string' && (
+    /^\/penyelenggara\/event\/([^/]+)\/(?:peserta|kelola)$/.exec(value)
+    || /^\/mahasiswa\/ulasan\/([^/]+)$/.exec(value)
+  );
+  if (roleEventPath && normalizeEventId(roleEventPath[1]) === roleEventPath[1]) return value;
   return '/dashboard';
 }
 
@@ -30,4 +41,10 @@ export function validateRegistration(values) {
   if (!PUBLIC_ROLES.includes(values.role)) errors.role = 'Pilih peran mahasiswa atau penyelenggara.';
   if (values.role === 'penyelenggara' && !values.organizationId.trim()) errors.organizationId = 'Masukkan ID organisasi yang diberikan pengelola.';
   return errors;
+}
+
+export function validateNewPassword(password, confirmation) {
+  if (password.length < 8 || password.length > 128) return 'Kata sandi baru harus 8 sampai 128 karakter.';
+  if (password !== confirmation) return 'Konfirmasi kata sandi belum sama.';
+  return '';
 }
