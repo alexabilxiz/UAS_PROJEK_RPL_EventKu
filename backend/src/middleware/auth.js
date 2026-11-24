@@ -6,7 +6,7 @@ import { USER_SELECT } from '../lib/serializers.js';
 
 async function userFromRequest(req) {
   const header = req.headers.authorization;
-  const match = /^Bearer ([^\s]+)$/.exec(header ?? '');
+  const match = /^Bearer ([^\s]+)$/i.exec(header ?? '');
   if (!match) return null;
   let payload;
   try {

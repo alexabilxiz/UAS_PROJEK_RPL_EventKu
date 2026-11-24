@@ -70,6 +70,21 @@ describe('Autentikasi & otorisasi', () => {
   });
 });
 
+test('skema bearer tidak membedakan huruf besar dan kecil', async () => {
+  const login = await api().post(`${V1}/auth/login`).send({
+    email: 's@student.ukwms.ac.id',
+    password: 'RahasiaBanget123',
+  });
+
+  const token = login.body.accessToken;
+
+  const res = await api()
+    .get(`${V1}/auth/me`)
+    .set('Authorization', `bearer ${token}`);
+
+  expect(res.status).toBe(200);
+});
+
 describe('Input jahat / tidak valid', () => {
   test('ID bukan UUID → 404, bukan 500', async () => {
     for (const path of ['/events/1', '/events/abc', `/events/${encodeURIComponent("' OR 1=1 --")}`, '/registrations/xyz']) {
