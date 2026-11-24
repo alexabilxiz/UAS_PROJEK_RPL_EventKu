@@ -41,6 +41,10 @@ export function createAuthService(client = apiClient) {
       }
       return { accessToken: result.accessToken, user: normalizeUser(result.user) };
     },
+    async logout(token, { signal } = {}) {
+      if (typeof token !== 'string' || !token || /\s/.test(token)) return;
+      await client.request('/auth/logout', { method: 'POST', token, signal });
+    },
     async register({ name, email, password, role, organizationId } = {}, { signal } = {}) {
       const fieldErrors = {};
       if (!string(name)) fieldErrors.name = 'Masukkan nama Anda.';

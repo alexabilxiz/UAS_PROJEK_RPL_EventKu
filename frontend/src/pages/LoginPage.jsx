@@ -46,7 +46,7 @@ export default function LoginPage() {
     <div className="form-eyebrow">SELAMAT DATANG KEMBALI</div>
     <h1>Masuk ke EventKu</h1>
     <p className="form-intro">Lanjutkan pengalaman kampusmu dalam satu akun.</p>
-    {location.state?.registered && <p className="success-message" role="status">Akun berhasil dibuat. Silakan masuk.{location.state.organizer ? ' Akun penyelenggara menunggu verifikasi organisasi.' : ''}</p>}
+    {location.state?.registered && <p className="success-message" role="status">Akun berhasil dibuat.{location.state.organizer ? ' Akun penyelenggara menunggu verifikasi admin sebelum dapat masuk.' : ' Silakan masuk.'}</p>}
     <form noValidate onSubmit={submit} aria-busy={submitting}>
       {error && <p className="error-message" role="alert" ref={alert} tabIndex={-1}>{error}</p>}
       <FormField id="email" label="Email" type="email" autoComplete="username" placeholder="nama@ukwms.ac.id" value={values.email} onChange={change('email')} error={errors.email} required disabled={submitting} />

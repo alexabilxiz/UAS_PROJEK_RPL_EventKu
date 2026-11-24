@@ -14,19 +14,20 @@ export function AdminUsersPage() {
     {users.length ? <ul className="workspace-list">
       {users.map((person) => {
         const active = person.status === 'active';
+        const pending = person.status === 'pending';
         const selected = confirming === person.userId;
         return <li className="workspace-card workspace-row" key={person.userId}>
           <div><h2>{person.name}</h2><p className="workspace-muted">{person.email} · {ROLE_LABELS[person.role]}</p></div>
           <div className="workspace-actions">
-            <span className="workspace-badge">{active ? 'Aktif' : 'Nonaktif'}</span>
+            <span className="workspace-badge">{active ? 'Aktif' : pending ? 'Menunggu verifikasi' : 'Nonaktif'}</span>
             {person.role !== 'admin' && (selected ? <>
               <button type="button" className="primary-button" disabled={list.busy} onClick={async () => {
                 if (await list.run((options) => workspaceService.updateUser(person.userId, active ? 'disabled' : 'active', options),
-                  active ? 'Akun dinonaktifkan.' : 'Akun diaktifkan kembali.')) setConfirming(null);
-              }}>{active ? 'Ya, nonaktifkan akun' : 'Ya, aktifkan akun'}</button>
+                  active ? 'Akun dinonaktifkan.' : pending ? 'Akun penyelenggara diverifikasi.' : 'Akun diaktifkan kembali.')) setConfirming(null);
+              }}>{active ? 'Ya, nonaktifkan akun' : pending ? 'Ya, verifikasi akun' : 'Ya, aktifkan akun'}</button>
               <button type="button" className="secondary-button" disabled={list.busy} onClick={() => setConfirming(null)}>Batal</button>
             </> : <button type="button" className="secondary-button" disabled={list.busy}
-              onClick={() => setConfirming(person.userId)}>{active ? 'Nonaktifkan akun' : 'Aktifkan kembali'}</button>)}
+              onClick={() => setConfirming(person.userId)}>{active ? 'Nonaktifkan akun' : pending ? 'Verifikasi akun' : 'Aktifkan kembali'}</button>)}
           </div>
         </li>;
       })}

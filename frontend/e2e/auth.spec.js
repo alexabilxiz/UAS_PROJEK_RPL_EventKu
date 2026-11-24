@@ -38,6 +38,12 @@ async function mockAuth(page, options = {}) {
         json: options.meBody ?? profile,
       });
     }
+    if (path === '/api/v1/auth/logout') {
+      return route.fulfill({
+        status: options.logoutStatus ?? 200,
+        json: options.logoutBody ?? { message: 'Berhasil keluar.' },
+      });
+    }
     if (path === '/api/v1/auth/register') {
       return route.fulfill({
         status: options.registerStatus ?? 201,

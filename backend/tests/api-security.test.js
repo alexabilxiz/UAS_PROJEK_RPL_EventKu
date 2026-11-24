@@ -25,10 +25,27 @@ describe('Autentikasi & otorisasi', () => {
   });
 
   test('token sah tapi sesinya sudah dihapus (logout/ganti sandi) → 401', async () => {
-    const extra = (await api().post(`${V1}/auth/login`).send({ email: 'a@t.test', password: 'RahasiaBanget123' })).body.accessToken;
-    expect((await api().get(`${V1}/auth/me`).set('Authorization', `Bearer ${extra}`)).status).toBe(200);
-    await pool.query(`DELETE FROM sessions WHERE jti = $1`, [jwt.decode(extra).jti]);
-    expect((await api().get(`${V1}/auth/me`).set('Authorization', `Bearer ${extra}`)).status).toBe(401);
+    const first = (await api().post(`${V1}/auth/login`).send({ email: 'a@t.test', password: 'RahasiaBanget123' })).body.accessToken;
+    const second = (await api().post(`${V1}/auth/login`).send({ email: 'a@t.test', password: 'RahasiaBanget123' })).body.accessToken;
+    expect((await api().get(`${V1}/auth/me`).set('Authorization', `Bearer ${first}`)).status).toBe(200);
+    expect((await api().post(`${V1}/auth/logout`).set('Authorization', `Bearer ${first}`)).status).toBe(200);
+    expect((await api().get(`${V1}/auth/me`).set('Authorization', `Bearer ${first}`)).status).toBe(401);
+    expect((await api().post(`${V1}/auth/logout`).set('Authorization', `Bearer ${first}`)).status).toBe(401);
+    expect((await api().post(`${V1}/auth/logout`)).status).toBe(401);
+    expect((await api().get(`${V1}/auth/me`).set('Authorization', `Bearer ${second}`)).status).toBe(200);
+  });
+
+  test('akun penyelenggara baru menunggu verifikasi admin sebelum bisa login atau mengakses organisasi', async () => {
+    const reg = await api().post(`${V1}/auth/register`).send({
+      name: 'Calon Penyelenggara', email: 'calon.org@t.test', password: 'password123', role: 'penyelenggara', organizationId: orgId,
+    });
+    expect(reg.status).toBe(201);
+    expect(reg.body).toMatchObject({ role: 'penyelenggara', status: 'pending', organizationId: orgId });
+    expect((await api().post(`${V1}/auth/login`).send({ email: 'calon.org@t.test', password: 'password123' })).status).toBe(403);
+    expect((await api().patch(`${V1}/admin/users/${reg.body.userId}`).set(bearer(admin)).send({ status: 'active' })).status).toBe(200);
+    const approved = await api().post(`${V1}/auth/login`).send({ email: 'calon.org@t.test', password: 'password123' });
+    expect(approved.status).toBe(200);
+    expect(approved.body.accessToken).toBeTruthy();
   });
 
   test('token kedaluwarsa → 401', async () => {

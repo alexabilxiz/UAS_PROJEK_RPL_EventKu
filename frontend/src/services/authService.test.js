@@ -68,6 +68,17 @@ describe('Auth service contract', () => {
     expect(request).not.toHaveBeenCalled();
   });
 
+  it('posts logout with the active bearer token and ignores missing tokens', async () => {
+    const request = vi.fn().mockResolvedValue({ message: 'Berhasil keluar.' });
+    const signal = new AbortController().signal;
+    await createAuthService({ request }).logout('signed.jwt.token', { signal });
+    expect(request).toHaveBeenCalledWith('/auth/logout', { method: 'POST', token: 'signed.jwt.token', signal });
+    request.mockClear();
+    await createAuthService({ request }).logout('');
+    await createAuthService({ request }).logout('invalid token');
+    expect(request).not.toHaveBeenCalled();
+  });
+
   it('does not invent account or organization verification status', () => {
     expect(normalizeUser({ userId: '1', role: 'penyelenggara' })).toEqual({
       userId: '1', name: '', email: '', role: 'penyelenggara', status: '', organizationId: null, organizationStatus: '',

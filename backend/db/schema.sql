@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
   email            VARCHAR(254) NOT NULL UNIQUE,           -- disimpan huruf kecil
   password_hash    TEXT         NOT NULL,
   role             VARCHAR(20)  NOT NULL,                  -- mahasiswa | penyelenggara | admin
-  status           VARCHAR(20)  NOT NULL DEFAULT 'active', -- active | disabled
+  status           VARCHAR(20)  NOT NULL DEFAULT 'active', -- active | pending | disabled
   photo_url        TEXT         NOT NULL DEFAULT '',
   ukwms_verified   BOOLEAN      NOT NULL DEFAULT FALSE,
   email_enabled    BOOLEAN      NOT NULL DEFAULT FALSE,

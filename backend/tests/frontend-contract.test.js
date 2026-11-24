@@ -26,17 +26,22 @@ beforeAll(async () => {
 afterAll(() => fe.close());
 
 describe('Auth (authService frontend)', () => {
-  test('register → login → getMe', async () => {
+  test('register → login → getMe → logout', async () => {
     const created = await fe.authService.register({ name: 'Budi', email: 'Budi@student.ukwms.ac.id', password: 'password123', role: 'mahasiswa' });
     expect(created).toMatchObject({ role: 'mahasiswa', status: 'active', organizationId: null });
     const login = await fe.authService.login('budi@student.ukwms.ac.id', 'password123');
     expect(login.user).toMatchObject({ role: 'mahasiswa', name: 'Budi', ukwmsVerified: true });
     const me = await fe.authService.getMe(login.accessToken);
     expect(me.userId).toBe(created.userId);
+    await fe.authService.logout(login.accessToken);
+    await expect(fe.authService.getMe(login.accessToken)).rejects.toMatchObject({ status: 401 });
   });
 
-  test('penyelenggara terhubung ke organisasi dan membawa statusnya', async () => {
-    await fe.authService.register({ name: 'Sari', email: 'sari@t.test', password: 'password123', role: 'penyelenggara', organizationId: pendingOrgId });
+  test('penyelenggara baru menunggu verifikasi admin lalu membawa status organisasinya', async () => {
+    const created = await fe.authService.register({ name: 'Sari', email: 'sari@t.test', password: 'password123', role: 'penyelenggara', organizationId: pendingOrgId });
+    expect(created).toMatchObject({ role: 'penyelenggara', status: 'pending', organizationId: pendingOrgId });
+    await expect(fe.authService.login('sari@t.test', 'password123')).rejects.toMatchObject({ status: 403 });
+    await fe.workspaceService.updateUser(created.userId, 'active', session(admin));
     const { user } = await fe.authService.login('sari@t.test', 'password123');
     expect(user).toMatchObject({ role: 'penyelenggara', organizationId: pendingOrgId, organizationStatus: 'pending' });
   });

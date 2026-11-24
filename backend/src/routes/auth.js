@@ -65,14 +65,15 @@ router.post('/register', authLimiter, wrap(async (req, res) => {
 
   const domain = email.split('@')[1];
   const ukwmsVerified = role === 'mahasiswa' && config.ukwmsEmailDomains.includes(domain);
+  const status = role === 'penyelenggara' ? 'pending' : 'active';
   const userId = randomUUID();
   const passwordHash = await bcrypt.hash(body.password, config.bcryptRounds);
   await query(
     `INSERT INTO users (id, name, email, password_hash, role, status, ukwms_verified, organization_id)
-     VALUES ($1, $2, $3, $4, $5, 'active', $6, $7)`,
-    [userId, name, email, passwordHash, role, ukwmsVerified, organizationId],
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [userId, name, email, passwordHash, role, status, ukwmsVerified, organizationId],
   );
-  res.status(201).json({ userId, role, status: 'active', organizationId });
+  res.status(201).json({ userId, role, status, organizationId });
 }));
 
 router.post('/login', authLimiter, wrap(async (req, res) => {
@@ -83,9 +84,15 @@ router.post('/login', authLimiter, wrap(async (req, res) => {
   const user = rows[0];
   const matches = await bcrypt.compare(password, user?.password_hash ?? DUMMY_HASH);
   if (!user || !matches) throw unauthorized('Email atau kata sandi salah.');
+  if (user.status === 'pending') throw forbidden('Akun penyelenggara menunggu verifikasi admin.');
   if (user.status !== 'active') throw forbidden('Akun ini dinonaktifkan. Hubungi admin.');
   const accessToken = await issueToken(user.id);
   res.json({ accessToken, user: serializeUser(user) });
+}));
+
+router.post('/logout', requireAuth, wrap(async (req, res) => {
+  await query(`DELETE FROM sessions WHERE jti = $1 AND user_id = $2`, [req.jti, req.user.id]);
+  res.json({ message: 'Berhasil keluar.' });
 }));
 
 router.get('/me', requireAuth, (req, res) => {

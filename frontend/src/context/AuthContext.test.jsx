@@ -246,6 +246,22 @@ describe('AuthProvider session verification and races', () => {
     expect(sessionStorage.getItem(SESSION_KEY)).toBe('temporary-token');
   });
 
+  it('revokes the server session on logout and still clears local state if the request fails', async () => {
+    sessionStorage.setItem(SESSION_KEY, 'active-token');
+    const service = {
+      getMe: vi.fn().mockResolvedValue(student),
+      logout: vi.fn().mockRejectedValue({ status: 503, message: 'Server sibuk.' }),
+    };
+    const { result } = renderAuth(service);
+    await waitFor(() => expect(result.current.user).toEqual(student));
+    act(() => result.current.logout());
+    expect(service.logout).toHaveBeenCalledWith('active-token');
+    expect(result.current.user).toBeNull();
+    expect(result.current.token).toBeNull();
+    expect(sessionStorage.getItem(SESSION_KEY)).toBeNull();
+    expect(localStorage.getItem(SESSION_KEY)).toBeNull();
+  });
+
   it('ignores a storage removal from a sessionStorage iframe', async () => {
     localStorage.setItem(SESSION_KEY, 'remembered-token');
     const service = { getMe: vi.fn().mockResolvedValue(student) };

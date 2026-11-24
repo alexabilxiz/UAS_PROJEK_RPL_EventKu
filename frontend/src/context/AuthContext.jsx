@@ -22,7 +22,13 @@ export function AuthProvider({ children, service = authService }) {
     setSessionError('');
   }, []);
 
-  const logout = useCallback(() => endSession(), [endSession]);
+  const logout = useCallback(() => {
+    const activeToken = token ?? readSession()?.token;
+    endSession();
+    if (activeToken && typeof service.logout === 'function') {
+      Promise.resolve(service.logout(activeToken)).catch(() => {});
+    }
+  }, [endSession, service, token]);
 
   const restoreSession = useCallback(async () => {
     const current = ++operation.current;

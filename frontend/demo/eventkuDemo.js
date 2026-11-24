@@ -166,10 +166,17 @@ export function eventkuDemo() {
     if (path === '/auth/login' && method === 'POST') {
       const body = await readBody(request);
       const account = accounts.get(typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '');
-      if (account?.user.status !== 'active' || !matchesPassword(body.password, account.password)) return error(401, 'Kredensial demo tidak cocok.');
+      if (!account || !matchesPassword(body.password, account.password)) return error(401, 'Kredensial demo tidak cocok.');
+      if (account.user.status === 'pending') return error(403, 'Akun penyelenggara menunggu verifikasi admin.');
+      if (account.user.status !== 'active') return error(401, 'Kredensial demo tidak cocok.');
       const accessToken = `demo-${randomUUID()}`;
       sessions.set(`Bearer ${accessToken}`, account.user);
       return json(200, { accessToken, user: account.user });
+    }
+    if (path === '/auth/logout' && method === 'POST') {
+      if (!user) return error(401, 'Sesi demo berakhir.');
+      sessions.delete(authorization);
+      return json(200, { message: 'Berhasil keluar.' });
     }
     if (path === '/auth/register' && method === 'POST') {
       const body = await readBody(request);
@@ -183,7 +190,8 @@ export function eventkuDemo() {
         return error(422, 'Gunakan organisasi demo yang masih menunggu verifikasi.');
       }
       const profile = {
-        userId: randomUUID(), name: body.name, email, role: body.role, status: 'active',
+        userId: randomUUID(), name: body.name, email, role: body.role,
+        status: body.role === 'penyelenggara' ? 'pending' : 'active',
         ...(body.role === 'penyelenggara' && { organization: pendingOrganization }),
       };
       accounts.set(email, { password: hashPassword(body.password), user: profile });
