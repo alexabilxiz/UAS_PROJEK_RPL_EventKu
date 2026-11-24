@@ -380,24 +380,25 @@ FR-DSH-04 & UC-12 & CSV sesuai event dan izin.\\}
 Setiap perubahan memperbarui ID/versi SRS, kontrak API, diagram, backlog dan testcase. Kemajuan dinilai dari fungsi yang dapat diperagakan dan bukti uji; bukan persentase tanpa dasar.
 \page{Pengujian dan UAT: Ruang Lingkup dan Lingkungan}\label{sec:uat-env}
 Bagian ini menambahkan hasil pengujian Minggu 10--14 pada laporan UTS. Acuan kebutuhan tetap SRS versi 2 dan backlog Minggu 9; ruang lingkup adalah kebutuhan Must (autentikasi, pengajuan dan moderasi event, katalog dan pencarian, RSVP, kalender, notifikasi minat, dashboard). Dua jenis bukti harus dibedakan: pengujian fungsional otomatis pada API yang sudah dijalankan (Bagian~\ref{sec:uat-base}--\ref{sec:uat-bug}) dan UAT bersama pengguna nyata (Bagian~\ref{sec:uat-user}) yang hasilnya masih harus diisi tim.
-\note{Pengujian otomatis pada bagian ini dijalankan dengan bantuan asisten AI (Claude) pada lingkungan sandbox, dengan database PostgreSQL in-memory (pg-mem), bukan pada situs produksi. Hasilnya adalah bukti kondisi kode dan bukan pengganti UAT. Tim sebaiknya mengulang pengujian di mesin sendiri dan melampirkan tangkapan layar sebelum pengumpulan.}
+\note{Pengujian otomatis awal (commit \texttt{5edd1e0}) dijalankan dengan bantuan asisten AI pada sandbox Linux dengan database in-memory (pg-mem), lalu \textbf{dijalankan ulang di mesin lokal tim (Windows)} pada commit \texttt{dccaa91} setelah perbaikan BUG-01 dan BUG-02. Pengujian API tetap memakai \texttt{pg-mem} dan bukan situs produksi. Hasilnya adalah bukti kondisi kode dan bukan pengganti UAT bersama pengguna nyata; tangkapan layar terminal lokal tetap perlu dilampirkan tim sebelum pengumpulan.}
 \subsection{Lingkungan dan Metode}
 \tbl{p{4cm}Y}{Aspek & Keterangan\\\midrule
-Versi aplikasi & Branch \texttt{main}, commit \texttt{5edd1e0} (repositori alexabilxiz/UAS\_PROJEK\_RPL\_EventKu).\\
+Versi aplikasi & Branch \texttt{main}, pengujian awal commit \texttt{5edd1e0} (59/61 lulus) dan verifikasi ulang pascaperbaikan pada commit \texttt{dccaa91} (61/61 lulus) di repositori alexabilxiz/UAS\_PROJEK\_RPL\_EventKu.\\
 Tanggal pengujian & 24 November 2026.\\
-Runtime & Node.js v22.23.5, npm 10.9.9.\\
+Runtime & Node.js v22, npm 10 (mesin lokal Windows; uji awal sandbox memakai Node.js v22.23.5).\\
 Database & PostgreSQL in-memory (pg-mem) dengan skema dari \texttt{backend/db}; \textbf{bukan} PostgreSQL produksi (Neon).\\
-Lingkungan & Sandbox Linux; API dipanggil langsung melalui Supertest tanpa peramban.\\
+Lingkungan & Mesin lokal Windows untuk verifikasi ulang (Jest/Supertest, Vitest, dan Playwright Chromium).\\
 Data uji & Satu admin, dua penyelenggara (dua organisasi terverifikasi) dan satu penyelenggara organisasi belum terverifikasi, dua mahasiswa UKWMS, satu mahasiswa non-UKWMS, dua kategori.\\
-Metode & Skrip alur lengkap: registrasi, login, pengajuan, moderasi, katalog, RSVP, pembatalan, ekspor peserta; ditambah uji negatif (peran salah, lintas organisasi, input berbahaya, pembatasan login).\\}
+Metode & Skrip alur lengkap: registrasi, login, logout, pengajuan, moderasi, katalog, RSVP, pembatalan, ekspor peserta; ditambah uji negatif (peran salah, lintas organisasi, input berbahaya, pembatasan login) dan uji regresi browser Playwright.\\}
 \section{Hasil Uji Otomatis Bawaan Repositori}\label{sec:uat-base}
 \tbl{p{4.5cm}p{3cm}Y}{Pemeriksaan & Hasil & Keterangan\\\midrule
-Backend (Jest) & 45 dari 45 lulus & Tiga berkas: api-security, frontend-contract, seed.\\
-Frontend (Vitest) & 71 dari 71 lulus & Tujuh berkas pengujian.\\
-Build produksi frontend & Berhasil & Bundel JavaScript sekitar 115 KB (gzip).\\}
-Uji end-to-end Playwright (\texttt{frontend/e2e}) \textbf{tidak} dijalankan karena unduhan peramban tidak tersedia di lingkungan pengujian.
+Backend (Jest) & 61 dari 61 lulus & Tujuh berkas: api-security, auth, frontend-contract, seed, uat-flow, uat-extra, uat-rate (commit \texttt{dccaa91}).\\
+Frontend (Vitest) & 73 dari 73 lulus & Tujuh berkas pengujian (termasuk uji unit \texttt{logout} di \texttt{authService} dan \texttt{AuthContext}).\\
+Build produksi frontend & Berhasil & Bundel JavaScript sekitar 114,7 KB (gzip) melalui \texttt{vite build}.\\
+Frontend browser (Playwright) & 36 regresi + 4 demo E2E lulus & Dijalankan di Chromium lokal (\texttt{frontend/e2e} terhadap fixture kontrak API dan \texttt{frontend/demo-e2e} pada server demo lokal, termasuk viewport 320/360 piksel).\\}
+Uji browser terhadap backend dan situs produksi (Vercel/Render/Neon) belum dijalankan karena aplikasi belum di-deploy ke lingkungan produksi.
 \section{Hasil Pengujian Fungsional API}\label{sec:uat-api}
-Dari 61 skenario, 59 lulus dan 2 gagal (tingkat lulus 97\%). Kolom Acuan merujuk ID kebutuhan pada SRS; pemetaan ID ke pasal SRS perlu dicocokkan tim dengan dokumen SRS v2.
+Pada pengujian awal (commit \texttt{5edd1e0}), 59 dari 61 skenario lulus dan 2 gagal (97\%, yakni T-AUTH-08 dan T-AUTH-11). Setelah perbaikan BUG-01 dan BUG-02 pada commit \texttt{dccaa91} serta verifikasi ulang di mesin lokal, seluruh \textbf{61 dari 61 skenario lulus (100\%)}. Seluruh ID kebutuhan pada kolom Acuan telah dicocokkan dengan SRS versi 2.
 \subsection{Autentikasi dan hak akses}
 {\footnotesize\setlength{\parskip}{0pt}\renewcommand{\arraystretch}{1.15}
 \begin{longtable}{p{1.8cm}p{1.9cm}p{4.0cm}p{2.4cm}p{3.4cm}p{1.2cm}}
@@ -416,13 +417,13 @@ Dari 61 skenario, 59 lulus dan 2 gagal (tingkat lulus 97\%). Kolom Acuan merujuk
 \midrule
 \mbox{T-AUTH-07} & FR-AUTH-03 & Endpoint /me dengan token valid & 200 & 200 & \textbf{Lulus}\\
 \midrule
-\mbox{T-AUTH-08} & US-02 / FR-AUTH-03 & Logout menghapus sesi di server (token lama harus ditolak) & Token lama 401 setelah logout & POST /auth/logout=404; token lama sesudahnya=200 & \textbf{\textcolor{red}{Gagal}}\\
+\mbox{T-AUTH-08} & US-02 / FR-AUTH-03 & Logout menghapus sesi di server (token lama harus ditolak) & Token lama 401 setelah logout & Awal: 404/200; pasca-fix (\texttt{dccaa91}): POST /auth/logout=200; token lama=401 & \textbf{Lulus}\\
 \midrule
 \mbox{T-AUTH-09} & NFR-SEC-02 & Token JWT yang dimanipulasi ditolak & 401 & 401 & \textbf{Lulus}\\
 \midrule
 \mbox{T-AUTH-10} & NFR-SEC-03 & Akses tanpa token ditolak & 401 & 401 & \textbf{Lulus}\\
 \midrule
-\mbox{T-AUTH-11} & US-04 / FR-AUTH-05 & Akun penyelenggara baru tidak otomatis memperoleh hak atas organisasi terverifikasi sebelum diverifikasi admin & Akun menunggu verifikasi / pembuatan event ditolak & Registrasi 201; pembuatan event 201; akun melihat 2 event organisasi lain & \textbf{\textcolor{red}{Gagal}}\\
+\mbox{T-AUTH-11} & US-04 / FR-AUTH-05 & Akun penyelenggara baru tidak otomatis memperoleh hak atas organisasi terverifikasi sebelum diverifikasi admin & Akun menunggu verifikasi / pembuatan event ditolak & Awal: 201 aktif; pasca-fix (\texttt{dccaa91}): register=201 (\texttt{pending}); login=403; event/list=401 & \textbf{Lulus}\\
 \midrule
 \mbox{T-RBAC-01} & FR-AUTH-04 & Mahasiswa tidak boleh membuat event & 403 & 403 & \textbf{Lulus}\\
 \midrule
@@ -552,10 +553,10 @@ Dari 61 skenario, 59 lulus dan 2 gagal (tingkat lulus 97\%). Kolom Acuan merujuk
 \end{longtable}}
 
 \section{Temuan Bug}\label{sec:uat-bug}
-\tbl{p{1.5cm}p{1.5cm}Yp{4.6cm}}{ID & Tingkat & Temuan dan dampak & Usulan perbaikan\\\midrule
-BUG-01 & Sedang & Tidak ada endpoint logout di server. Logout hanya menghapus token di klien; token lama tetap diterima (200) sampai kedaluwarsa (default 8 jam). Bertentangan dengan kriteria US-02 ``logout menghapus sesi''. Bukti: T-AUTH-08. & Tambah \texttt{POST /auth/logout} yang menghapus baris \texttt{sessions} milik token; frontend memanggilnya. Tabel sesi sudah ada. Pemilik: Audrey (API), Bambang (klien).\\
-BUG-02 & Tinggi & Siapa pun dapat mendaftar sebagai penyelenggara pada organisasi terverifikasi dengan memakai \texttt{organizationId} yang tampil pada daftar event publik. Akun langsung aktif dan dapat membuat event atas nama organisasi itu serta melihat event organisasinya. Dari pembacaan kode, endpoint daftar peserta (nama dan email) dapat dijangkau dengan cara yang sama; bagian ini belum dijalankan. Bertentangan dengan US-04 (verifikasi akun penyelenggara oleh admin). Bukti: T-AUTH-11. & Akun penyelenggara baru berstatus menunggu sampai disetujui admin, atau pendaftaran memakai kode undangan dari organisasi. Pemilik: Audrey.\\}
-Catatan pengamatan (bukan bug yang dijalankan): pesan ``Email sudah terdaftar'' pada registrasi memungkinkan pengecekan email yang sudah terdaftar; komentar pada kode menyatakan layar admin untuk organisasi belum tersedia di frontend sehingga US-37/38 baru berjalan melalui API. Status perbaikan dan tautan Jira diisi tim: BUG-01 [ISI: SCRUM-xx, status]; BUG-02 [ISI: SCRUM-xx, status].
+\tbl{p{1.5cm}p{1.5cm}Yp{4.6cm}}{ID & Tingkat & Temuan dan dampak & Perbaikan dan status\\\midrule
+BUG-01 & Sedang & Pada commit \texttt{5edd1e0} tidak ada endpoint logout di server; token lama tetap diterima (200) sampai kedaluwarsa (default 8 jam). Bertentangan dengan US-02 ``logout menghapus sesi''. Bukti awal: T-AUTH-08. & \textbf{Diperbaiki} pada commit \texttt{dccaa91}: endpoint \texttt{POST /api/v1/auth/logout} menghapus baris \texttt{sessions} milik token aktif, dan frontend (\texttt{authService.logout} + \texttt{AuthContext}) memanggilnya saat keluar. Verifikasi ulang T-AUTH-08: lulus.\\
+BUG-02 & Tinggi & Pada commit \texttt{5edd1e0}, siapa pun dapat mendaftar sebagai penyelenggara pada organisasi terverifikasi dengan memakai \texttt{organizationId} publik; akun langsung aktif serta dapat membuat event dan melihat data organisasi itu. Bertentangan dengan US-04/FR-AUTH-05. Bukti awal: T-AUTH-11. & \textbf{Diperbaiki} pada commit \texttt{dccaa91}: registrasi peran \texttt{penyelenggara} berstatus \texttt{pending}, ditolak saat login (403) dan tidak memperoleh akses API sampai disetujui admin melalui \texttt{PATCH /admin/users/:userId} (halaman \emph{Kelola pengguna} kini menampilkan lencana \emph{Menunggu verifikasi} dan tombol \emph{Verifikasi akun}). Verifikasi ulang T-AUTH-11: lulus.\\}
+Catatan pengamatan (bukan bug yang dijalankan): pesan ``Email sudah terdaftar'' pada registrasi memungkinkan pengecekan email yang sudah terdaftar; layar admin untuk verifikasi/penangguhan organisasi sudah tersedia di frontend (\texttt{AdminOrganizationsPage}), sedangkan pembuatan organisasi baru baru tersedia lewat API (\texttt{POST /admin/organizations}). Tautan tiket Jira diisi tim: BUG-01 [ISI: SCRUM-xx]; BUG-02 [ISI: SCRUM-xx].
 \section{UAT bersama Pengguna}\label{sec:uat-user}
 Bagian ini \textbf{belum berisi hasil}; diisi setelah UAT dilaksanakan.
 \subsection{Peserta Penguji}
@@ -575,11 +576,11 @@ Ringkasan: [ISI jumlah skenario lulus dari jumlah dijalankan]; temuan [ISI]; tem
 \section{Cakupan yang Belum Diuji}
 \begin{itemize}
 \item UAT dengan pengguna nyata (Bagian~\ref{sec:uat-user}).
-\item Uji end-to-end Playwright dan tampilan di peramban, termasuk lebar 360 piksel (NFR-USA-01).
+\item Uji end-to-end browser Playwright melawan backend dan situs produksi nyata (uji Playwright saat ini sudah lulus 36 regresi + 4 demo E2E termasuk lebar 320/360 piksel pada fixture kontrak API dan server demo lokal).
 \item Situs produksi (Vercel/Render) dan database Neon PostgreSQL.
 \item Konkurensi nyata pada PostgreSQL: uji kursi terakhir (T-RSV-02) dijalankan pada pg-mem yang tidak paralel sungguhan.
 \item Performa dan beban (NFR-PERF-01 sampai 03), ketersediaan 99\% (NFR-REL-01), dan cakupan unit test 60\% (NFR-MAINT-02).
-\item Fitur Should/Could (favorit, ulasan, pengingat, email) hanya diperiksa dari kode, tidak dijalankan.
+\item Fitur Should/Could (favorit, ulasan, pengingat, email) pada skrip UAT terpisah; sebagian sudah tercakup pada uji kontrak (\texttt{frontend-contract.test.js}) dan uji demo E2E.
 \end{itemize}
 \page{Kesimpulan dan Status Laporan}
 EventKu dirancang untuk memusatkan informasi dan pendaftaran kegiatan dengan moderasi, pencarian, kalender, kuota dan notifikasi sesuai peran. Modular monolith memisahkan empat modul; transaksi dan constraint menjaga integritas RSVP, sedangkan Observer mengurangi keterikatan layanan notifikasi.
@@ -595,8 +596,8 @@ Artefak analisis/rancangan tersedia dan dikonsolidasikan dalam laporan ini. SRS 
 Diagram arsitektur, ERD, pattern, class diagram dan algoritma menggunakan ekspor Lucidchart versi revisi yang tertanam pada DOCX kelompok. Diagram SDLC dan use case digambar dalam LaTeX dan diberi sumber yang sesuai. Kompilasi memerlukan file utama dan folder figures dalam paket laporan. Daftar kebutuhan lengkap di lampiran mempertahankan prioritas dari SRS.
 \note{Status: draf kelompok yang dapat ditinjau. Jawaban individu Audrey, Bambang, Dustin, dan Alexa sudah terisi. Verifikasi sebagian bukti kontribusi Dustin serta pemeriksaan akhir isi tetap diperlukan.}
 \section{Kesimpulan Pengujian dan Rekomendasi}
-Pada pengujian API otomatis, 59 dari 61 skenario lulus; alur inti (registrasi, pengajuan, moderasi, katalog, RSVP dengan kuota, pembatalan, ekspor peserta) berjalan sesuai harapan. Dua temuan perlu ditangani sebelum rilis akhir: BUG-02 (prioritas tinggi) dan BUG-01 (Bagian~\ref{sec:uat-bug}). Keputusan penerimaan akhir menunggu hasil UAT pengguna: [ISI].
-\note{Status laporan akhir: draf. Hasil UAT pengguna (Bagian~\ref{sec:uat-user}) dan status perbaikan bug perlu diisi tim; pengujian otomatis perlu diulang dan dilampiri tangkapan layar oleh QA. Bagian laporan UTS di depan belum diperbarui dan masih mencerminkan kondisi Minggu 8.}
+Pada pengujian API otomatis awal (commit \texttt{5edd1e0}), 59 dari 61 skenario lulus dengan dua temuan: BUG-02 (prioritas tinggi) dan BUG-01 (prioritas sedang). Setelah perbaikan pada commit \texttt{dccaa91} dan verifikasi ulang lokal, seluruh \textbf{61 dari 61 skenario API lulus (100\%)}, didukung 61/61 tes Jest backend, 73/73 tes Vitest frontend, serta 36 tes regresi dan 4 tes demo E2E Playwright yang seluruhnya lulus. Keputusan penerimaan akhir tetap menunggu hasil UAT bersama pengguna nyata dan pengujian pada situs produksi (Vercel/Render/Neon): [ISI].
+\note{Status laporan akhir: draf. Hasil UAT pengguna nyata (Bagian~\ref{sec:uat-user}), nomor tiket Jira, serta tangkapan layar bukti uji QA lokal/produksi perlu dilengkapi tim sebelum pengumpulan akhir. Bagian laporan UTS di depan masih dipertahankan sebagai riwayat kondisi Minggu 8.}
 \clearpage\begin{thebibliography}{99}
 \addcontentsline{toc}{section}{Referensi}
 \bibitem{uts} INF300. \emph{Instruksi UTS Rekayasa Perangkat Lunak Semester Gasal 2026/2027}, 7 Oktober 2026. Berkas: \path{INF300 Rekayasa Perangkat Lunak - UTS.pdf}.
