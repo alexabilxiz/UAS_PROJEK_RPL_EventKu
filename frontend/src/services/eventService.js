@@ -1,5 +1,5 @@
 import apiClient, { ApiError } from './apiClient';
-import { isEventDate, isEventTimestamp, normalizeEventId, safeEventPoster } from '../utils/events';
+import { isEventDate, isEventTimestamp, normalizeEventId, safeEventPoster, safeRegistrationUrl } from '../utils/events';
 
 const clean = (value) => typeof value === 'string' ? value.trim() : '';
 const count = (value) => Number.isSafeInteger(value) && value >= 0 ? value : null;
@@ -28,6 +28,9 @@ export function normalizeEvent(event) {
     endAt: isEventTimestamp(event.endAt) ? event.endAt : '',
     locationOrLink: clean(event.locationOrLink),
     posterUrl: safeEventPoster(event.posterUrl),
+    registrationMode: event.registrationMode === 'external' ? 'external' : 'internal',
+    audience: clean(event.audience),
+    registrationUrl: safeRegistrationUrl(clean(event.registrationUrl)),
     quota,
     reservedSeats,
     availableSeats,

@@ -1,0 +1,64 @@
+.moderation-page .account-heading { margin-bottom: 24px; }
+.moderation-page .account-heading > a { flex-shrink: 0; }
+.moderation-page button:disabled { opacity: .55; cursor: not-allowed; }
+.moderation-queue-header, .moderation-pagination, .moderation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.moderation-queue-header { justify-content: space-between; margin-bottom: 14px; }
+.moderation-queue-header p, .moderation-pagination span { color: #535c78; font-size: 14px; }
+.moderation-list { display: grid; gap: 16px; }
+.moderation-card {
+  padding: 22px;
+  border: 1px solid #e4e7f0;
+  border-radius: 14px;
+  background: #fff;
+  overflow-wrap: anywhere;
+}
+.moderation-card h2 { font-size: 20px; font-weight: 700; }
+.moderation-meta, .moderation-description { margin-top: 5px; color: #535c78; }
+.moderation-description { white-space: pre-wrap; }
+.moderation-card > button { margin-top: 12px; }
+.moderation-details { margin: 14px 0; }
+.moderation-details summary { color: #2d4188; cursor: pointer; width: fit-content; padding-block: 8px; font-weight: 650; }
+.moderation-details dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 16px;
+  margin-top: 12px;
+  background: #f7f8fc;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.moderation-details dt { color: #535c78; }
+.moderation-details a { color: #2d4188; text-decoration: underline; }
+.moderation-decision {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: #f4f3ff;
+  border-radius: 8px;
+}
+.moderation-decision label { display: grid; gap: 8px; font-weight: 650; }
+.moderation-decision textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #a7b0cf;
+  border-radius: 8px;
+  background: #fff;
+  font-weight: 400;
+  resize: vertical;
+}
+.moderation-pagination { justify-content: center; margin-top: 22px; }
+.moderation-feedback { margin-bottom: 16px; padding: 12px 16px; border-radius: 8px; background: #edf8f0; color: #21583a; }
+.moderation-error { background: #fff0ef; color: #8b2929; }
+
+@media (max-width: 620px) {
+  .moderation-page .account-heading > a { margin-top: 14px; }
+  .moderation-card { padding: 16px; }
+  .moderation-details dl { grid-template-columns: 1fr; }
+  .moderation-decision .moderation-actions > * { flex: 1 1 100%; }
+}

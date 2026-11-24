@@ -29,10 +29,14 @@ function registrationError(error) {
   if (error.status === 409) {
     return 'Pendaftaran ditolak karena kuota penuh, Anda sudah terdaftar, atau status event berubah. Periksa daftar pendaftaran Anda.';
   }
-  if (!error.status || error.status >= 500) {
-    return 'Hasil pendaftaran belum dapat dipastikan. Periksa daftar pendaftaran Anda sebelum mencoba lagi.';
+  if (isUncertainResponse(error)) {
+    return 'Hasil pendaftaran belum dapat dipastikan. Periksa ulang status sebelum mencoba lagi.';
   }
   return error.message;
+}
+
+function isUncertainResponse(error) {
+  return !error.status || error.status === 408 || error.status >= 500;
 }
 
 function StudentRegistration({ event, seats, token, loginUrl, logout }) {
@@ -40,32 +44,45 @@ function StudentRegistration({ event, seats, token, loginUrl, logout }) {
   const [checking, setChecking] = useState(true);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(null);
+  const [lookupAttempt, setLookupAttempt] = useState(0);
   const request = useRef(null);
 
   useEffect(() => {
     const controller = new AbortController();
-    // The API has no event-specific read endpoint. This first page can confirm
-    // a visible registration, but an absent row is left to the server on POST.
-    registrationService.list({ token, signal: controller.signal })
-      .then(({ data }) => {
+    registrationService.hasActiveRegistration(event.eventId, { token, signal: controller.signal })
+      .then((existing) => {
         if (!controller.signal.aborted) {
-          const existing = data.some((row) => row.eventId === event.eventId && row.status === 'aktif');
           if (existing) setRegistration('existing');
         }
       })
       .catch((failure) => {
-        if (!controller.signal.aborted && failure.status === 401) setError(failure);
+        if (!controller.signal.aborted) {
+          setError({
+            status: failure.status,
+            message: failure.status === 401
+              ? registrationError(failure)
+              : 'Status pendaftaran belum dapat diperiksa. Coba periksa ulang.',
+            recheck: true,
+          });
+        }
       })
       .finally(() => {
         if (!controller.signal.aborted) setChecking(false);
       });
     return () => controller.abort();
-  }, [event.eventId, token]);
+  }, [event.eventId, token, lookupAttempt]);
 
   useEffect(() => () => request.current?.abort(), []);
 
+  function recheckRegistration() {
+    setChecking(true);
+    setError(null);
+    setLookupAttempt((attempt) => attempt + 1);
+  }
+
   async function register() {
-    if (request.current || checking || registration || closedReason(event, seats)) return;
+    if (request.current || checking || registration || error?.recheck || error?.status === 401
+      || closedReason(event, seats)) return;
     const controller = new AbortController();
     request.current = controller;
     setPending(true);
@@ -74,7 +91,13 @@ function StudentRegistration({ event, seats, token, loginUrl, logout }) {
       await registrationService.register(event.eventId, { token, signal: controller.signal });
       if (!controller.signal.aborted) setRegistration('confirmed');
     } catch (failure) {
-      if (!controller.signal.aborted) setError(failure);
+      if (!controller.signal.aborted) {
+        setError({
+          status: failure.status,
+          message: registrationError(failure),
+          recheck: failure.status === 409 || isUncertainResponse(failure),
+        });
+      }
     } finally {
       if (!controller.signal.aborted) setPending(false);
       request.current = null;
@@ -83,9 +106,11 @@ function StudentRegistration({ event, seats, token, loginUrl, logout }) {
 
   const reason = closedReason(event, seats);
   return <>
-    {error && <p className="error-message" role="alert">{registrationError(error)}</p>}
+    {error && <p className="error-message" role="alert">{error.message}</p>}
     {error?.status === 401 ? (
       <Link className="primary-button" to={loginUrl} onClick={logout}>Masuk kembali</Link>
+    ) : error?.recheck ? (
+      <button className="secondary-button" type="button" onClick={recheckRegistration}>Periksa ulang pendaftaran</button>
     ) : registration ? (
       <p className="success-message" role="status">
         {registration === 'confirmed' ? 'Pendaftaran berhasil.' : 'Anda sudah terdaftar di event ini.'}
@@ -110,9 +135,11 @@ export default function EventRegistration({ event }) {
   return <section className="rsvp-panel" aria-label="Pendaftaran event">
     {loading ? <p className="rsvp-note" role="status">Memeriksa sesi…</p>
       : user?.role === 'mahasiswa' && token ? (
-        <StudentRegistration key={`${user.userId}:${event.eventId}`} {...{ event, seats, token, loginUrl, logout }} />
+        user.ukwmsVerified === true
+          ? <StudentRegistration key={`${user.userId}:${event.eventId}`} {...{ event, seats, token, loginUrl, logout }} />
+          : <p className="rsvp-note">RSVP khusus mahasiswa UKWMS terverifikasi.</p>
       ) : reason ? <p className="rsvp-note">{reason}</p>
-        : user ? <p className="rsvp-note">Pendaftaran tersedia untuk akun mahasiswa.</p>
+        : user ? <p className="rsvp-note">RSVP khusus mahasiswa UKWMS terverifikasi.</p>
           : <Link className="primary-button" to={loginUrl}>Masuk untuk mendaftar</Link>}
   </section>;
 }

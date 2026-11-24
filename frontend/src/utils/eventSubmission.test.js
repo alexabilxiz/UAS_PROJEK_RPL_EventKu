@@ -10,6 +10,20 @@ const values = {
 const now = Date.parse('2030-11-15T01:59:00Z');
 
 describe('prepareEventDraft', () => {
+  it('requires an audience and a safe organizer link for external registration', () => {
+    const external = { ...values, registrationMode: 'external', quota: '' };
+    const invalid = prepareEventDraft({ ...external, registrationUrl: 'https://user@example.org/' }, categories, now);
+    expect(invalid.errors).toMatchObject({ audience: expect.any(String), registrationUrl: expect.any(String) });
+
+    const valid = prepareEventDraft({
+      ...external, audience: ' Siswa SMA/SMK ', registrationUrl: 'https://example.org/lomba',
+    }, categories, now);
+    expect(valid.payload).toMatchObject({
+      registrationMode: 'external', audience: 'Siswa SMA/SMK', registrationUrl: 'https://example.org/lomba',
+    });
+    expect(valid.payload).not.toHaveProperty('quota');
+  });
+
   it('converts explicit WIB input to API timestamps independent of browser timezone', () => {
     expect(prepareEventDraft(values, categories, now)).toEqual({
       errors: {},

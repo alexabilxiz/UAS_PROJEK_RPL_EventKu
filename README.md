@@ -4,9 +4,9 @@ PROJEK NAME "EVENTKU"
  
 Website Kumpulan dan Pendaftaran Event Kampus 
  
-## Implementasi frontend Bambang, Minggu 9–12
+## Implementasi frontend Bambang, Minggu 9–14
 
-Folder [`frontend`](frontend/README.md) berisi React, Tailwind, autentikasi, katalog event, pengajuan penyelenggara, dan RSVP mahasiswa.
+Folder [`frontend`](frontend/README.md) berisi React, Tailwind, autentikasi, katalog event, pengajuan penyelenggara, RSVP mahasiswa, dan kalender event bulanan.
 
 ```powershell
 cd frontend
@@ -17,7 +17,7 @@ npm run dev
 
 Gunakan Node.js minimal 22.12. Arahkan `API_PROXY_TARGET` pada `.env.local` ke server Auth dan Event untuk menjalankan alur dengan data nyata. Pengujian otomatis menggunakan fixture kontrak API.
 
-Catatan implementasi dan pengujian tersedia untuk [Minggu 9–11](docs/implementation/bambang/week9-11/README.md) dan [Minggu 12](docs/implementation/bambang/week12/README.md).
+Catatan implementasi dan pengujian tersedia untuk [Minggu 9–11](docs/implementation/bambang/week9-11/README.md), [Minggu 12](docs/implementation/bambang/week12/README.md), [Minggu 13](docs/implementation/bambang/week13/README.md), dan [Minggu 14](docs/implementation/bambang/week14/README.md). Jalankan `npm run dev:demo` dari folder `frontend` untuk mencoba alur dengan data dummy.
 
 ## QA & DevOps Documentation 
  

@@ -40,4 +40,6 @@
   .submission-banner-inner, .submission-footer { align-items: flex-start; flex-direction: column; }
   .submission-card { padding: 18px; }
   .submission-fields { grid-template-columns: 1fr; }
+  .submission-actions { width: 100%; }
+  .submission-actions > * { flex: 1 1 100%; }
 }

@@ -46,7 +46,8 @@ export default function RegisterPage() {
       {error && <p role="alert" className="error-message" ref={alert} tabIndex={-1}>{error}</p>}
       <FormField id="name" label="Nama lengkap" autoComplete="name" value={values.name} onChange={change('name')} error={errors.name} required disabled={submitting} />
       <FormField id="email" label="Email" type="email" autoComplete="email" placeholder="nama@ukwms.ac.id" value={values.email} onChange={change('email')} error={errors.email} required disabled={submitting} />
-      <FormField id="role" label="Peran akun" error={errors.role} required>
+      <FormField id="role" label="Peran akun" error={errors.role} required
+        hint={values.role === 'mahasiswa' ? 'RSVP memerlukan verifikasi status mahasiswa UKWMS.' : undefined}>
         <select value={values.role} onChange={change('role')} disabled={submitting}><option value="mahasiswa">Mahasiswa</option><option value="penyelenggara">Penyelenggara</option></select>
       </FormField>
       {values.role === 'penyelenggara' && <FormField id="organizationId" label="ID organisasi" value={values.organizationId} onChange={change('organizationId')} error={errors.organizationId} hint="Gunakan ID dari pengelola. Organisasi perlu diverifikasi admin sebelum mengajukan event." required disabled={submitting} />}

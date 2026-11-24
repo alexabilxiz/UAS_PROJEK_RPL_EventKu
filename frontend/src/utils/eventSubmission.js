@@ -1,4 +1,8 @@
+import { safeRegistrationUrl } from './events.js';
+
 const WIB_OFFSET_MS = 7 * 60 * 60 * 1000;
+export const POSTER_LIMIT = 2 * 1024 * 1024;
+export const POSTER_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 function toWibTimestamp(value) {
   if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return null;
@@ -20,11 +24,22 @@ export function isHttpsPoster(value) {
   }
 }
 
+export function isUploadPoster(value) {
+  return typeof value === 'string' && /^\/api\/v1\/assets\/posters\/[a-f0-9-]{36}$/.test(value);
+}
+
+export function isEventPosterReference(value) {
+  return isHttpsPoster(value) || isUploadPoster(value);
+}
+
 export function prepareEventDraft(values, categories, now = Date.now()) {
   const title = values.title.trim();
   const description = values.description.trim();
   const locationOrLink = values.locationOrLink.trim();
   const posterUrl = values.posterUrl.trim();
+  const external = values.registrationMode === 'external';
+  const audience = values.audience?.trim() || '';
+  const registrationUrl = safeRegistrationUrl(values.registrationUrl?.trim());
   const quota = Number(values.quota);
   const start = toWibTimestamp(values.startAt);
   const end = toWibTimestamp(values.endAt);
@@ -40,10 +55,12 @@ export function prepareEventDraft(values, categories, now = Date.now()) {
   if (end === null) errors.endAt = 'Isi waktu selesai yang valid.';
   else if (start !== null && end <= start) errors.endAt = 'Waktu selesai harus setelah waktu mulai.';
   if (!locationOrLink) errors.locationOrLink = 'Isi lokasi atau tautan event.';
-  if (!/^\d+$/.test(values.quota) || !Number.isSafeInteger(quota) || quota <= 0) {
+  if (!external && (!/^\d+$/.test(values.quota) || !Number.isSafeInteger(quota) || quota <= 0)) {
     errors.quota = 'Isi kuota dengan bilangan bulat lebih dari nol.';
   }
-  if (!isHttpsPoster(posterUrl)) errors.posterUrl = 'Isi URL poster HTTPS yang valid.';
+  if (external && !audience) errors.audience = 'Jelaskan siapa yang boleh mengikuti event.';
+  if (external && !registrationUrl) errors.registrationUrl = 'Isi tautan pendaftaran HTTPS yang valid.';
+  if (!isEventPosterReference(posterUrl)) errors.posterUrl = 'Unggah poster atau isi URL HTTPS yang valid.';
 
   if (Object.keys(errors).length) return { errors };
   return {
@@ -51,7 +68,8 @@ export function prepareEventDraft(values, categories, now = Date.now()) {
     payload: {
       title, description, categoryId: values.categoryId,
       startAt: new Date(start).toISOString(), endAt: new Date(end).toISOString(),
-      locationOrLink, posterUrl, quota,
+      locationOrLink, posterUrl,
+      ...(external ? { registrationMode: 'external', audience, registrationUrl } : { quota, ...(audience && { audience }) }),
     },
   };
 }
