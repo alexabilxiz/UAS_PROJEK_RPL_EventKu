@@ -19,6 +19,18 @@ Gunakan Node.js minimal 22.12. Arahkan `API_PROXY_TARGET` pada `.env.local` ke s
 
 Catatan implementasi dan pengujian tersedia untuk [Minggu 9–11](docs/implementation/bambang/week9-11/README.md), [Minggu 12](docs/implementation/bambang/week12/README.md), [Minggu 13](docs/implementation/bambang/week13/README.md), [Minggu 14](docs/implementation/bambang/week14/README.md), dan [Minggu 15](docs/implementation/bambang/week15/README.md). Jalankan `npm run dev:demo` dari folder `frontend` untuk mencoba alur dengan data dummy.
 
+## Backend API & Swagger
+
+Jalankan backend lokal:
+
+```powershell
+cd backend
+npm ci
+npm run dev
+```
+
+Setelah backend berjalan, buka [Swagger UI](http://localhost:3000/api-docs/) untuk menjelajahi dan mencoba endpoint API. Spesifikasi OpenAPI tersedia di [`docs/openapi.yaml`](docs/openapi.yaml).
+
 ## QA & DevOps Documentation 
  
 ### Tools Pendukung & Git Convention 
