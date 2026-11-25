@@ -48,6 +48,10 @@ tests/
 
 Respons daftar: `{ data, total, page }` dengan `page >= 1`, `limit <= 20`. Error: `{ message, fieldErrors? }`.
 
+## Swagger / OpenAPI
+
+Jalankan backend (`npm run dev`), lalu buka [Swagger UI](http://localhost:3000/api-docs/) untuk menjelajahi dan mencoba endpoint langsung dari browser. Spesifikasi OpenAPI 3 yang digunakan UI tersedia di [`../docs/openapi.yaml`](../docs/openapi.yaml). Server API lokal menggunakan `http://localhost:3000/api/v1`; health check berada di `http://localhost:3000/health`. Endpoint terproteksi menerima JWT melalui `Authorization: Bearer <accessToken>`.
+
 | Kelompok | Endpoint | Akses |
 |---|---|---|
 | Auth | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` | publik / login |
