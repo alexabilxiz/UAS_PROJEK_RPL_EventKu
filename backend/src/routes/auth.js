@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import rateLimit from 'express-rate-limit';
 import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import { config } from '../config.js';
 import { query, transaction } from '../db.js';
 import { conflict, forbidden, invalid, isUuid, unauthorized, wrap } from '../lib/errors.js';
+import { dummyPasswordHash, hashPassword, verifyPassword } from '../lib/password.js';
 import { EMAIL_PATTERN, safeHttpsUrl, text } from '../lib/validators.js';
 import { USER_SELECT, serializeUser } from '../lib/serializers.js';
 import { requireAuth } from '../middleware/auth.js';
@@ -13,21 +13,46 @@ import { requireAuth } from '../middleware/auth.js';
 const router = Router();
 const PUBLIC_ROLES = ['mahasiswa', 'penyelenggara'];
 const sha256 = (value) => createHash('sha256').update(value).digest('hex');
-// Hash palsu agar login email tak dikenal memakan waktu sama dengan email dikenal.
-const DUMMY_HASH = bcrypt.hashSync('tidak-dipakai', config.bcryptRounds);
 
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 30,
+const RATE_WINDOW_MS = 15 * 60 * 1000;
+const RATE_LIMIT_MAX = 30;
+const workerHits = new Map();
+// Hanya inisialisasi express-rate-limit di Node.js; di Cloudflare Workers hindari setInterval global scope.
+const nodeAuthLimiter = config.isWorker ? null : rateLimit({
+  windowMs: RATE_WINDOW_MS,
+  limit: RATE_LIMIT_MAX,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
   skip: () => !config.rateLimitEnabled,
   handler: (_req, res) => res.status(429).json({ message: 'Terlalu banyak percobaan. Coba lagi nanti.' }),
 });
 
+function authLimiter(req, res, next) {
+  if (!config.rateLimitEnabled) return next();
+  if (config.isWorker) {
+    const ip = req.headers['cf-connecting-ip'] || req.ip || 'unknown';
+    const now = Date.now();
+    const record = workerHits.get(ip);
+    if (!record || record.resetAt <= now) {
+      if (workerHits.size > 2000) workerHits.clear();
+      workerHits.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+      return next();
+    }
+    record.count += 1;
+    if (record.count > RATE_LIMIT_MAX) {
+      return res.status(429).json({ message: 'Terlalu banyak percobaan. Coba lagi nanti.' });
+    }
+    return next();
+  }
+  return nodeAuthLimiter(req, res, next);
+}
+
 const validPassword = (value) => typeof value === 'string' && value.length >= 8 && value.length <= 128;
 
 async function issueToken(userId) {
+  if (!config.jwtSecret || config.jwtSecret.length < 32) {
+    throw new Error('JWT_SECRET wajib diisi (minimal 32 karakter) pada production.');
+  }
   const jti = randomUUID();
   const expiresAt = new Date(Date.now() + config.jwtExpiresInSeconds * 1000);
   await query(`DELETE FROM sessions WHERE user_id = $1 AND expires_at <= $2`, [userId, new Date()]);
@@ -67,7 +92,7 @@ router.post('/register', authLimiter, wrap(async (req, res) => {
   const ukwmsVerified = role === 'mahasiswa' && config.ukwmsEmailDomains.includes(domain);
   const status = role === 'penyelenggara' ? 'pending' : 'active';
   const userId = randomUUID();
-  const passwordHash = await bcrypt.hash(body.password, config.bcryptRounds);
+  const passwordHash = await hashPassword(body.password);
   await query(
     `INSERT INTO users (id, name, email, password_hash, role, status, ukwms_verified, organization_id)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
@@ -82,7 +107,7 @@ router.post('/login', authLimiter, wrap(async (req, res) => {
   if (!email || typeof password !== 'string' || password.length > 128) throw unauthorized('Email atau kata sandi salah.');
   const { rows } = await query(`${USER_SELECT} WHERE u.email = $1`, [email]);
   const user = rows[0];
-  const matches = await bcrypt.compare(password, user?.password_hash ?? DUMMY_HASH);
+  const matches = await verifyPassword(password, user?.password_hash ?? dummyPasswordHash());
   if (!user || !matches) throw unauthorized('Email atau kata sandi salah.');
   if (user.status === 'pending') throw forbidden('Akun penyelenggara menunggu verifikasi admin.');
   if (user.status !== 'active') throw forbidden('Akun ini dinonaktifkan. Hubungi admin.');
@@ -115,14 +140,14 @@ router.patch('/me/profile', requireAuth, wrap(async (req, res) => {
 router.patch('/me/password', requireAuth, wrap(async (req, res) => {
   const { currentPassword, password } = req.body ?? {};
   const currentOk = typeof currentPassword === 'string' && currentPassword.length <= 128
-    && await bcrypt.compare(currentPassword, req.user.password_hash);
+    && await verifyPassword(currentPassword, req.user.password_hash);
   if (!currentOk || !validPassword(password)) {
     throw invalid('Periksa kata sandi lama dan kata sandi baru.', {
       ...(!currentOk && { currentPassword: 'Kata sandi lama salah.' }),
       ...(!validPassword(password) && { password: 'Kata sandi baru 8 sampai 128 karakter.' }),
     });
   }
-  const passwordHash = await bcrypt.hash(password, config.bcryptRounds);
+  const passwordHash = await hashPassword(password);
   await transaction(async (q) => {
     await q(`UPDATE users SET password_hash = $1 WHERE id = $2`, [passwordHash, req.user.id]);
     // Perangkat lain harus login ulang; sesi yang sedang dipakai tetap hidup.
@@ -162,7 +187,7 @@ router.post('/reset-password', authLimiter, wrap(async (req, res) => {
     `SELECT user_id FROM password_resets WHERE token_hash = $1 AND expires_at > $2`, [sha256(token), new Date()],
   );
   if (!rows.length) throw invalid('Tautan pemulihan atau kata sandi tidak valid.');
-  const passwordHash = await bcrypt.hash(password, config.bcryptRounds);
+  const passwordHash = await hashPassword(password);
   await transaction(async (q) => {
     await q(`UPDATE users SET password_hash = $1 WHERE id = $2 AND status = 'active'`, [passwordHash, rows[0].user_id]);
     await q(`DELETE FROM password_resets WHERE user_id = $1`, [rows[0].user_id]);

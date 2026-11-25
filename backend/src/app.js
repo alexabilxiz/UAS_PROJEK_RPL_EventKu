@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { config } from './config.js';
+import { runWithPool } from './db.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.js';
 import categoryRoutes from './routes/categories.js';
@@ -13,14 +14,32 @@ import notificationRoutes from './routes/notifications.js';
 import studentRoutes from './routes/student.js';
 import assetRoutes from './routes/assets.js';
 
-export function createApp() {
+export function createApp({ createRequestPool } = {}) {
   const app = express();
   app.disable('x-powered-by');
   // Di balik proxy (Cloudflare / reverse proxy) IP klien ada di X-Forwarded-For; dibutuhkan rate limiter.
-  if (config.isProduction) app.set('trust proxy', 1);
+  if (config.isProduction || config.isWorker) app.set('trust proxy', 1);
+  if (createRequestPool) {
+    app.use((req, res, next) => {
+      const handle = createRequestPool(req);
+      if (!handle) return next();
+      let closed = false;
+      const done = () => {
+        if (closed) return;
+        closed = true;
+        handle.onDone();
+      };
+      res.once('finish', done);
+      res.once('close', done);
+      return runWithPool(handle.pool, () => next());
+    });
+  }
   app.use(helmet());
   app.use(cors({
-    origin: config.corsOrigins,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      return callback(null, config.corsOrigins.includes(origin));
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     maxAge: 600,

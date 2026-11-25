@@ -1,9 +1,8 @@
 // Data awal: admin, kategori, organisasi. Contoh event/akun hanya dibuat bila SEED_DEMO=true.
-import bcrypt from 'bcryptjs';
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { config } from '../src/config.js';
 import { closePool, getPool } from '../src/db.js';
+import { hashPassword } from '../src/lib/password.js';
 import { migrate } from './migrate.js';
 
 const CATEGORIES = ['Workshop', 'Seminar', 'Kompetisi'];
@@ -29,7 +28,7 @@ export async function seedData(pool = getPool(), env = process.env) {
     if (!exists.rows.length) {
       await q(
         `INSERT INTO users (id, name, email, password_hash, role, status) VALUES ($1, $2, $3, $4, 'admin', 'active')`,
-        [randomUUID(), env.ADMIN_NAME || 'Admin EventKu', adminEmail, await bcrypt.hash(env.ADMIN_PASSWORD, config.bcryptRounds)],
+        [randomUUID(), env.ADMIN_NAME || 'Admin EventKu', adminEmail, await hashPassword(env.ADMIN_PASSWORD)],
       );
       console.log(`Admin dibuat: ${adminEmail}`);
     }
@@ -41,7 +40,7 @@ export async function seedData(pool = getPool(), env = process.env) {
 }
 
 async function seedDemo(q) {
-  const password = await bcrypt.hash('EventKuDemo123!', config.bcryptRounds);
+  const password = await hashPassword('EventKuDemo123!');
   const orgs = [
     ['Komunitas Kampus', 'verified'],
     ['Komunitas Mahasiswa Baru', 'pending'],

@@ -1,0 +1,17 @@
+{
+  "name": "uas-projek-rpl-eventku",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EventKu full-stack deployment coordinator for Cloudflare Workers (Frontend SPA + Express API + Neon PostgreSQL)",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "npm --prefix backend ci && npm --prefix frontend ci && npm --prefix frontend run build",
+    "dev:worker": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.46.0"
+  }
+}

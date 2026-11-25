@@ -8,6 +8,7 @@ async function userFromRequest(req) {
   const header = req.headers.authorization;
   const match = /^Bearer ([^\s]+)$/.exec(header ?? '');
   if (!match) return null;
+  if (!config.jwtSecret) return null;
   let payload;
   try {
     payload = jwt.verify(match[1], config.jwtSecret, { algorithms: ['HS256'] });

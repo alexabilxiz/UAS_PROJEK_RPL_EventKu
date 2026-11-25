@@ -1,9 +1,11 @@
 import pg from 'pg';
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { config } from './config.js';
 
 // COUNT/SUM dari PostgreSQL berupa bigint (string); ubah ke number.
 pg.types.setTypeParser(20, (value) => Number(value));
 
+const requestPoolStorage = new AsyncLocalStorage();
 let pool = null;
 
 /** Dipakai test untuk memasang database in-memory. */
@@ -11,7 +13,14 @@ export function setPool(instance) {
   pool = instance;
 }
 
+/** Dipakai Cloudflare Worker untuk memasang pool terisolasi per-request. */
+export function runWithPool(instance, fn) {
+  return requestPoolStorage.run(instance, fn);
+}
+
 export function getPool() {
+  const scoped = requestPoolStorage.getStore();
+  if (scoped) return scoped;
   if (!pool) {
     if (!config.databaseUrl) throw new Error('DATABASE_URL belum diisi.');
     pool = new pg.Pool({
