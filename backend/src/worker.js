@@ -1,5 +1,5 @@
 import { httpServerHandler } from 'cloudflare:node';
-import { Pool, types } from '@neondatabase/serverless';
+import { Pool, neonConfig, types } from '@neondatabase/serverless';
 import { createApp } from './app.js';
 import { refreshConfig } from './config.js';
 import { runWithPool } from './db.js';
@@ -7,6 +7,9 @@ import { runScheduledJobs } from './lib/scheduler.js';
 
 // COUNT/SUM dari PostgreSQL berupa bigint (string); ubah ke number.
 types.setTypeParser(20, (value) => Number(value));
+// Query tunggal memakai HTTP fetch Neon (1 roundtrip, jauh lebih cepat & stabil daripada WebSocket per request);
+// transaksi (pool.connect()) tetap memakai WebSocket interaktif penuh.
+neonConfig.poolQueryViaFetch = true;
 
 const WORKER_PORT = 3000;
 const requestContexts = new Map();
