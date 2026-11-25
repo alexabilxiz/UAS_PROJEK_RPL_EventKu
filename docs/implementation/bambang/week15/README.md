@@ -23,8 +23,9 @@ Halaman 16 *Rincian Pekerjaan Individu Mingguan - Proyek EventKu* menugaskan Bam
 | `cd frontend && npm run build` | Build produksi berhasil (`dist/assets/index-*.js` ~114,7 kB gzip). |
 | `cd frontend && npx playwright test --workers=2` | 36 tes regresi Chromium lulus. |
 | `cd frontend && npx playwright test -c playwright.demo.config.js` | 4 tes E2E demo Chromium lulus. |
-| `cd backend && npm test` | 61 tes Jest lulus di 7 file (termasuk 61/61 skenario UAT API pada `pg-mem`). |
+| `cd backend && npm test` | 62 tes Jest lulus di 8 file (termasuk 61/61 UAT API dan 17/17 `uat-retest` pada `pg-mem`). |
+| Integrasi Penuh Lokal (`Vite + Express + PostgreSQL 18.1`) | 6/6 lulus (0 error JS): `db:migrate`, `db:seed`, 8 RSVP paralel untuk 1 kursi (`201=1`, `409=7`), BUG-01/BUG-02 live di browser, unggah poster, moderasi, kalender 360 px, dan unduh CSV (`SCRUM-16` **DONE**). |
 
-## Tindak Lanjut Menunggu Deploy Live (`SCRUM-16`)
+## Tindak Lanjut Menunggu Deploy Live
 
-Setelah Alexa menyelesaikan deployment backend di Render (terhubung ke Neon PostgreSQL) dan frontend di Vercel, lakukan verifikasi akhir menggunakan checklist pada Bagian 5.4 [DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md](DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) untuk menutup tiket `SCRUM-16` dan melanjutkan ke final check Minggu 16.
+Setelah Alexa menyelesaikan deployment backend di Render/Cloudflare (terhubung ke Neon PostgreSQL) dan frontend di Vercel/Cloudflare Pages, lakukan verifikasi akhir pada URL produksi menggunakan checklist pada Bagian 5.4 [DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md](DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) untuk persiapan final check Minggu 16.

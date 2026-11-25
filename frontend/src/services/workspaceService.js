@@ -94,7 +94,7 @@ function studentNotice(row) {
 }
 
 function userRow(row) {
-  if (!Object.hasOwn(ROLE_LABELS, row?.role) || !['active', 'disabled'].includes(row.status)) throw invalidResponse();
+  if (!Object.hasOwn(ROLE_LABELS, row?.role) || !['active', 'pending', 'disabled'].includes(row.status)) throw invalidResponse();
   return { userId: requiredId(row.userId), name: requiredText(row.name), email: requiredText(row.email), role: row.role, status: row.status };
 }
 

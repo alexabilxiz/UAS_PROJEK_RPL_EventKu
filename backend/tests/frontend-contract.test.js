@@ -41,6 +41,8 @@ describe('Auth (authService frontend)', () => {
     const created = await fe.authService.register({ name: 'Sari', email: 'sari@t.test', password: 'password123', role: 'penyelenggara', organizationId: pendingOrgId });
     expect(created).toMatchObject({ role: 'penyelenggara', status: 'pending', organizationId: pendingOrgId });
     await expect(fe.authService.login('sari@t.test', 'password123')).rejects.toMatchObject({ status: 403 });
+    const adminUsers = await fe.workspaceService.users({ ...session(admin), page: 1 });
+    expect(adminUsers.data[0]).toMatchObject({ userId: created.userId, status: 'pending' });
     await fe.workspaceService.updateUser(created.userId, 'active', session(admin));
     const { user } = await fe.authService.login('sari@t.test', 'password123');
     expect(user).toMatchObject({ role: 'penyelenggara', organizationId: pendingOrgId, organizationStatus: 'pending' });

@@ -25,7 +25,7 @@ async function paged(req, res, { count, select, params = [], map }) {
 /* ---------- Pengguna ---------- */
 router.get('/users', wrap((req, res) => paged(req, res, {
   count: `SELECT COUNT(*) AS total FROM users`,
-  select: `SELECT id, name, email, role, status FROM users ORDER BY created_at ASC, id ASC`,
+  select: `SELECT id, name, email, role, status FROM users ORDER BY CASE WHEN status = 'pending' THEN 0 ELSE 1 END, created_at ASC, id ASC`,
   map: (row) => ({ userId: row.id, name: row.name, email: row.email, role: row.role, status: row.status }),
 })));
 
