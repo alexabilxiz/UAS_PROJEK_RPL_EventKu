@@ -32,13 +32,15 @@ Opsi hosting yang dipertimbangkan:
  
 Hosting digunakan untuk menjalankan aplikasi EventKu pada lingkungan staging maupun production. 
  
-**Pilihan:** **Cloudflare Workers** untuk frontend (Workers Static Assets) dan backend API, terhubung ke **Neon PostgreSQL**. *(Pembaruan pasca-UTS: sebelumnya direncanakan Vercel + Render, lalu dikonsolidasikan ke Cloudflare.)*
- 
-**Alasan:** 
-- Cloudflare Workers Static Assets menyajikan hasil build Vite/React SPA secara global dengan dukungan native SPA fallback.
-- Frontend dan backend API dapat berjalan pada satu origin yang sama (`/api/v1`), sehingga menghindari hambatan CORS dan membuat tautan poster relatif (`/api/v1/assets/posters/:id`) langsung berfungsi.
-- Mendukung deployment otomatis melalui integrasi GitHub (Workers Builds) maupun Cloudflare CLI (`cf`).
-- Koneksi ke database **Neon PostgreSQL** dapat dioptimalkan melalui Cloudflare Hyperdrive atau driver serverless Neon.
+**Pilihan:** **Cloudflare Workers** untuk frontend (Workers Static Assets) dan backend API dalam satu Worker (`uas-projek-rpl-eventku`), terhubung ke **Neon PostgreSQL**. *(Pembaruan pasca-UTS: sebelumnya direncanakan Vercel + Render, lalu dikonsolidasikan ke Cloudflare.)*
+
+**URL Produksi Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev
+
+**Alasan & Implementasi:** 
+- Cloudflare Workers Static Assets menyajikan hasil build Vite/React SPA (`frontend/dist`) secara global dengan dukungan native SPA fallback (`not_found_handling: "single-page-application"`).
+- Frontend dan backend API Express (`backend/src/worker.js` via `cloudflare:node` `httpServerHandler`) berjalan pada satu origin yang sama (`run_worker_first: ["/api/*", "/health"]`), sehingga menghindari hambatan CORS dan membuat tautan poster relatif (`/api/v1/assets/posters/:id`) langsung berfungsi.
+- Koneksi ke **Neon PostgreSQL** memakai `@neondatabase/serverless` (`poolQueryViaFetch: true` untuk query tunggal + WebSocket interaktif untuk transaksi RSVP) serta Smart Placement dan Cron Trigger (`*/5 * * * *`) pada [`wrangler.jsonc`](wrangler.jsonc).
+- Build & deploy dari root repositori: `npm run build` lalu `npx wrangler deploy` (dengan secrets `DATABASE_URL` dan `JWT_SECRET` di Cloudflare Workers).
  
 **Database:** Neon PostgreSQL digunakan sebagai database aplikasi EventKu. 
  

@@ -3,8 +3,9 @@
 **Proyek:** EventKu — Website Kumpulan dan Pendaftaran Event Kampus (INF300 Rekayasa Perangkat Lunak)  
 **Penyusun:** Bambang Herlambang (5803024019 — System Architect & Frontend Developer)  
 **Kelompok:** Kelompok IV (Audrey Elizabeth Gracesia, Bambang Herlambang, Dustin Pranata Wangsawidjaja, Alexa Bilxiz Aulia)  
-**Tanggal:** 25 November 2026 (Persiapan Minggu 15)  
-**Acuan Kode:** Branch `main`, pasca perbaikan `BUG-01`, `BUG-02`, dan uji integrasi PostgreSQL 18.1 (commit `05b87b5`)
+**Tanggal:** 25 November 2026 (Minggu 14–15 — Situs Produksi Live)  
+**Acuan Kode:** Branch `main`, commit `0e8c3bf` (Cloudflare Workers full-stack + Neon PostgreSQL)  
+**URL Produksi Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev (Version ID: `862f7ed6-e4ca-4d32-a3a1-325f9a47e065`)
 
 ---
 
@@ -128,52 +129,50 @@ EventKu menerapkan arsitektur **Modular Monolith** di sisi backend (`backend/`, 
   - `dist/assets/index-*.js` (~392 kB; gzip ~114,7 kB)
 - **Pratinjau hasil build lokal:** `npm run preview` (setelah `npm run build`).
 
-### 5.2 Arsitektur Deployment Cloudflare Workers (Static Assets + Workers API)
-Rencana hosting produksi dikonsolidasikan ke **Cloudflare Workers** agar frontend SPA (`frontend/dist`) dan backend API (`/api/v1/*`) berjalan dalam **satu origin yang sama** (`https://<worker>.workers.dev` atau domain khusus):
+### 5.2 Arsitektur Deployment Cloudflare Workers (Static Assets + Workers API — Live)
+Aplikasi di-deploy sebagai **satu Worker terpadu** (`uas-projek-rpl-eventku`, live pada https://uas-projek-rpl-eventku.yuhugelo4.workers.dev) sehingga frontend SPA (`frontend/dist`) dan backend API (`/api/v1/*`) berjalan pada **satu origin yang sama**:
 
-1. **Serving Frontend SPA (Workers Static Assets):**
-   - Arahkan direktori aset statis ke hasil build `frontend/dist`.
-   - Aktifkan fallback SPA (`not_found_handling: "single-page-application"`) agar *hard refresh* pada rute React Router (mis. `/events/calendar`, `/penyelenggara/event/ajukan`, `/admin/moderasi`) tetap menyajikan `index.html` tanpa 404.
-   - Atur `run_worker_first: ["/api/*", "/health"]` agar setiap panggilan API dan health check langsung ditangani Worker backend sebelum pencarian file statis.
-   - Set variabel build frontend `VITE_API_BASE_URL=/api/v1` (same-origin). Dengan pola ini tidak diperlukan preflight CORS lintas domain dan poster unggahan (`/api/v1/assets/posters/<uuid>`) langsung tampil dari origin yang sama.
-2. **Adaptasi Backend Express di Cloudflare Workers (`nodejs_compat`):**
-   - Karena runtime Cloudflare Workers berbasis V8 isolate (bukan proses server Node.js permanen), pada tahap deployment Minggu 15 backend Express (`backend/src/app.js`) dibungkus menggunakan kompatibilitas Node.js (`nodejs_compat`) dan HTTP handler Workers, serta menggunakan **Cloudflare CLI (`cf`)** (`cloudflare.config.ts`) atau **Workers Builds** (GitHub CI).
-   - Koneksi ke **Neon PostgreSQL** menggunakan **Cloudflare Hyperdrive** (connection pooling PostgreSQL dengan *query caching* dinonaktifkan untuk jalur transaksi RSVP agar data kuota selalu segar, disertai konfigurasi *placement* dekat region Neon) atau driver `@neondatabase/serverless`. Klien database dibuat per invocation handler sesuai siklus hidup koneksi Workers.
-   - Karena memori antar-isolate Workers tidak dibagikan secara global, pembatasan laju permintaan (`express-rate-limit` pada mesin lokal) dipadukan dengan **Cloudflare WAF / Rate Limiting Rules** di produksi.
-3. **Variabel Lingkungan & Secrets (Cloudflare Workers Secrets — jangan simpan di Git):**
-   | Variabel / Binding | Wajib | Nilai / Keterangan |
+1. **Konfigurasi Root (`wrangler.jsonc` & `package.json`):**
+   - [wrangler.jsonc](../../../../wrangler.jsonc) menunjuk `main: "backend/src/worker.js"`, `compatibility_date: "2026-04-01"`, `compatibility_flags: ["nodejs_compat"]`, `placement: { "mode": "smart" }`, dan `triggers: { "crons": ["*/5 * * * *"] }`.
+   - Workers Static Assets diarahkan ke `frontend/dist` dengan `not_found_handling: "single-page-application"` dan `run_worker_first: ["/api/*", "/health"]`. Dengan `VITE_API_BASE_URL` bawaan `/api/v1` (same-origin), tidak ada preflight CORS lintas domain dan poster unggahan (`/api/v1/assets/posters/<uuid>`) tampil dari origin yang sama.
+   - Modul `iconv-lite` (ketergantungan Express 4) di-alias ke [backend/src/lib/iconvWorkerShim.js](../../../../backend/src/lib/iconvWorkerShim.js) berbasis `TextDecoder` agar bundle `workerd` bersih dan ringkas (**304,4 KiB** gzip).
+2. **Adaptasi Backend Express di Cloudflare Workers (`backend/src/worker.js`):**
+   - Membungkus `createApp()` Express memakai `httpServerHandler` dari `cloudflare:node` serta handler `scheduled()` untuk menjalankan `runScheduledJobs()` lewat Cron Trigger setiap 5 menit.
+   - Koneksi ke **Neon PostgreSQL** memakai driver resmi **`@neondatabase/serverless`** dengan pool per-request terisolasi melalui `AsyncLocalStorage` ([backend/src/db.js](../../../../backend/src/db.js)) dan `neonConfig.poolQueryViaFetch = true` (query tunggal memakai 1 roundtrip HTTP fetch, transaksi RSVP memakai WebSocket interaktif penuh, ditutup bersih via `ctx.waitUntil(pool.end())`). Tidak memerlukan binding Hyperdrive tambahan.
+   - Hashing kata sandi ([backend/src/lib/password.js](../../../../backend/src/lib/password.js)) otomatis memakai **Web Crypto PBKDF2-SHA256** native (`100.000` iterasi) di Cloudflare Workers agar aman terhadap batas CPU 10 ms Workers Free Plan, sambil tetap kompatibel memverifikasi hash `bcrypt` lama.
+3. **Perintah Build & Deploy serta Secrets (jangan simpan di Git):**
+   ```powershell
+   npm run build        # install backend & frontend lalu build frontend/dist
+   npx wrangler deploy  # unggah aset statis & Worker ke Cloudflare
+   ```
+   | Secret / Variabel | Wajib | Keterangan |
    |---|---|---|
-   | `NODE_ENV` | Ya | `production` |
-   | `HYPERDRIVE` / `DATABASE_URL` | Ya | Binding Hyperdrive ke Neon PostgreSQL atau secret connection string (`?sslmode=require`) |
-   | `JWT_SECRET` | Ya | Workers Secret, minimal 32 karakter acak |
-   | `JWT_EXPIRES_IN_SECONDS` | Opsional | `28800` (8 jam, bawaan) |
-   | `CORS_ORIGINS` | Ya | Origin produksi Cloudflare Workers (mis. `https://eventku.<subdomain>.workers.dev`) |
-   | `FRONTEND_URL` | Ya | URL utama frontend Cloudflare Workers |
-   | `UKWMS_EMAIL_DOMAINS` | Opsional | `student.ukwms.ac.id` |
+   | `DATABASE_URL` | Ya (Secret) | Connection string pooled Neon PostgreSQL (`?sslmode=require`) |
+   | `JWT_SECRET` | Ya (Secret) | Minimal 32 karakter acak (256-bit) |
+   | `CORS_ORIGINS` / `FRONTEND_URL` | Opsional | Otomatis memakai origin Worker (`https://uas-projek-rpl-eventku.yuhugelo4.workers.dev`) bila tidak diisi |
+   | `UKWMS_EMAIL_DOMAINS` | Opsional | Bawaan `student.ukwms.ac.id` |
 
 ### 5.3 Migrasi & Seed Database (Neon PostgreSQL)
-Jalankan migrasi skema dan akun admin awal dari mesin lokal/CI mengarah ke `DATABASE_URL` Neon PostgreSQL:
+Migrasi skema dan data awal pada database Neon PostgreSQL produksi sudah terpasang (`Kompetisi`, `Seminar`, `Workshop`, dan 10 event aktif). Bila perlu menjalankan ulang dari mesin lokal mengarah ke `DATABASE_URL` Neon:
 ```powershell
 cd backend
+$env:PASSWORD_HASH_ALGO = "pbkdf2"
 npm run db:migrate
-# Isi ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD di environment sebelum seed:
 npm run db:seed
 ```
-Setelah deploy aktif, verifikasi `GET https://<url-cloudflare>/health` mengembalikan `200 {"status":"ok"}`.
 
-### 5.4 Checklist Verifikasi Pascadeploy (Final Check Minggu 15–16)
-- [ ] Hard refresh pada rute nested (mis. `/events/calendar`, `/penyelenggara/event/ajukan`, `/admin/moderasi`) tidak menghasilkan 404 (tertangani `not_found_handling: "single-page-application"` di Workers Static Assets).
-- [ ] Request `/health` dan `/api/v1/*` langsung masuk ke Worker backend (`run_worker_first`) tanpa diblokir CORS, dan unggahan poster (`/api/v1/assets/posters/:id`) langsung tampil same-origin.
-- [ ] Login admin, verifikasi akun penyelenggara baru (`pending` → `active`), dan verifikasi organisasi berjalan di database Neon PostgreSQL.
-- [ ] Logout mencabut sesi di server (mengulang request `/api/v1/auth/me` dengan token lama mengembalikan `401`).
-- [ ] Alur penuh live: penyelenggara unggah poster + ajukan event → admin setujui → mahasiswa UKWMS cari/filter/kalender/RSVP → batal RSVP → penyelenggara ekspor CSV.
-- [ ] Uji tampilan mobile 360 px dan desktop 1440 px pada situs live tanpa overflow horizontal dan tanpa error konsol browser.
+### 5.4 Checklist Verifikasi Pascadeploy (URL Live Cloudflare Workers)
+- [x] Hard refresh pada rute nested (`/events/calendar`) menyajikan `index.html` (`200 OK`, tertangani `not_found_handling: "single-page-application"`).
+- [x] Request `/health` (`200 OK`, ~273 ms) dan `/api/v1/*` langsung masuk ke Worker backend (`run_worker_first`); `/api/v1/categories` (3 kategori) dan `/api/v1/events` (10 event) membaca Neon PostgreSQL asli.
+- [x] Verifikasi TLS HTTPS (`Let's Encrypt YE1`, valid hingga Feb 2027), header `x-content-type-options: nosniff`, `POST /api/v1/auth/login` PBKDF2 (~836 ms), dan blokir CORS lintas origin (`https://evil.test`).
+- [x] Uji tampilan live Playwright desktop `1440 px` dan mobile `360 px` pada `/events` & `/login` tanpa overflow horizontal dan 0 error aplikasi (`Bukti QA-04` & `Bukti QA-05`).
+- [ ] Sesi UAT tulis end-to-end bersama 3–5 penguji nyata (Bagian 23 Laporan Akhir — dikoordinasikan Dustin & Alexa memakai URL live).
 
 ---
 
-## 6. Ringkasan Verifikasi Otomatis Terkini (Commit `05b87b5`)
+## 6. Ringkasan Verifikasi Otomatis & Live Terkini (Commit `0e8c3bf`)
 
-| Suite Pengujian | Perintah | Hasil | Keterangan |
+| Suite Pengujian | Perintah / Target | Hasil | Keterangan |
 |---|---|---|---|
 | Frontend Unit (Vitest) | `cd frontend && npm test` | **73/73 lulus** (7 file) | Mencakup `apiClient`, `authService` (+`logout`), `AuthContext` (+`logout` & race condition), `calendar`, `eventSubmission`, `registrationService`. |
 | Frontend Build (Vite) | `cd frontend && npm run build` | **Berhasil** | Bundel JS `114,70 kB` (gzip), tanpa error/warning. |
@@ -181,5 +180,7 @@ Setelah deploy aktif, verifikasi `GET https://<url-cloudflare>/health` mengembal
 | Frontend Browser Demo E2E | `cd frontend && npx playwright test -c playwright.demo.config.js` | **4/4 lulus** | Alur multi-peran lengkap (mahasiswa, penyelenggara, admin) pada server demo lokal. |
 | Backend Jest + UAT API | `cd backend && npm test` | **62/62 lulus** (8 file) | `api-security`, `auth`, `frontend-contract`, `seed`, `uat-flow`, `uat-extra`, `uat-rate`, `uat-retest` (17/17). Menggunakan `pg-mem`. |
 | Integrasi Penuh Lokal (PG 18.1) | Playwright live terhadap Vite + Express + PostgreSQL 18.1 | **6/6 lulus** (0 error JS) | `db:migrate`, `db:seed`, konkurensi nyata 8 RSVP paralel untuk 1 kursi (`201=1`, `409=7`), BUG-01/BUG-02 live di browser, unggah poster, moderasi, kalender 360 px, ekspor CSV (`SCRUM-16` **DONE**). |
+| Runtime Worker Lokal (`workerd`) | `npx wrangler dev` + `--dry-run` | **6/6 lulus** | Bundle **304,4 KiB** gzip; `/health`, SPA fallback, `run_worker_first`, Express + CORS + Worker rate limiter lulus. |
+| **Produksi Live (Cloudflare + Neon)** | `https://uas-projek-rpl-eventku.yuhugelo4.workers.dev` | **6/6 lulus** (0 error aplikasi) | TLS valid, `/health` 273 ms, Neon `/categories` (3) & `/events` (10), auth PBKDF2 + CORS + `nosniff`, Playwright live `1440 px` & `360 px` tanpa overflow (`Bukti QA-04` & `QA-05`). |
 
-*Catatan batas pengujian:* Pengujian di atas memverifikasi kualitas kode, kontrak, dan integrasi PostgreSQL 18.1 secara lokal; pengujian terhadap situs produksi live (**Cloudflare Workers + Neon PostgreSQL**) serta UAT bersama 3–5 pengguna nyata tetap menjadi syarat penyelesaian Minggu 14–16.
+*Catatan batas pengujian:* Deployment produksi live (**Cloudflare Workers + Neon PostgreSQL**) telah aktif dan diverifikasi; UAT bersama 3–5 pengguna nyata (Bagian 23 Laporan Akhir) serta penyiapan slide/presentasi akhir tetap menjadi tahap penyelesaian tim pada Minggu 14–16.
