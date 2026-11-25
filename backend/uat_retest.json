@@ -1,0 +1,138 @@
+[
+  {
+    "id": "R-02-01",
+    "area": "US-04",
+    "desc": "Registrasi penyelenggara menghasilkan akun berstatus menunggu",
+    "expected": "201 pending",
+    "actual": "201 pending",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-02",
+    "area": "US-04",
+    "desc": "Akun menunggu tidak bisa login",
+    "expected": "403",
+    "actual": "403 Akun penyelenggara menunggu verifikasi admin.",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-03",
+    "area": "US-04",
+    "desc": "Mass assignment: field status=active pada registrasi diabaikan",
+    "expected": "pending",
+    "actual": "pending",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-04",
+    "area": "US-04",
+    "desc": "Akun dengan status dipaksa active tetap tidak bisa login",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-05",
+    "area": "FR-AUTH-01",
+    "desc": "Registrasi mahasiswa tetap langsung aktif",
+    "expected": "201 active",
+    "actual": "201 active",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-06",
+    "area": "FR-ADM-02",
+    "desc": "Admin dapat menemukan akun penyelenggara yang menunggu",
+    "expected": "akun p1 terdaftar",
+    "actual": "ditemukan",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-07",
+    "area": "FR-AUTH-04",
+    "desc": "Penyelenggara tidak boleh menyetujui akun penyelenggara lain",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-08",
+    "area": "FR-AUTH-04",
+    "desc": "Mahasiswa tidak boleh menyetujui akun",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-09",
+    "area": "US-04",
+    "desc": "Admin menyetujui akun penyelenggara",
+    "expected": "200 active",
+    "actual": "200 active",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-10",
+    "area": "US-04",
+    "desc": "Setelah disetujui admin, penyelenggara bisa login",
+    "expected": "200 + token",
+    "actual": "200 token=true",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-11",
+    "area": "US-04",
+    "desc": "Penyelenggara yang sudah disetujui dapat membuat event",
+    "expected": "201",
+    "actual": "201",
+    "status": "Pass"
+  },
+  {
+    "id": "R-02-12",
+    "area": "FR-AUTH-05",
+    "desc": "Akun disetujui tetapi organisasi belum terverifikasi tetap tidak bisa mengajukan event",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass"
+  },
+  {
+    "id": "R-01-01",
+    "area": "US-02",
+    "desc": "Endpoint logout tersedia dan berhasil",
+    "expected": "200",
+    "actual": "200",
+    "status": "Pass"
+  },
+  {
+    "id": "R-01-02",
+    "area": "US-02",
+    "desc": "Token lama ditolak setelah logout",
+    "expected": "401",
+    "actual": "401",
+    "status": "Pass"
+  },
+  {
+    "id": "R-01-03",
+    "area": "US-02",
+    "desc": "Logout ulang dengan token yang sudah dicabut ditolak",
+    "expected": "401",
+    "actual": "401",
+    "status": "Pass"
+  },
+  {
+    "id": "R-01-04",
+    "area": "US-02",
+    "desc": "Logout satu perangkat tidak mencabut sesi perangkat lain",
+    "expected": "200",
+    "actual": "200",
+    "status": "Pass"
+  },
+  {
+    "id": "R-01-05",
+    "area": "US-02",
+    "desc": "Logout tanpa token ditolak",
+    "expected": "401",
+    "actual": "401",
+    "status": "Pass"
+  }
+]

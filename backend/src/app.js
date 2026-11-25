@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import { readFileSync } from 'node:fs';
+import swaggerUi from 'swagger-ui-express';
+import { parse } from 'yaml';
 import { config } from './config.js';
 import { runWithPool } from './db.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
@@ -13,6 +16,10 @@ import adminRoutes from './routes/admin.js';
 import notificationRoutes from './routes/notifications.js';
 import studentRoutes from './routes/student.js';
 import assetRoutes from './routes/assets.js';
+
+const swaggerDocument = config.isWorker
+  ? null
+  : parse(readFileSync(new URL('../../docs/openapi.yaml', import.meta.url), 'utf8'));
 
 export function createApp({ createRequestPool } = {}) {
   const app = express();
@@ -44,6 +51,16 @@ export function createApp({ createRequestPool } = {}) {
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     maxAge: 600,
   }));
+
+  if (!config.isWorker) {
+    app.use('/api-docs', (_req, res, next) => {
+      res.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http: https:");
+      next();
+    }, swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+      explorer: true,
+      swaggerOptions: { validatorUrl: null },
+    }));
+  }
 
   app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 

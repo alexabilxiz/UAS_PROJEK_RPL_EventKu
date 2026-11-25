@@ -1,0 +1,533 @@
+[
+  {
+    "id": "T-AUTH-01",
+    "area": "FR-AUTH-01",
+    "desc": "Registrasi mahasiswa dengan data valid",
+    "expected": "201",
+    "actual": "201",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-02",
+    "area": "FR-AUTH-01",
+    "desc": "Registrasi dengan email duplikat ditolak",
+    "expected": "409",
+    "actual": "409",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-03",
+    "area": "FR-AUTH-01",
+    "desc": "Kata sandi < 8 karakter ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-04",
+    "area": "FR-AUTH-04",
+    "desc": "Registrasi publik dengan peran admin ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-05",
+    "area": "FR-AUTH-03",
+    "desc": "Login valid mengembalikan token",
+    "expected": "200 + accessToken",
+    "actual": "200 token=true",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-06",
+    "area": "FR-AUTH-03",
+    "desc": "Login dengan kata sandi salah ditolak",
+    "expected": "401",
+    "actual": "401",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-07",
+    "area": "FR-AUTH-03",
+    "desc": "Endpoint /me dengan token valid",
+    "expected": "200",
+    "actual": "200",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-08",
+    "area": "US-02 / FR-AUTH-03",
+    "desc": "Logout menghapus sesi di server (token lama harus ditolak)",
+    "expected": "Token lama 401 setelah logout",
+    "actual": "POST /auth/logout=200; token lama sesudahnya=401",
+    "status": "Pass",
+    "note": "Tidak ada endpoint logout di backend; logout hanya menghapus token di klien."
+  },
+  {
+    "id": "T-AUTH-09",
+    "area": "NFR-SEC-02",
+    "desc": "Token JWT yang dimanipulasi ditolak",
+    "expected": "401",
+    "actual": "401",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-AUTH-10",
+    "area": "NFR-SEC-03",
+    "desc": "Akses tanpa token ditolak",
+    "expected": "401",
+    "actual": "401",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RBAC-01",
+    "area": "FR-AUTH-04",
+    "desc": "Mahasiswa tidak boleh membuat event",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RBAC-02",
+    "area": "FR-AUTH-04",
+    "desc": "Penyelenggara tidak boleh mengakses endpoint admin",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RBAC-03",
+    "area": "FR-AUTH-04",
+    "desc": "Penyelenggara tidak boleh RSVP",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RBAC-04",
+    "area": "FR-AUTH-04",
+    "desc": "Mahasiswa tidak boleh membuka dashboard penyelenggara",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RBAC-05",
+    "area": "FR-MOD-01",
+    "desc": "Penyelenggara tidak boleh memoderasi event",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-01",
+    "area": "FR-AUTH-05",
+    "desc": "Organisasi belum terverifikasi tidak boleh mengajukan event",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-02",
+    "area": "FR-EVT-02",
+    "desc": "Event tanpa judul ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-03",
+    "area": "FR-EVT-02",
+    "desc": "Waktu selesai sebelum mulai ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-04",
+    "area": "FR-EVT-02",
+    "desc": "Waktu mulai di masa lalu ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-05",
+    "area": "FR-EVT-02",
+    "desc": "Kuota 0 ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-06",
+    "area": "FR-EVT-01",
+    "desc": "Membuat draft event valid",
+    "expected": "201 draft",
+    "actual": "201 draft",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-07",
+    "area": "FR-SRC-01",
+    "desc": "Draft tidak tampil di katalog publik",
+    "expected": "0 hasil",
+    "actual": "0",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-08",
+    "area": "NFR-SEC-03",
+    "desc": "Penyelenggara organisasi lain tidak boleh mengajukan draft ini",
+    "expected": "404",
+    "actual": "404",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-09",
+    "area": "FR-EVT-03",
+    "desc": "Ajukan draft -> menunggu moderasi",
+    "expected": "200 menunggu_moderasi",
+    "actual": "200 menunggu_moderasi",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-10",
+    "area": "FR-EVT-03",
+    "desc": "Pengajuan ganda ditolak",
+    "expected": "409",
+    "actual": "409",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-EVT-11",
+    "area": "FR-MOD-01",
+    "desc": "Event menunggu moderasi belum tampil publik",
+    "expected": "0 hasil",
+    "actual": "0",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-MOD-01",
+    "area": "FR-MOD-01",
+    "desc": "Admin melihat antrean moderasi",
+    "expected": "total >= 1",
+    "actual": "1",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-MOD-02",
+    "area": "FR-MOD-02",
+    "desc": "Penolakan tanpa alasan ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-MOD-03",
+    "area": "FR-MOD-03",
+    "desc": "Admin menyetujui event",
+    "expected": "200 disetujui",
+    "actual": "200 disetujui",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-MOD-04",
+    "area": "FR-MOD-03",
+    "desc": "Moderasi ulang event yang sudah diputuskan ditolak",
+    "expected": "409",
+    "actual": "409",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-MOD-05",
+    "area": "FR-MOD-04",
+    "desc": "Penyelenggara menerima notifikasi hasil moderasi",
+    "expected": ">=1 notifikasi",
+    "actual": "{\"data\":[{\"notificationId\":\"b691875a-7694-4b99-bb28-56df69f29038\",\"eventId\":\"14d366d9-ec84-4fbe-b285-5a3a2e72e9c0\",\"titl",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-MOD-06",
+    "area": "FR-MOD-06",
+    "desc": "Riwayat moderasi tercatat",
+    "expected": "total >= 1",
+    "actual": "1",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-NTF-01",
+    "area": "FR-NTF-02",
+    "desc": "Mahasiswa berminat kategori tersebut menerima notifikasi event baru",
+    "expected": "ada tipe event_baru",
+    "actual": "[\"event_baru\"]",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-NTF-02",
+    "area": "FR-NTF-02",
+    "desc": "Mahasiswa kategori lain TIDAK menerima notifikasi",
+    "expected": "tidak ada event_baru",
+    "actual": "[]",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-SRC-01",
+    "area": "FR-SRC-01",
+    "desc": "Daftar event publik menampilkan event disetujui",
+    "expected": "total >= 1",
+    "actual": "1",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-SRC-02",
+    "area": "FR-SRC-02",
+    "desc": "Pencarian kata kunci tidak sensitif huruf besar-kecil",
+    "expected": "total >= 1",
+    "actual": "1",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-SRC-03",
+    "area": "FR-SRC-02",
+    "desc": "Pencarian tanpa hasil mengembalikan daftar kosong",
+    "expected": "0",
+    "actual": "0",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-SRC-04",
+    "area": "FR-SRC-03",
+    "desc": "Filter kategori sesuai data",
+    "expected": "cat=1, cat2=0",
+    "actual": "cat=1, cat2=0",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-SEC-01",
+    "area": "NFR-SEC-04",
+    "desc": "Input SQL injection pada pencarian tidak merusak data",
+    "expected": "200 & data utuh",
+    "actual": "200, total=1",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-SRC-05",
+    "area": "FR-SRC-03",
+    "desc": "Filter tanggal tidak valid ditolak",
+    "expected": "4xx",
+    "actual": "422",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-SEC-02",
+    "area": "NFR-SEC-04",
+    "desc": "Judul berisi <script> tidak dieksekusi (API mengembalikan teks apa adanya; escape dilakukan React)",
+    "expected": "teks tersimpan sebagai string",
+    "actual": "Seminar <script>alert(1)</script> AI",
+    "status": "Pass",
+    "note": "Perlu dicek manual di UI bahwa tidak dirender sebagai HTML."
+  },
+  {
+    "id": "T-SRC-06",
+    "area": "FR-DET-01",
+    "desc": "ID event tidak valid -> 404",
+    "expected": "404",
+    "actual": "404",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-01",
+    "area": "FR-RSV-01",
+    "desc": "Mahasiswa non-UKWMS tidak boleh RSVP",
+    "expected": "403",
+    "actual": "403",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-02",
+    "area": "FR-RSV-02",
+    "desc": "Dua permintaan untuk kursi terakhir: hanya satu berhasil",
+    "expected": "[201,409]",
+    "actual": "[201,409]",
+    "status": "Pass",
+    "note": "Dijalankan pada pg-mem (single-thread); konkurensi nyata PostgreSQL perlu uji terpisah."
+  },
+  {
+    "id": "T-RSV-03",
+    "area": "FR-RSV-06",
+    "desc": "RSVP ganda pada event yang sama ditolak",
+    "expected": "409",
+    "actual": "409",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-04",
+    "area": "NFR-SEC-03",
+    "desc": "Pembatalan pendaftaran milik akun lain ditolak",
+    "expected": "404",
+    "actual": "404",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-05",
+    "area": "FR-RSV-05",
+    "desc": "Riwayat pendaftaran menampilkan event yang didaftari",
+    "expected": "total >= 1",
+    "actual": "1",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-06",
+    "area": "FR-RSV-04",
+    "desc": "Pembatalan oleh pemilik sebelum event dimulai",
+    "expected": "200",
+    "actual": "200",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-07",
+    "area": "FR-RSV-04",
+    "desc": "Pembatalan ulang ditolak (kursi tidak dikembalikan dua kali)",
+    "expected": "409",
+    "actual": "409",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-08",
+    "area": "FR-RSV-04",
+    "desc": "Setelah pembatalan, kursi bisa dipakai pendaftar lain",
+    "expected": "201",
+    "actual": "201",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-09",
+    "area": "FR-RSV-02",
+    "desc": "Penghitung kursi konsisten (0 <= reserved <= quota)",
+    "expected": "reserved=1, quota=1",
+    "actual": "{\"reserved_seats\":1,\"quota\":1}",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-RSV-10",
+    "area": "FR-RSV-01",
+    "desc": "RSVP ke event yang tidak ada -> 404",
+    "expected": "404",
+    "actual": "404",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-DSH-01",
+    "area": "FR-DSH-03",
+    "desc": "Penyelenggara melihat daftar peserta eventnya",
+    "expected": "total=1",
+    "actual": "1",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-DSH-02",
+    "area": "FR-DSH-04",
+    "desc": "Penyelenggara organisasi lain tidak boleh melihat peserta",
+    "expected": "404",
+    "actual": "404",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-DSH-03",
+    "area": "FR-DSH-04",
+    "desc": "Ekspor CSV peserta",
+    "expected": "CSV berisi header + 1 baris",
+    "actual": "\"\\\"Nama\\\",\\\"Email\\\",\\\"Waktu daftar (ISO 8601)\\\"\\r\\n\\\"Pengguna Uji\\\",\\\"student@example.org\\\",\\\"2026-11-25T07:47:58.852",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-DSH-04",
+    "area": "FR-DSH-02",
+    "desc": "Statistik penyelenggara dapat diakses",
+    "expected": "200",
+    "actual": "200",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-ADM-01",
+    "area": "FR-ADM-04",
+    "desc": "Statistik admin dapat diakses",
+    "expected": "200",
+    "actual": "200",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-ADM-02",
+    "area": "FR-ADM-01",
+    "desc": "Kategori duplikat ditolak",
+    "expected": "409",
+    "actual": "409",
+    "status": "Pass",
+    "note": ""
+  },
+  {
+    "id": "T-ADM-03",
+    "area": "FR-ADM-02",
+    "desc": "Admin membuat & memverifikasi organisasi",
+    "expected": "200 verified",
+    "actual": "200 verified",
+    "status": "Pass",
+    "note": ""
+  }
+]

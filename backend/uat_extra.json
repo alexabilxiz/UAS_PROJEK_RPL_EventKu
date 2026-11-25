@@ -1,0 +1,13 @@
+[
+  {
+    "exposedOrgId": true,
+    "sample": "{\"eventId\":\"b3aec7da-fe39-43d5-922a-f6f7c39a342b\",\"title\":\"Acara Resmi\",\"description\":\"Deskripsi uji.\",\"categoryId\":\"6f82ecbe-4801-4cfa-bb9c-f1e790a470f8\",\"categoryName\":\"Workshop\",\"organizationId\":\"907743b9-55a7-4d07-9108-57d7b01efc04\",\"organizationName\":\"UKM Resmi\",\"startAt\":\"2026-11-28T07:48:02.5"
+  },
+  {
+    "registerAsOrganizerStatus": 201
+  },
+  {
+    "createEventAsImpostor": 401
+  },
+  {}
+]
