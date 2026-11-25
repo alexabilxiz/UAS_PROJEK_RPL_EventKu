@@ -8,7 +8,7 @@
 ## 1. Persiapan Sebelum Mulai (5 Menit)
 
 Pilih salah satu lingkungan pengujian dan catat pilihan yang dipakai secara jujur:
-- **Opsi A (Direkomendasikan bila sudah live):** Gunakan URL situs produksi (Vercel/Cloudflare + Render + Neon PostgreSQL).
+- **Opsi A (Direkomendasikan bila sudah live):** Gunakan URL situs produksi (Cloudflare Workers + Neon PostgreSQL).
 - **Opsi B (Lokal di 1 laptop — cepat untuk Minggu 14):**
   1. Jalankan backend & frontend lokal terhubung ke PostgreSQL lokal/Neon (`cd backend && npm run dev` dan `cd frontend && npm run dev`), **atau**
   2. Jika database belum siap, jalankan mode demo lokal (`cd frontend && npm run dev:demo` di `http://127.0.0.1:5174`) dengan akun demo bawaan:

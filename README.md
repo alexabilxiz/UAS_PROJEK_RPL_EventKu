@@ -17,7 +17,7 @@ npm run dev
 
 Gunakan Node.js minimal 22.12. Arahkan `API_PROXY_TARGET` pada `.env.local` ke server Auth dan Event untuk menjalankan alur dengan data nyata. Pengujian otomatis menggunakan fixture kontrak API.
 
-Catatan implementasi dan pengujian tersedia untuk [Minggu 9–11](docs/implementation/bambang/week9-11/README.md), [Minggu 12](docs/implementation/bambang/week12/README.md), [Minggu 13](docs/implementation/bambang/week13/README.md), dan [Minggu 14](docs/implementation/bambang/week14/README.md). Jalankan `npm run dev:demo` dari folder `frontend` untuk mencoba alur dengan data dummy.
+Catatan implementasi dan pengujian tersedia untuk [Minggu 9–11](docs/implementation/bambang/week9-11/README.md), [Minggu 12](docs/implementation/bambang/week12/README.md), [Minggu 13](docs/implementation/bambang/week13/README.md), [Minggu 14](docs/implementation/bambang/week14/README.md), dan [Minggu 15](docs/implementation/bambang/week15/README.md). Jalankan `npm run dev:demo` dari folder `frontend` untuk mencoba alur dengan data dummy.
 
 ## QA & DevOps Documentation 
  
@@ -27,18 +27,18 @@ Catatan implementasi dan pengujian tersedia untuk [Minggu 9–11](docs/implement
  
 Opsi hosting yang dipertimbangkan: 
  
-- Vercel 
-- Render 
+- Cloudflare Workers (Static Assets + Workers API)
+- Vercel & Render *(opsi awal pada tahap perencanaan UTS)*
  
 Hosting digunakan untuk menjalankan aplikasi EventKu pada lingkungan staging maupun production. 
  
-**Pilihan:** Vercel untuk frontend dan Render untuk backend. 
+**Pilihan:** **Cloudflare Workers** untuk frontend (Workers Static Assets) dan backend API, terhubung ke **Neon PostgreSQL**. *(Pembaruan pasca-UTS: sebelumnya direncanakan Vercel + Render, lalu dikonsolidasikan ke Cloudflare.)*
  
 **Alasan:** 
-- Vercel memiliki konfigurasi yang sederhana untuk deployment frontend. 
-- Vercel mendukung deployment aplikasi melalui repository Git. 
-- Render dapat digunakan untuk menjalankan backend Node.js dan Express.js. 
-- Vercel dan Render dapat digunakan untuk deployment aplikasi dari tahap development hingga production. 
+- Cloudflare Workers Static Assets menyajikan hasil build Vite/React SPA secara global dengan dukungan native SPA fallback.
+- Frontend dan backend API dapat berjalan pada satu origin yang sama (`/api/v1`), sehingga menghindari hambatan CORS dan membuat tautan poster relatif (`/api/v1/assets/posters/:id`) langsung berfungsi.
+- Mendukung deployment otomatis melalui integrasi GitHub (Workers Builds) maupun Cloudflare CLI (`cf`).
+- Koneksi ke database **Neon PostgreSQL** dapat dioptimalkan melalui Cloudflare Hyperdrive atau driver serverless Neon.
  
 **Database:** Neon PostgreSQL digunakan sebagai database aplikasi EventKu. 
  

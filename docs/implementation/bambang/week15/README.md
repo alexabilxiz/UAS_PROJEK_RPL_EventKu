@@ -1,19 +1,17 @@
 # Implementasi Bambang Minggu 15
 
-Bambang Herlambang · 5803024019 · System Architect & Frontend Developer · 24 November 2026
+Bambang Herlambang · 5803024019 · System Architect & Frontend Developer · 25 November 2026
 
 Halaman 16 *Rincian Pekerjaan Individu Mingguan - Proyek EventKu* menugaskan Bambang memastikan build frontend production berjalan optimal untuk deployment static assets serta menulis dokumentasi teknis arsitektur dan frontend.
 
 ## Pekerjaan yang Diselesaikan
 
-1. **Perbaikan integrasi pasca-QA/UAT (commit `dccaa91`):**
+1. **Perbaikan integrasi pasca-QA/UAT (commit `dccaa91` & `05b87b5`):**
    - Menambahkan pemanggilan `POST /api/v1/auth/logout` pada `authService.js` dan `AuthContext.jsx` (perbaikan sisi klien `BUG-01`, lengkap dengan dukungan backend dan demo).
-   - Menyelaraskan dukungan verifikasi akun penyelenggara `pending` pada `AdminToolsPage.jsx` dan `LoginPage.jsx` (mendukung perbaikan `BUG-02` di backend).
-2. **Dokumentasi Teknis Arsitektur & Frontend:**
-   - [DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md](DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) — merinci arsitektur Modular Monolith + React SPA, struktur modul frontend, peta rute RBAC, kontrak API & keamanan sesi, panduan build serta deployment Vercel + Render + Neon, dan checklist verifikasi pascadeploy (`SCRUM-16`).
-3. **Konfigurasi Deployment Siap Pakai (untuk koordinasi dengan Alexa/DevOps):**
-   - [frontend/vercel.json](../../../../frontend/vercel.json) — konfigurasi build Vite, SPA fallback rewrite (tanpa menimpa `/api/*`), header keamanan, dan cache aset hashed.
-   - [render.yaml](../../../../render.yaml) — blueprint Render untuk `backend/` (`npm ci`, `npm start`, health check `/health`, dan daftar environment variable tanpa menyimpan kredensial).
+   - Menyelaraskan dukungan verifikasi akun penyelenggara `pending` pada `AdminToolsPage.jsx`, `LoginPage.jsx`, `workspaceService.js`, dan urutan `GET /admin/users` (`BUG-02`).
+2. **Dokumentasi Teknis Arsitektur & Frontend (Target Cloudflare Workers + Neon PostgreSQL):**
+   - [DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md](DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) — merinci arsitektur Modular Monolith + React SPA, struktur modul frontend, peta rute RBAC, kontrak API & keamanan sesi, panduan build serta deployment **Cloudflare Workers (Workers Static Assets + Workers API) + Neon PostgreSQL** (menggantikan rencana awal Vercel + Render), dan checklist verifikasi pascadeploy.
+   - Berkas template lama (`frontend/vercel.json` dan `render.yaml`) dihapus agar tidak menimbulkan duplikasi konfigurasi setelah target hosting dipindahkan ke Cloudflare Workers.
 
 ## Hasil Verifikasi Lokal
 
@@ -28,4 +26,4 @@ Halaman 16 *Rincian Pekerjaan Individu Mingguan - Proyek EventKu* menugaskan Bam
 
 ## Tindak Lanjut Menunggu Deploy Live
 
-Setelah Alexa menyelesaikan deployment backend di Render/Cloudflare (terhubung ke Neon PostgreSQL) dan frontend di Vercel/Cloudflare Pages, lakukan verifikasi akhir pada URL produksi menggunakan checklist pada Bagian 5.4 [DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md](DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) untuk persiapan final check Minggu 16.
+Setelah Alexa menyelesaikan deployment aplikasi pada **Cloudflare Workers** (Workers Static Assets untuk `frontend/dist` + Workers API terhubung ke **Neon PostgreSQL** melalui Hyperdrive / Neon serverless), lakukan verifikasi akhir pada URL produksi menggunakan checklist pada Bagian 5.4 [DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md](DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) untuk persiapan final check Minggu 16.

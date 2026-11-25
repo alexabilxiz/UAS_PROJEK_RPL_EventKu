@@ -16,7 +16,7 @@ import assetRoutes from './routes/assets.js';
 export function createApp() {
   const app = express();
   app.disable('x-powered-by');
-  // Di balik proxy (Render) IP klien ada di X-Forwarded-For; dibutuhkan rate limiter.
+  // Di balik proxy (Cloudflare / reverse proxy) IP klien ada di X-Forwarded-For; dibutuhkan rate limiter.
   if (config.isProduction) app.set('trust proxy', 1);
   app.use(helmet());
   app.use(cors({
