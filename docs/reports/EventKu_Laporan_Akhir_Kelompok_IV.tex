@@ -1260,15 +1260,15 @@ Status Done pada daftar tugas dokumen dan rancangan tidak menunjukkan bahwa apli
 \page{Pembaruan Frontend, Integrasi, dan Deployment Produksi (Minggu 14--15)}
 \textbf{Kelompok IV} \textbar{} \textbf{Kontribusi:} Bambang Herlambang \textbar{} \textbf{NRP:} 5803024019
 
-Pembaruan per 24--25 November 2026. Lampiran ini mencatat perkembangan implementasi, pengujian integrasi, dan deployment produksi setelah UTS serta melengkapi laporan kelompok pada bagian sebelumnya.
+Pembaruan per 24--27 November 2026. Lampiran ini mencatat perkembangan implementasi, pengujian integrasi, dan deployment produksi setelah UTS serta melengkapi laporan kelompok pada bagian sebelumnya.
 
 \subsection*{Perbaikan, Pengujian, dan Deployment Produksi}
 \begin{itemize}
 \item \textbf{Pemulihan RSVP.} Pengguna dapat memeriksa ulang status pendaftaran sebelum mencoba lagi saat respons API gagal atau hasil pengiriman belum pasti.
 \item \textbf{Tampilan responsif.} Tautan Daftar tersedia pada navigasi ponsel. Tombol pengajuan tersusun selebar kartu di layar sempit dan sejajar di desktop.
 \item \textbf{Integrasi API asli \& perbaikan pasca-QA.} Menambahkan \texttt{POST /api/v1/auth/logout} (BUG-01, \texttt{SCRUM-127}), status \texttt{pending} penyelenggara baru + UI verifikasi admin (BUG-02, \texttt{SCRUM-128}), serta memperbaiki validator \texttt{userRow} pada \texttt{workspaceService.js} agar menerima status \texttt{pending} dan mengurutkannya di bagian atas daftar admin.
-\item \textbf{Pengujian lokal.} 73 tes unit Vitest, 62 tes Jest backend, 36 tes browser regresi, 4 tes browser end-to-end demo, 6/6 uji integrasi penuh lokal (\textbf{Frontend Vite + Backend Express asli + PostgreSQL 18.1}, termasuk uji konkurensi nyata 8 RSVP paralel untuk 1 kursi), serta 6/6 uji runtime \texttt{wrangler dev} (\texttt{workerd}) lulus tanpa error.
-\item \textbf{Deployment produksi live (Cloudflare Workers + Neon PostgreSQL).} Aplikasi dikonsolidasikan dari rencana awal UTS (Vercel + Render) ke satu Worker terpadu \texttt{uas-projek-rpl-eventku} pada \url{https://uas-projek-rpl-eventku.yuhugelo4.workers.dev} (Version ID \texttt{862f7ed6-e4ca-4d32-a3a1-325f9a47e065}, commit \texttt{0e8c3bf}) dengan Workers Static Assets (\texttt{frontend/dist}, SPA fallback), adapter Express \texttt{cloudflare:node} (\texttt{backend/src/worker.js}), \texttt{@neondatabase/serverless} (\texttt{poolQueryViaFetch: true} + pool per-request \texttt{AsyncLocalStorage}), Web Crypto PBKDF2-SHA256 untuk batas CPU Workers Free Plan, Smart Placement, dan Cron Trigger tiap 5 menit. Verifikasi live lulus 6/6 (Bukti QA-04 dan QA-05).
+\item \textbf{Pengujian lokal.} 73 tes unit Vitest, 64 tes Jest backend (9 suite termasuk \texttt{docs.test.js}; coverage 86,08\% Statements / 91,25\% Lines melampaui \texttt{NFR-MAINT-02} $\ge 60\%$), 36 tes browser regresi, 4 tes browser end-to-end demo, 6/6 uji integrasi penuh lokal (\textbf{Frontend Vite + Backend Express asli + PostgreSQL 18.1}, termasuk uji konkurensi nyata 8 RSVP paralel untuk 1 kursi), serta uji runtime \texttt{wrangler dev} (\texttt{workerd}) lulus tanpa error.
+\item \textbf{Deployment produksi live (Cloudflare Workers + Neon PostgreSQL + Swagger UI Live).} Aplikasi dikonsolidasikan dari rencana awal UTS (Vercel + Render) ke satu Worker terpadu \texttt{uas-projek-rpl-eventku} pada \url{https://uas-projek-rpl-eventku.yuhugelo4.workers.dev} (Version ID \texttt{f4879fc2-106c-420f-b43e-f94914a02fc9}, commit \texttt{de1e74f}) dengan Workers Static Assets (\texttt{frontend/dist}, SPA fallback, serta Swagger UI self-hosted pada \texttt{/api-docs/}), adapter Express \texttt{cloudflare:node} (\texttt{backend/src/worker.js}), \texttt{@neondatabase/serverless} (\texttt{poolQueryViaFetch: true} + pool per-request \texttt{AsyncLocalStorage}), Web Crypto PBKDF2-SHA256 untuk batas CPU Workers Free Plan, Smart Placement, dan Cron Trigger tiap 5 menit. Verifikasi live lulus (Bukti QA-04, Bukti QA-05, dan \texttt{docs/implementation/bambang/week15/evidence/}).
 \end{itemize}
 
 \subsection*{Status Pekerjaan di Jira}
@@ -1280,8 +1280,9 @@ SCRUM-127 / 128 & \textbf{DONE} & Perbaikan BUG-01 (logout server) dan BUG-02 (v
 \subsection*{Bukti yang Dapat Dibuka}
 \begin{itemize}
 \item \href{https://uas-projek-rpl-eventku.yuhugelo4.workers.dev}{Aplikasi Produksi Live -- Cloudflare Workers + Neon PostgreSQL (\texttt{uas-projek-rpl-eventku.yuhugelo4.workers.dev})}
-\item \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/0e8c3bf}{GitHub -- commit \texttt{0e8c3bf} (deployment Cloudflare Workers + optimasi Neon HTTP fetch)}
-\item \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/tree/main/docs/implementation/bambang/week15}{GitHub -- dokumentasi teknis arsitektur \& frontend Minggu 15}
+\item \href{https://uas-projek-rpl-eventku.yuhugelo4.workers.dev/api-docs/}{Swagger UI Live -- Dokumentasi Interaktif OpenAPI 3.0 (\texttt{/api-docs/})}
+\item \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/commit/de1e74f}{GitHub -- commit \texttt{de1e74f} (Swagger UI Static Assets di Cloudflare Workers)}
+\item \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/tree/main/docs/implementation/bambang/week15}{GitHub -- dokumentasi teknis arsitektur, frontend, dan bukti live Minggu 15}
 \item \href{https://github.com/alexabilxiz/UAS_PROJEK_RPL_EventKu/tree/073e7a47f7ff0b133c53c3442cb7521f314482b1/docs/implementation/bambang/week14}{GitHub -- dokumentasi dan tangkapan layar Minggu 14}
 \item Jira -- \href{https://eventku.atlassian.net/browse/SCRUM-17}{SCRUM-17} \textbar{} \href{https://eventku.atlassian.net/browse/SCRUM-16}{SCRUM-16} \textbar{} \href{https://eventku.atlassian.net/browse/SCRUM-127}{SCRUM-127} \textbar{} \href{https://eventku.atlassian.net/browse/SCRUM-128}{SCRUM-128} (seluruh tiket Bambang berstatus Done, 0 terbuka)
 \end{itemize}

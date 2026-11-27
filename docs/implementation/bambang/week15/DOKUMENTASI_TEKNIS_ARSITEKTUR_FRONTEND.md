@@ -1,11 +1,12 @@
 # Dokumentasi Teknis Arsitektur dan Frontend — EventKu
 
-**Proyek:** EventKu — Website Kumpulan dan Pendaftaran Event Kampus (INF300 Rekayasa Perangkat Lunak)  
-**Penyusun:** Bambang Herlambang (5803024019 — System Architect & Frontend Developer)  
-**Kelompok:** Kelompok IV (Audrey Elizabeth Gracesia, Bambang Herlambang, Dustin Pranata Wangsawidjaja, Alexa Bilxiz Aulia)  
-**Tanggal:** 25 November 2026 (Minggu 14–15 — Situs Produksi Live)  
-**Acuan Kode:** Branch `main`, commit `0e8c3bf` (Cloudflare Workers full-stack + Neon PostgreSQL)  
-**URL Produksi Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev (Version ID: `862f7ed6-e4ca-4d32-a3a1-325f9a47e065`)
+- **Proyek:** EventKu — Website Kumpulan dan Pendaftaran Event Kampus (INF300 Rekayasa Perangkat Lunak)
+- **Penyusun:** Bambang Herlambang (5803024019 — System Architect & Frontend Developer)
+- **Kelompok:** Kelompok IV (Audrey Elizabeth Gracesia, Bambang Herlambang, Dustin Pranata Wangsawidjaja, Alexa Bilxiz Aulia)
+- **Tanggal:** 27 November 2026 (Minggu 14–15 — Situs Produksi & Swagger UI Live)
+- **Acuan Kode:** Branch `main`, commit `de1e74f` (Cloudflare Workers full-stack + Neon PostgreSQL + Swagger UI Static Assets)
+- **URL Produksi Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev (Version ID: `f4879fc2-106c-420f-b43e-f94914a02fc9`)
+- **Swagger UI Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev/api-docs/
 
 ---
 
@@ -17,20 +18,21 @@ EventKu menerapkan arsitektur **Modular Monolith** di sisi backend (`backend/`, 
 [Browser Pengguna]
         │ HTTPS (Same-Origin)
         ▼
-[Cloudflare Workers — Static Assets (Frontend SPA)]
+[Cloudflare Workers — Static Assets (Frontend SPA & Swagger UI)]
   React 19 + React Router 7 + Vite 8 + Tailwind CSS v4
   - AuthContext + sessionStorage/localStorage (Bearer JWT)
   - Services layer (apiClient.js -> /api/v1/*)
+  - Swagger UI self-hosted (/api-docs/ + /api-docs/openapi.yaml)
         │ Routing /api/* & /health (run_worker_first)
         ▼
 [Cloudflare Workers — Backend API (Modular Monolith, nodejs_compat)]
-  Express.js (adapter Workers) + Helmet + CORS + JWT + Cloudflare Rate Limiting
+  Express.js (cloudflare:node httpServerHandler) + Helmet + CORS + JWT + Rate Limiter
   - Modul Auth & Sesi       (/api/v1/auth)
   - Modul Event & Moderasi  (/api/v1/events, /api/v1/organizer, /api/v1/admin, /api/v1/categories, /api/v1/assets)
   - Modul Pendaftaran/RSVP  (/api/v1/events/:id/registrations, /api/v1/registrations)
   - Modul Notifikasi & Minat(/api/v1/notifications, /api/v1/student)
   - Health Check            (GET /health)
-        │ SQL Berparameter + Transaksi Atomik (TLS via Hyperdrive / Neon Serverless)
+        │ SQL Berparameter + Transaksi Atomik (TLS via @neondatabase/serverless)
         ▼
 [Neon PostgreSQL]
   users, organizations, sessions, password_resets, categories,
@@ -117,25 +119,24 @@ EventKu menerapkan arsitektur **Modular Monolith** di sisi backend (`backend/`, 
 
 ### 5.1 Prasyarat & Perintah Build Lokal
 - **Node.js:** minimal `>= 22.12.0` (`engines.node` di `frontend/package.json` dan `backend/package.json`; untuk Cloudflare CLI `cf`, disarankan `>= 22.18.0`).
-- **Build produksi frontend:**
+- **Build produksi frontend & aset Swagger UI:**
   ```powershell
-  cd frontend
-  npm ci
-  npm run build
+  npm run build        # install backend & frontend, vite build, lalu build:swagger
   ```
-- **Keluaran aktual build (`frontend/dist/`):**
+- **Keluaran aktual build (`frontend/dist/` — 16 berkas statis):**
   - `dist/index.html` (~0,68 kB; gzip ~0,41 kB)
-  - `dist/assets/index-*.css` (~35,5 kB; gzip ~8,1 kB)
-  - `dist/assets/index-*.js` (~392 kB; gzip ~114,7 kB)
-- **Pratinjau hasil build lokal:** `npm run preview` (setelah `npm run build`).
+  - `dist/assets/index-*.css` (~35,54 kB; gzip ~8,14 kB)
+  - `dist/assets/index-*.js` (~392,09 kB; gzip ~114,70 kB)
+  - `dist/api-docs/` — 9 berkas aset self-hosted **Swagger UI** (`index.html`, `swagger-init.js`, `openapi.yaml`, `swagger-ui.css`, `index.css`, `swagger-ui-bundle.js`, `swagger-ui-standalone-preset.js`, dan ikon) yang dihasilkan oleh [scripts/build-swagger-assets.mjs](../../../../scripts/build-swagger-assets.mjs).
+- **Pratinjau hasil build lokal:** `npm --prefix frontend run preview` atau `npm run dev:worker` (`wrangler dev`).
 
 ### 5.2 Arsitektur Deployment Cloudflare Workers (Static Assets + Workers API — Live)
-Aplikasi di-deploy sebagai **satu Worker terpadu** (`uas-projek-rpl-eventku`, live pada https://uas-projek-rpl-eventku.yuhugelo4.workers.dev) sehingga frontend SPA (`frontend/dist`) dan backend API (`/api/v1/*`) berjalan pada **satu origin yang sama**:
+Aplikasi di-deploy sebagai **satu Worker terpadu** (`uas-projek-rpl-eventku`, live pada https://uas-projek-rpl-eventku.yuhugelo4.workers.dev) sehingga frontend SPA (`frontend/dist`), Swagger UI (`/api-docs/`), dan backend API (`/api/v1/*`) berjalan pada **satu origin yang sama**:
 
 1. **Konfigurasi Root (`wrangler.jsonc` & `package.json`):**
    - [wrangler.jsonc](../../../../wrangler.jsonc) menunjuk `main: "backend/src/worker.js"`, `compatibility_date: "2026-04-01"`, `compatibility_flags: ["nodejs_compat"]`, `placement: { "mode": "smart" }`, dan `triggers: { "crons": ["*/5 * * * *"] }`.
-   - Workers Static Assets diarahkan ke `frontend/dist` dengan `not_found_handling: "single-page-application"` dan `run_worker_first: ["/api/*", "/health"]`. Dengan `VITE_API_BASE_URL` bawaan `/api/v1` (same-origin), tidak ada preflight CORS lintas domain dan poster unggahan (`/api/v1/assets/posters/<uuid>`) tampil dari origin yang sama.
-   - Modul `iconv-lite` (ketergantungan Express 4) di-alias ke [backend/src/lib/iconvWorkerShim.js](../../../../backend/src/lib/iconvWorkerShim.js) berbasis `TextDecoder` agar bundle `workerd` bersih dan ringkas (**304,4 KiB** gzip).
+   - Workers Static Assets diarahkan ke `frontend/dist` dengan `not_found_handling: "single-page-application"` dan `run_worker_first: ["/api/*", "/health"]`. Dengan `VITE_API_BASE_URL` bawaan `/api/v1` (same-origin), tidak ada preflight CORS lintas domain dan poster unggahan (`/api/v1/assets/posters/<uuid>`) tampil dari origin yang sama. Halaman dokumentasi `/api-docs/` disajikan langsung sebagai aset statis tanpa membebani CPU Worker.
+   - Alias khusus Worker pada `wrangler.jsonc`: `iconv-lite` diarahkan ke [backend/src/lib/iconvWorkerShim.js](../../../../backend/src/lib/iconvWorkerShim.js) berbasis `TextDecoder`, sedangkan `swagger-ui-express` dan `yaml` diarahkan ke [backend/src/lib/noopWorkerShim.js](../../../../backend/src/lib/noopWorkerShim.js) sehingga bundle `workerd` tetap ringkas (**304,79 KiB** gzip, startup `107 ms`) tanpa mengganggu Swagger Express lokal.
 2. **Adaptasi Backend Express di Cloudflare Workers (`backend/src/worker.js`):**
    - Membungkus `createApp()` Express memakai `httpServerHandler` dari `cloudflare:node` serta handler `scheduled()` untuk menjalankan `runScheduledJobs()` lewat Cron Trigger setiap 5 menit.
    - Koneksi ke **Neon PostgreSQL** memakai driver resmi **`@neondatabase/serverless`** dengan pool per-request terisolasi melalui `AsyncLocalStorage` ([backend/src/db.js](../../../../backend/src/db.js)) dan `neonConfig.poolQueryViaFetch = true` (query tunggal memakai 1 roundtrip HTTP fetch, transaksi RSVP memakai WebSocket interaktif penuh, ditutup bersih via `ctx.waitUntil(pool.end())`). Tidak memerlukan binding Hyperdrive tambahan.
@@ -163,24 +164,27 @@ npm run db:seed
 
 ### 5.4 Checklist Verifikasi Pascadeploy (URL Live Cloudflare Workers)
 - [x] Hard refresh pada rute nested (`/events/calendar`) menyajikan `index.html` (`200 OK`, tertangani `not_found_handling: "single-page-application"`).
-- [x] Request `/health` (`200 OK`, ~273 ms) dan `/api/v1/*` langsung masuk ke Worker backend (`run_worker_first`); `/api/v1/categories` (3 kategori) dan `/api/v1/events` (10 event) membaca Neon PostgreSQL asli.
+- [x] Request `/health` (`200 OK`) dan `/api/v1/*` langsung masuk ke Worker backend (`run_worker_first`); `/api/v1/categories` (3 kategori) dan `/api/v1/events` (13 event aktif per 27 Nov 2026) membaca Neon PostgreSQL asli.
+- [x] Swagger UI Live (`/api-docs/` dan `/api-docs/openapi.yaml`) tampil penuh tanpa CDN luar; pengujian *Try it out* `GET /health` dan `GET /categories` pada browser menghasilkan `200 OK`.
 - [x] Verifikasi TLS HTTPS (`Let's Encrypt YE1`, valid hingga Feb 2027), header `x-content-type-options: nosniff`, `POST /api/v1/auth/login` PBKDF2 (~836 ms), dan blokir CORS lintas origin (`https://evil.test`).
-- [x] Uji tampilan live Playwright desktop `1440 px` dan mobile `360 px` pada `/events` & `/login` tanpa overflow horizontal dan 0 error aplikasi (`Bukti QA-04` & `Bukti QA-05`).
-- [ ] Sesi UAT tulis end-to-end bersama 3–5 penguji nyata (Bagian 23 Laporan Akhir — dikoordinasikan Dustin & Alexa memakai URL live).
+- [x] Uji tampilan live Playwright desktop `1440 px` dan mobile `360 px` pada `/events`, `/events/calendar`, dan `/api-docs/` tanpa overflow horizontal dan 0 error aplikasi ([evidence/verification.md](evidence/verification.md)).
+- [ ] Sesi simulasi end-to-end & UAT tulis bersama 3–5 penguji nyata (Bagian 23 Laporan Akhir — dikoordinasikan Dustin & Alexa memakai URL live).
 
 ---
 
-## 6. Ringkasan Verifikasi Otomatis & Live Terkini (Commit `0e8c3bf`)
+## 6. Ringkasan Verifikasi Otomatis & Live Terkini (Commit `de1e74f`)
+
+Rincian lengkap dan tangkapan layar produksi live tersimpan di [evidence/verification.md](evidence/verification.md).
 
 | Suite Pengujian | Perintah / Target | Hasil | Keterangan |
 |---|---|---|---|
 | Frontend Unit (Vitest) | `cd frontend && npm test` | **73/73 lulus** (7 file) | Mencakup `apiClient`, `authService` (+`logout`), `AuthContext` (+`logout` & race condition), `calendar`, `eventSubmission`, `registrationService`. |
-| Frontend Build (Vite) | `cd frontend && npm run build` | **Berhasil** | Bundel JS `114,70 kB` (gzip), tanpa error/warning. |
+| Frontend Build + Swagger Assets | `npm --prefix frontend run build && npm run build:swagger` | **Berhasil** | Bundel JS `114,70 kB` (gzip) + 9 berkas aset Swagger UI di `frontend/dist/api-docs/`. |
 | Frontend Browser Regresi | `cd frontend && npx playwright test --workers=2` | **36/36 lulus** | Auth, katalog, pengajuan, RSVP, kalender, responsif 320/360/1440 px terhadap fixture kontrak API. |
 | Frontend Browser Demo E2E | `cd frontend && npx playwright test -c playwright.demo.config.js` | **4/4 lulus** | Alur multi-peran lengkap (mahasiswa, penyelenggara, admin) pada server demo lokal. |
-| Backend Jest + UAT API | `cd backend && npm test` | **62/62 lulus** (8 file) | `api-security`, `auth`, `frontend-contract`, `seed`, `uat-flow`, `uat-extra`, `uat-rate`, `uat-retest` (17/17). Menggunakan `pg-mem`. |
+| Backend Jest + UAT API + Coverage | `cd backend && npm test` | **64/64 lulus** (9 suite) | `docs`, `api-security`, `auth`, `frontend-contract`, `seed`, `uat-flow`, `uat-extra`, `uat-rate`, `uat-retest` (17/17); coverage **86,08% Stmts / 91,25% Lines** (melampaui `NFR-MAINT-02` ≥ 60%). |
 | Integrasi Penuh Lokal (PG 18.1) | Playwright live terhadap Vite + Express + PostgreSQL 18.1 | **6/6 lulus** (0 error JS) | `db:migrate`, `db:seed`, konkurensi nyata 8 RSVP paralel untuk 1 kursi (`201=1`, `409=7`), BUG-01/BUG-02 live di browser, unggah poster, moderasi, kalender 360 px, ekspor CSV (`SCRUM-16` **DONE**). |
-| Runtime Worker Lokal (`workerd`) | `npx wrangler dev` + `--dry-run` | **6/6 lulus** | Bundle **304,4 KiB** gzip; `/health`, SPA fallback, `run_worker_first`, Express + CORS + Worker rate limiter lulus. |
-| **Produksi Live (Cloudflare + Neon)** | `https://uas-projek-rpl-eventku.yuhugelo4.workers.dev` | **6/6 lulus** (0 error aplikasi) | TLS valid, `/health` 273 ms, Neon `/categories` (3) & `/events` (10), auth PBKDF2 + CORS + `nosniff`, Playwright live `1440 px` & `360 px` tanpa overflow (`Bukti QA-04` & `QA-05`). |
+| Runtime Worker Lokal (`workerd`) | `npx wrangler dev` + `--dry-run` | **Lulus** | Bundle **304,79 KiB** gzip; `/health`, `/api-docs/` *Try it out*, SPA fallback, `run_worker_first`, Express + CORS + Worker rate limiter lulus. |
+| **Produksi Live (Cloudflare + Neon)** | `https://uas-projek-rpl-eventku.yuhugelo4.workers.dev` | **Lulus** (0 error aplikasi) | `Version ID f4879fc2-106c-420f-b43e-f94914a02fc9` (startup `107 ms`), TLS valid, Neon `/categories` (3) & `/events` (13), Swagger UI Live `/api-docs/` *Try it out* `200`, Playwright live `1440 px` & `360 px` tanpa overflow. |
 
-*Catatan batas pengujian:* Deployment produksi live (**Cloudflare Workers + Neon PostgreSQL**) telah aktif dan diverifikasi; UAT bersama 3–5 pengguna nyata (Bagian 23 Laporan Akhir) serta penyiapan slide/presentasi akhir tetap menjadi tahap penyelesaian tim pada Minggu 14–16.
+*Catatan batas pengujian:* Deployment produksi live (**Cloudflare Workers + Neon PostgreSQL + Swagger UI Live**) telah aktif dan diverifikasi; simulasi end-to-end & UAT bersama 3–5 pengguna nyata (Bagian 23 Laporan Akhir) serta penyiapan slide/presentasi akhir tetap menjadi tahap penyelesaian tim pada Minggu 15–16.
