@@ -32,8 +32,9 @@ Rincian lengkap tersedia di [evidence/verification.md](evidence/verification.md)
 | Runtime Worker Lokal (`npx wrangler dev`) | Lulus, ukuran bundle **304,79 KiB** gzip, `/api-docs` → `/api-docs/` + *Try it out* `/health` `200 OK`. |
 | **Produksi Live (`uas-projek-rpl-eventku.yuhugelo4.workers.dev`)** | **Lulus** (0 error aplikasi, startup Worker `107 ms`): TLS valid, `/health` `200`, Neon `/categories` (3) & `/events` (13), Swagger UI Live `/api-docs/` *Try it out* `/health` & `/categories` `200`, Playwright live `1440 px` & `360 px` tanpa overflow. |
 
-## Bukti Tampilan Produksi Live
+## Bukti Tampilan Produksi Live & Pelacakan Jira
 
+- **Tiket Jira Minggu 15:** [`SCRUM-129`](https://eventku.atlassian.net/browse/SCRUM-129) (**Done** — `[M15] Build production, deploy Cloudflare Workers, Swagger UI live, dan dokumentasi teknis arsitektur & frontend`; seluruh 30 tiket Bambang berstatus Done, 0 terbuka).
 - [Katalog publik live desktop 1440 px](evidence/produksi-katalog-desktop-1440.png)
 - [Katalog publik live mobile 360 px](evidence/produksi-katalog-mobile-360.png)
 - [Kalender event bulanan live (`/events/calendar`)](evidence/produksi-kalender-desktop-1440.png)
