@@ -29,7 +29,7 @@ npm ci
 npm run dev
 ```
 
-Setelah backend berjalan, buka [Swagger UI](http://localhost:3000/api-docs/) untuk menjelajahi dan mencoba endpoint API. Spesifikasi OpenAPI tersedia di [`docs/openapi.yaml`](docs/openapi.yaml).
+Setelah backend berjalan, buka [Swagger UI Lokal](http://localhost:3000/api-docs/) atau akses [Swagger UI Live (Produksi)](https://uas-projek-rpl-eventku.yuhugelo4.workers.dev/api-docs/) untuk menjelajahi dan mencoba endpoint API. Spesifikasi OpenAPI tersedia di [`docs/openapi.yaml`](docs/openapi.yaml).
 
 Link Documentation Postman https://alexabixz1212-9078706.postman.co/workspace/Alexa-bix's-Workspace~26e0924a-878a-4e04-894f-0c8fc1ba6f47/documentation/54162513-9b1e6c7e-79b3-4c8b-a207-7c5a89e0f17e
 

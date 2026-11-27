@@ -7,6 +7,10 @@ info:
     kecuali health check. Endpoint yang memerlukan login menggunakan access
     token JWT pada header `Authorization: Bearer <token>`.
 servers:
+  - url: /api/v1
+    description: Server aktif saat ini (otomatis mengikuti domain)
+  - url: https://uas-projek-rpl-eventku.yuhugelo4.workers.dev/api/v1
+    description: Server produksi live (Cloudflare Workers + Neon PostgreSQL)
   - url: http://localhost:3000/api/v1
     description: Server lokal (sesuaikan dengan EventKu_Local.postman_environment.json)
 tags:
@@ -26,7 +30,12 @@ paths:
       tags: [Health]
       summary: Memeriksa status server
       servers:
+        - url: /
+          description: Root server aktif saat ini (otomatis mengikuti domain)
+        - url: https://uas-projek-rpl-eventku.yuhugelo4.workers.dev
+          description: Server produksi live (Cloudflare Workers)
         - url: http://localhost:3000
+          description: Server lokal
       security: []
       responses:
         '200':

@@ -7,7 +7,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "build": "npm --prefix backend ci && npm --prefix frontend ci && npm --prefix frontend run build",
+    "build:swagger": "node scripts/build-swagger-assets.mjs",
+    "build": "npm --prefix backend ci && npm --prefix frontend ci && npm --prefix frontend run build && npm run build:swagger",
     "dev:worker": "wrangler dev",
     "deploy": "wrangler deploy"
   },

@@ -5,7 +5,9 @@
   "compatibility_date": "2026-04-01",
   "compatibility_flags": ["nodejs_compat"],
   "alias": {
-    "iconv-lite": "./backend/src/lib/iconvWorkerShim.js"
+    "iconv-lite": "./backend/src/lib/iconvWorkerShim.js",
+    "swagger-ui-express": "./backend/src/lib/noopWorkerShim.js",
+    "yaml": "./backend/src/lib/noopWorkerShim.js"
   },
   "assets": {
     "directory": "./frontend/dist",
