@@ -10,7 +10,7 @@
 | **Swagger UI Live (OpenAPI 3.0)** | https://uas-projek-rpl-eventku.yuhugelo4.workers.dev/api-docs/ |
 | **Dokumentasi Postman (Online)** | [Postman API Documentation](https://alexabixz1212-9078706.postman.co/workspace/Alexa-bix's-Workspace~26e0924a-878a-4e04-894f-0c8fc1ba6f47/documentation/54162513-9b1e6c7e-79b3-4c8b-a207-7c5a89e0f17e) |
 | **Spesifikasi OpenAPI & Koleksi Postman** | [`docs/openapi.yaml`](docs/openapi.yaml) · [`EventKu_API_QA_postman_collection.json`](docs/postman/EventKu_API_QA_postman_collection.json) |
-| **Dokumentasi Arsitektur & Frontend** | [`DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md`](docs/implementation/bambang/week15/DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) |
+| **Dokumentasi Arsitektur & Frontend** | [`DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md`](docs/implementation/bambang/week15/DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) · [Lucidchart As-Built (Arsitektur & ERD 17 Tabel)](https://lucid.app/lucidchart/1e49cea3-1463-4e91-8273-05b652e5e93a/edit?invitationId=inv_abe0894b-1d2e-4a6b-aab0-2bc4c06a2120) |
 | **Laporan Akhir & Panduan UAT** | [`EventKu_Laporan_Akhir_Kelompok_IV.pdf`](docs/reports/EventKu_Laporan_Akhir_Kelompok_IV.pdf) · [`PANDUAN_UAT_PENGGUNA_EVENTKU.md`](docs/reports/PANDUAN_UAT_PENGGUNA_EVENTKU.md) |
 
 ## Tim Pengembang (Kelompok IV)

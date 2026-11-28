@@ -7,6 +7,7 @@
 - **Acuan Kode:** Branch `main`, commit `de1e74f` (Cloudflare Workers full-stack + Neon PostgreSQL + Swagger UI Static Assets)
 - **URL Produksi Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev (Version ID: `f4879fc2-106c-420f-b43e-f94914a02fc9`)
 - **Swagger UI Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev/api-docs/
+- **Diagram Lucidchart Final (As-Built):** [Arsitektur Produksi & ERD 17 Tabel (View only)](https://lucid.app/lucidchart/1e49cea3-1463-4e91-8273-05b652e5e93a/edit?invitationId=inv_abe0894b-1d2e-4a6b-aab0-2bc4c06a2120)
 
 ---
 
@@ -34,11 +35,15 @@ EventKu menerapkan arsitektur **Modular Monolith** di sisi backend (`backend/`, 
   - Health Check            (GET /health)
         │ SQL Berparameter + Transaksi Atomik (TLS via @neondatabase/serverless)
         ▼
-[Neon PostgreSQL]
+[Neon PostgreSQL — 17 Tabel]
   users, organizations, sessions, password_resets, categories,
-  events, registrations, moderation_history, organizer_notifications,
-  student_notifications, student_interests, favorites, reviews, posters
+  events, posters, moderation_history, registrations, reminders_sent,
+  organizer_notifications, organizer_notification_reads,
+  student_notifications, email_outbox, student_interests,
+  favorites, reviews
 ```
+
+**Diagram Visual Lucidchart (*As-Built*, Minggu 15):** [Buka di Lucidchart (View only)](https://lucid.app/lucidchart/1e49cea3-1463-4e91-8273-05b652e5e93a/edit?invitationId=inv_abe0894b-1d2e-4a6b-aab0-2bc4c06a2120) · Ekspor PNG 300 PPI: [Tab 13 — Arsitektur Produksi Final](evidence/arsitektur-produksi-final-lucidchart.png) · [Tab 14 — ERD Aktual 17 Tabel](evidence/erd-aktual-17-tabel-lucidchart.png). *(Dokumen Lucidchart tahap UTS tab `00`–`12` tetap dipertahankan utuh sebagai riwayat perancangan awal.)*
 
 ### Prinsip Arsitektur Utama
 1. **Otoritas Tunggal di Server:** Penjaga rute (`RoleRoute`) dan tampilan kondisional di frontend hanya mengatur pengalaman pengguna. Seluruh pemeriksaan autentikasi (JWT + tabel `sessions`), peran (RBAC), status akun (`active`/`pending`/`disabled`), verifikasi organisasi, dan kepemilikan event tetap ditegakkan di backend.

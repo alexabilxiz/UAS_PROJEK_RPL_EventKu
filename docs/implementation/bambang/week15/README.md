@@ -14,8 +14,9 @@ Halaman 16 *Rincian Pekerjaan Individu Mingguan - Proyek EventKu* menugaskan Bam
    - **Swagger UI Live:** https://uas-projek-rpl-eventku.yuhugelo4.workers.dev/api-docs/ (aset statis self-hosted dibangun lewat [scripts/build-swagger-assets.mjs](../../../../scripts/build-swagger-assets.mjs) tanpa CDN eksternal dan 0 CPU Worker).
    - [wrangler.jsonc](../../../../wrangler.jsonc) & [package.json](../../../../package.json) — 1 Worker terpadu menyajikan Workers Static Assets (`frontend/dist`, SPA fallback, + `/api-docs/*`) dan API Worker (`run_worker_first: ["/api/*", "/health"]`), Smart Placement, serta Cron Trigger `*/5 * * * *`.
    - [backend/src/worker.js](../../../../backend/src/worker.js), [backend/src/lib/password.js](../../../../backend/src/lib/password.js), [backend/src/lib/iconvWorkerShim.js](../../../../backend/src/lib/iconvWorkerShim.js), & [backend/src/lib/noopWorkerShim.js](../../../../backend/src/lib/noopWorkerShim.js) — adapter Express `cloudflare:node` (`httpServerHandler`), `@neondatabase/serverless` (`poolQueryViaFetch: true` + pool per-request `AsyncLocalStorage`), Web Crypto PBKDF2-SHA256 untuk batas CPU Workers Free Plan, serta shim ringan agar bundle Worker tetap ringkas (**304,79 KiB** gzip).
-3. **Dokumentasi Teknis Arsitektur & Frontend:**
+3. **Dokumentasi Teknis Arsitektur & Frontend + Diagram Lucidchart Final (*As-Built*):**
    - [DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md](DOKUMENTASI_TEKNIS_ARSITEKTUR_FRONTEND.md) — merinci arsitektur Modular Monolith + React SPA, struktur modul frontend, peta rute RBAC, kontrak API & keamanan sesi, implementasi deployment **Cloudflare Workers + Neon PostgreSQL** (termasuk Swagger UI Live), dan hasil verifikasi.
+   - **Lucidchart Final (*As-Built*, View only):** [EventKu — Arsitektur & ERD Final](https://lucid.app/lucidchart/1e49cea3-1463-4e91-8273-05b652e5e93a/edit?invitationId=inv_abe0894b-1d2e-4a6b-aab0-2bc4c06a2120) — menambahkan Tab 13 (*Arsitektur Produksi Final*) dan Tab 14 (*ERD Aktual 17 Tabel* sesuai `backend/db/schema.sql`) tanpa mengubah dokumen perancangan UTS (`00`–`12`).
 
 ## Hasil Verifikasi Lokal & Produksi Live
 
@@ -39,6 +40,9 @@ Rincian lengkap tersedia di [evidence/verification.md](evidence/verification.md)
 - [Katalog publik live mobile 360 px](evidence/produksi-katalog-mobile-360.png)
 - [Kalender event bulanan live (`/events/calendar`)](evidence/produksi-kalender-desktop-1440.png)
 - [Swagger UI Live (`/api-docs/`) & Try it out `GET /health`](evidence/produksi-swagger-live-1440.png)
+- [Diagram Arsitektur Produksi Final — Ekspor Lucidchart 300 PPI (Tab 13)](evidence/arsitektur-produksi-final-lucidchart.png)
+- [Diagram ERD Aktual 17 Tabel — Ekspor Lucidchart 300 PPI (Tab 14)](evidence/erd-aktual-17-tabel-lucidchart.png)
+- [Dokumen Lucidchart Final (*As-Built*, View only)](https://lucid.app/lucidchart/1e49cea3-1463-4e91-8273-05b652e5e93a/edit?invitationId=inv_abe0894b-1d2e-4a6b-aab0-2bc4c06a2120)
 
 ## Tindak Lanjut Menuju Minggu 16
 
